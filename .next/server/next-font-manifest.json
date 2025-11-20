@@ -1,0 +1,22 @@
+{
+  "app": {
+    "[project]/src/app/(protected)/project/[id]/page": [
+      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
+    ],
+    "[project]/src/app/(protected)/projects/[projectId]/[[...slug]]/page": [
+      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
+    ],
+    "[project]/src/app/(protected)/test/page": [
+      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
+    ],
+    "[project]/src/app/(protected)/workspace/task/[id]/page": [
+      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
+    ],
+    "[project]/src/app/_not-found/page": [
+      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

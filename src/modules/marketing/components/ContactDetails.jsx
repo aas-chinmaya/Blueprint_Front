@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -16,13 +17,13 @@ import {
   Loader2,
   AlertCircle,
   User,
-  Mail,
+  Mail,Globe,
   Phone,
-  Building,
+  Building,StickyNote ,
   Briefcase,
-  MapPin,
+  MapPin,Link,
   MessageSquare,
-  Tag,
+  Tag,Clock,
   CheckCircle,
   XCircle,
   ArrowLeft,
@@ -438,15 +439,15 @@ export default function ContactDetails({ contact_id }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 bg-gray-50 p-4 sm:p-6 rounded-xl w-full">
                   <Detail
                     icon={Tag}
-                    label="ID"
+                    label="Contact ID"
                     value={selectedContact.contactId}
-                    color="text-blue-600"
+                    color="text-green-600"
                   />
                   <Detail
                     icon={User}
-                    label="Name"
+                    label="Contact Person Name"
                     value={selectedContact.fullName}
-                    color="text-blue-600"
+                    color="text-green-600"
                   />
                   <Detail
                     icon={Mail}
@@ -461,16 +462,34 @@ export default function ContactDetails({ contact_id }) {
                     color="text-green-600"
                   />
                   <Detail
+                    icon={Link}
+                    label="Source Domain"
+                    value={selectedContact.sourceDomain}
+                    color="text-green-600"
+                  />
+                  <Detail
+                    icon={Globe}
+                    label="Inquiry Source"
+                    value={selectedContact.inquirySource}
+                    color="text-green-600"
+                  />
+                  <Detail
+                    icon={Clock}
+                    label="Contact Received"
+                    value={formatDateTimeUTC(selectedContact.createdAt)}
+                    color="text-green-600"
+                  />
+                  <Detail
                     icon={Building}
                     label="Company"
                     value={selectedContact.companyName}
-                    color="text-purple-600"
+                    color="text-indigo-600"
                   />
                   <Detail
                     icon={Briefcase}
                     label="Role"
                     value={selectedContact.designation}
-                    color="text-purple-600"
+                    color="text-indigo-600"
                   />
                   <Detail
                     icon={Tag}
@@ -497,7 +516,15 @@ export default function ContactDetails({ contact_id }) {
                       icon={MessageSquare}
                       label="Message"
                       value={selectedContact.message}
-                      color="text-gray-700"
+                      color="text-green-700"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Detail
+                      icon={StickyNote}
+                      label="Internal Note"
+                      value={selectedContact.internalNotes}
+                      color="text-green-700"
                     />
                   </div>
                 </div>

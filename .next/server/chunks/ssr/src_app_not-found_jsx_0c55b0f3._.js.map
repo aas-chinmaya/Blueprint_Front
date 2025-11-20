@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///C:/Dev%20Directory/live/frontend/Blueprint_Front/src/app/not-found.jsx"],"sourcesContent":["export default function NotFound() {\r\n  return (\r\n    <div className=\"min-h-screen flex flex-col items-center justify-center\">\r\n      <h1 className=\"text-4xl font-bold\">404 - Page Not Found</h1>\r\n      <p className=\"text-gray-500 mt-2\">The page you’re looking for doesn’t exist.</p>\r\n    </div>\r\n  );\r\n}\r\n"],"names":[],"mappings":";;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;;0BACb,8OAAC;gBAAG,WAAU;0BAAqB;;;;;;0BACnC,8OAAC;gBAAE,WAAU;0BAAqB;;;;;;;;;;;;AAGxC","debugId":null}}]
+}

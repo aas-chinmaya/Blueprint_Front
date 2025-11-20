@@ -1,0 +1,3 @@
+{
+  "/(protected)/marketing/contacts/[contact_id]/page": "app/(protected)/marketing/contacts/[contact_id]/page.js"
+}

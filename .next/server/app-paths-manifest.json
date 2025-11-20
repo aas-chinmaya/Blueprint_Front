@@ -1,0 +1,8 @@
+{
+  "/(protected)/project/[id]/page": "app/(protected)/project/[id]/page.js",
+  "/(protected)/projects/[projectId]/[[...slug]]/page": "app/(protected)/projects/[projectId]/[[...slug]]/page.js",
+  "/(protected)/test/page": "app/(protected)/test/page.js",
+  "/(protected)/workspace/task/[id]/page": "app/(protected)/workspace/task/[id]/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
+}

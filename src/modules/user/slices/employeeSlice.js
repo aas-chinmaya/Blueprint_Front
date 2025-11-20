@@ -6,7 +6,7 @@ export const fetchAllEmployees = createAsyncThunk(
   'employee/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get('/hrms/employee/all', { withCredentials: true });
+      const res = await axiosInstance.get('/hrms/employees', { withCredentials: true });
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || 'Failed to fetch all employees');

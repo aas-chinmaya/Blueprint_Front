@@ -1,5 +1,10 @@
 
 
+
+
+
+
+
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -10,7 +15,9 @@ import {
   resetCreateStatus,
   clearError,
 } from "@/modules/meet/slices/meetSlice";
-import { fetchAllAdminEmployees } from "@/modules/user/slices/employeeSlice";
+
+// Changed: Use fetchAllEmployees instead of fetchAllAdminEmployees
+import { fetchAllEmployees } from "@/modules/user/slices/employeeSlice";
 import { getContactById } from "@/modules/marketing/slices/contactSlice";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -24,12 +31,15 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const { selectedContact } = useSelector((state) => state.contact);
-  const { adminEmployees, loading: employeesLoading, error: employeeError } = useSelector(
+
+  // Changed: Use allEmployees instead of adminEmployees
+  const { allEmployees, loading: employeesLoading, error: employeeError } = useSelector(
     (state) => state.employee
   );
+
   const dropdownRef = useRef(null);
 
-  // Auto-detect any xxxId from URL
+  // Auto-detect reference from URL
   const urlRef = (() => {
     if (meetingRefs) return null;
     for (const [key, value] of searchParams.entries()) {
@@ -53,8 +63,8 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     agenda: "",
     contactId: contactId,
     reference: finalRef,
-    ourParty: [], // Array of { employeeID, name, email, role: "Organizer" | "Attendee" }
-    contactParty: [], // Array of { contactId, fullName, email, phone }
+    ourParty: [],
+    contactParty: [],
   });
 
   const [duration, setDuration] = useState(0);
@@ -62,44 +72,31 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset form and fetch data on mount
   useEffect(() => {
     dispatch(clearError());
     dispatch(resetCreateStatus());
     if (contactId) {
       dispatch(getContactById(contactId));
     }
-    dispatch(fetchAllAdminEmployees());
 
-    // Reset form
-    setForm({
-      title: "",
-      date: "",
-      startTime: "",
-      endTime: "",
-      mode: "offline",
-      meetingLink: "",
-      agenda: "",
-      contactId: contactId,
-      reference: finalRef,
-      ourParty: [],
-      contactParty: [],
-    });
-    setDuration(0);
-    setSearchQuery("");
-    setIsDropdownOpen(false);
-    setIsSubmitting(false);
+    // Changed: Fetch ALL employees (not just admin)
+    dispatch(fetchAllEmployees());
   }, [dispatch, contactId, finalRef]);
 
-  // Set contactParty based on selectedContact
+  // Fixed: Use fullName directly if exists, fallback safely
   useEffect(() => {
     if (selectedContact) {
+      const fullName =
+        selectedContact.fullName?.trim() ||
+        `${selectedContact.firstName || ""} ${selectedContact.lastName || ""}`.trim() ||
+        "Unnamed Contact";
+
       setForm((prev) => ({
         ...prev,
         contactParty: [
           {
             contactId: selectedContact.contactId,
-            fullName: `${selectedContact.firstName} ${selectedContact.lastName}`,
+            fullName,
             email: selectedContact.email || "",
             phone: selectedContact.phone || "",
           },
@@ -134,15 +131,14 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Dropdown placeholder
   const hasOrganizer = form.ourParty.some((p) => p.role === "Organizer");
   const dropdownPlaceholder = hasOrganizer ? "Search and add attendees" : "Select Organizer";
   const searchPlaceholder = hasOrganizer ? "Search Attendees" : "Search Organizer";
 
-  // Filter admin employees
+  // Filter all employees (not just admin)
   const selectedemployeeIDs = form.ourParty.map((p) => p.employeeID);
-  const filteredEmployees = Array.isArray(adminEmployees)
-    ? adminEmployees.filter(
+  const filteredEmployees = Array.isArray(allEmployees)
+    ? allEmployees.filter(
         (employee) =>
           !selectedemployeeIDs.includes(employee.employeeID) &&
           ((employee.firstName?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
@@ -150,7 +146,6 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
       )
     : [];
 
-  // Handle employee selection
   const handleEmployeeSelect = (employee) => {
     setForm((prev) => ({
       ...prev,
@@ -158,7 +153,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
         ...prev.ourParty,
         {
           employeeID: employee.employeeID,
-          name: `${employee.firstName} ${employee.lastName}`,
+          name: `${employee.firstName} ${employee.lastName}`.trim(),
           email: employee.email || "",
           role: prev.ourParty.some((p) => p.role === "Organizer") ? "Attendee" : "Organizer",
         },
@@ -168,7 +163,6 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     setSearchQuery("");
   };
 
-  // Remove employee
   const handleRemove = (id) => {
     setForm((prev) => ({
       ...prev,
@@ -176,8 +170,21 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     }));
   };
 
-  // Reset form
   const handleReset = () => {
+    const contactParty = selectedContact
+      ? [
+          {
+            contactId: selectedContact.contactId,
+            fullName:
+              selectedContact.fullName?.trim() ||
+              `${selectedContact.firstName || ""} ${selectedContact.lastName || ""}`.trim() ||
+              "Unnamed Contact",
+            email: selectedContact.email || "",
+            phone: selectedContact.phone || "",
+          },
+        ]
+      : [];
+
     setForm({
       title: "",
       date: "",
@@ -189,21 +196,13 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
       contactId: contactId,
       reference: finalRef,
       ourParty: [],
-      contactParty: selectedContact
-        ? [{
-            contactId: selectedContact.contactId,
-            fullName: `${selectedContact.firstName} ${selectedContact.lastName}`,
-            email: selectedContact.email || "",
-            phone: selectedContact.phone || "",
-          }]
-        : [],
+      contactParty,
     });
     setDuration(0);
     setSearchQuery("");
     setIsDropdownOpen(false);
   };
 
-  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     const required =
@@ -235,14 +234,12 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
         email,
         role,
       })),
-      contactParty: form.contactParty.length > 0
-        ? form.contactParty.map(({ contactId, fullName, email, phone }) => ({
-            contactId,
-            fullName,
-            email,
-            phone,
-          }))
-        : [],
+      contactParty: form.contactParty.map(({ contactId, fullName, email, phone }) => ({
+        contactId,
+        fullName,
+        email,
+        phone,
+      })),
     };
 
     setIsSubmitting(true);
@@ -305,7 +302,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6">
-        {/* Left Column: Form Fields (40%) */}
+        {/* Left Column: Form Fields */}
         <div className="space-y-4">
           {/* TITLE */}
           <div>
@@ -428,7 +425,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
             </div>
           )}
 
-          {/* AGENDA (Moved to Bottom) */}
+          {/* AGENDA */}
           <div>
             <Label className="block text-xs font-bold text-gray-900 mb-1 flex items-center gap-1.5">
               <Users className="h-4 w-4 text-gray-900" /> Agenda
@@ -446,7 +443,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
           </div>
         </div>
 
-        {/* Right Column: Attendees (60%) */}
+        {/* Right Column: Attendees */}
         <div className="space-y-4">
           <h3 className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
             <Users className="h-4 w-4 text-gray-900" /> Attendees
@@ -478,35 +475,24 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
                       className="w-full h-8 px-2 rounded-md border border-gray-300 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white transition-colors"
                     />
                   </div>
-                  {employeesLoading && (
-                    <div className="p-2 text-xs text-gray-900">Loading...</div>
-                  )}
                   {employeeError && (
                     <div className="p-2 text-xs text-red-600">{employeeError}</div>
                   )}
-                  {!employeesLoading && !employeeError && filteredEmployees.length === 0 && (
+                  {filteredEmployees.length === 0 && !employeesLoading && (
                     <div className="p-2 text-xs text-gray-900">
-                      {searchQuery
-                        ? hasOrganizer
-                          ? "No matching attendees found"
-                          : "No matching organizers found"
-                        : hasOrganizer
-                          ? "No attendees available"
-                          : "No organizers available"}
+                      {searchQuery ? "No matching employees" : "No employees available"}
                     </div>
                   )}
-                  {!employeesLoading && !employeeError && filteredEmployees.length > 0 && (
-                    filteredEmployees.map((employee) => (
-                      <button
-                        key={employee.employeeID}
-                        onClick={() => handleEmployeeSelect(employee)}
-                        className="w-full px-2 py-1 text-left text-xs text-gray-900 hover:bg-gray-100 focus:bg-gray-100 transition-colors"
-                      >
-                        <div className="font-medium">{`${employee.firstName} ${employee.lastName}`}</div>
-                        <div className="text-xs text-gray-600">{employee.email || "No email"}</div>
-                      </button>
-                    ))
-                  )}
+                  {filteredEmployees.map((employee) => (
+                    <button
+                      key={employee.employeeID}
+                      onClick={() => handleEmployeeSelect(employee)}
+                      className="w-full px-2 py-1 text-left text-xs text-gray-900 hover:bg-gray-100 focus:bg-gray-100 transition-colors"
+                    >
+                      <div className="font-medium">{`${employee.firstName} ${employee.lastName}`}</div>
+                      <div className="text-xs text-gray-600">{employee.email || "No email"}</div>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
@@ -561,10 +547,3 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     </div>
   );
 }
-
-
-
-
-
-
-

@@ -293,7 +293,7 @@ const ProjectbugList = ({ projectId, teamLeadId }) => {
       <div className="w-full bg-white">
         <div className="space-y-2">
           {/* ---------- TOP BAR ---------- */}
-          <div className="flex flex-wrap gap-4 p-4">
+          <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-[180px]">
               <div className="relative w-full">
                 <Input

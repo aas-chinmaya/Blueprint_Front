@@ -652,102 +652,44 @@ var { g: global, __dirname } = __turbopack_context__;
 // import { Textarea } from '@/components/ui/textarea';
 // import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 // import { Calendar } from '@/components/ui/calendar';
-// import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
-// import { Plus, User, CalendarIcon, X, Loader, Flag, Clock } from 'lucide-react';
+// import { Plus, CalendarIcon, X, Loader, Flag, Clock } from 'lucide-react';
 // import { format } from 'date-fns';
 // import { cn } from '@/lib/utils';
-// import { createSubTask } from '@/features/subTaskSlice';
-// import { fetchTeamByProjectId } from '@/features/teamSlice';
+// import { createSubTask } from '@/modules/project-management/task/slices/subTaskSlice';
 // import { toast } from 'sonner';
 // import { useCurrentUser } from '@/hooks/useCurrentUser';
-// const CreateSubtaskModal = ({ projectId, taskDetails,open, setOpen, taskId }) => {
+// const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId }) => {
 //   const { currentUser } = useCurrentUser();
 //   const dispatch = useDispatch();
-// console.log(taskDetails);
-//   const { teamsByProject: teams, status: teamStatus } = useSelector((state) => state.team);
+// console.log(taskDetails.assignedTo);
 //   const { loading: subTaskLoading, error: subTaskError } = useSelector((state) => state.subTask);
-//   // Initial state
+//   // Initial state - Derive assignedTo and memberId from taskDetails
 //   const initialFormData = useMemo(
 //     () => ({
 //       title: '',
 //       priority: 'Medium',
 //       description: '',
-//       assignedTo: '',
-//       assignedBy: currentUser?.id || '',
-//       projectId: projectId || '',
-//       teamId: '',
-//       memberId: '',
+//       assignedTo: taskDetails?.assignedTo || '', // Derived from taskDetails, not shown in form
+//       assignedBy: currentUser?.name || taskDetails?.assignedBy || 'Current User',
+//       projectId: taskDetails?.projectId || projectId || '',
+//       teamId: '', // Will be handled in payload if needed
+//       memberId: taskDetails?.memberId || '', // Derived from taskDetails
 //     }),
-//     [currentUser?.id, projectId]
+//     [currentUser?.name, taskDetails, projectId]
 //   );
 //   const [formData, setFormData] = useState(initialFormData);
 //   const [errors, setErrors] = useState({});
-//   const [selectedTeam, setSelectedTeam] = useState(null);
 //   const [selectedDate, setSelectedDate] = useState(null);
 //   const [selectedTime, setSelectedTime] = useState('');
-//   const [memberSearchQuery, setMemberSearchQuery] = useState('');
-//   const [memberOpen, setMemberOpen] = useState(false);
-//   const [isInitialized, setIsInitialized] = useState(false);
-//   // Fetch teams only once when component mounts and projectId is available
-//   useEffect(() => {
-//     if (projectId && !isInitialized) {
-//       dispatch(fetchTeamByProjectId(projectId));
-//       setIsInitialized(true);
-//     }
-//   }, [dispatch, projectId, isInitialized]);
-//   // Reset form only when modal opens
+//   // Reset form only when modal opens, but preserve derived data from taskDetails
 //   useEffect(() => {
 //     if (open) {
 //       setFormData(initialFormData);
 //       setErrors({});
-//       setSelectedTeam(null);
 //       setSelectedDate(null);
 //       setSelectedTime('');
-//       setMemberSearchQuery('');
-//       setMemberOpen(false);
 //     }
 //   }, [open, initialFormData]);
-//   // Update assignedBy when team changes
-//   const updateFormDataOnTeamChange = useCallback(
-//     (team) => {
-//       if (team) {
-//         setFormData((prev) => ({
-//           ...prev,
-//           assignedBy: currentUser?.name || 'Current User',
-//           projectId: projectId || '',
-//           teamId: team.teamId || '',
-//           assignedTo: '',
-//           memberId: '',
-//         }));
-//         setMemberSearchQuery('');
-//       }
-//     },
-//     [projectId, currentUser?.name]
-//   );
-//   useEffect(() => {
-//     if (selectedTeam) {
-//       updateFormDataOnTeamChange(selectedTeam);
-//     }
-//   }, [selectedTeam, updateFormDataOnTeamChange]);
-//   const teamOptions = useMemo(() => {
-//     return teams.map((team) => ({
-//       value: team.teamId,
-//       label: team.teamName,
-//     }));
-//   }, [teams]);
-//   const teamMemberOptions = useMemo(() => {
-//     if (!selectedTeam?.teamMembers || !Array.isArray(selectedTeam.teamMembers)) {
-//       return [];
-//     }
-//     const query = memberSearchQuery.toLowerCase();
-//     return selectedTeam.teamMembers
-//       .filter((member) => member.memberName.toLowerCase().includes(query))
-//       .map((member) => ({
-//         value: member.memberId,
-//         label: member.memberName,
-//         memberId: member.memberId,
-//       }));
-//   }, [selectedTeam, memberSearchQuery]);
 //   const handleChange = useCallback((e) => {
 //     const { name, value } = e.target;
 //     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -761,35 +703,16 @@ var { g: global, __dirname } = __turbopack_context__;
 //     setFormData((prev) => ({ ...prev, priority: value }));
 //     setErrors((prev) => ({ ...prev, priority: '' }));
 //   }, []);
-//   const handleMemberSelect = useCallback(
-//     (value) => {
-//       const member = teamMemberOptions.find((opt) => opt.value === value);
-//       handleSelectChange('assignedTo', value);
-//       handleSelectChange('memberId', member?.memberId || '');
-//       setMemberOpen(false);
-//     },
-//     [teamMemberOptions, handleSelectChange]
-//   );
-//   const handleTeamSelect = useCallback(
-//     (value) => {
-//       const team = teams.find((t) => t.teamId === value);
-//       setSelectedTeam(team);
-//       handleSelectChange('teamId', value);
-//       setErrors((prev) => ({ ...prev, team: '' }));
-//     },
-//     [teams, handleSelectChange]
-//   );
 //   const validate = useCallback(() => {
 //     const newErrors = {};
 //     if (!formData.title.trim()) newErrors.title = 'Title is required';
 //     if (!formData.priority.trim()) newErrors.priority = 'Priority is required';
 //     if (!selectedDate) newErrors.deadline = 'Deadline is required';
 //     if (!formData.description.trim()) newErrors.description = 'Description is required';
-//     if (!selectedTeam) newErrors.team = 'Team selection is required';
-//     if (!formData.assignedTo) newErrors.assignedTo = 'Assigned To is required';
+//     // No validation for assignedTo since it's derived from taskDetails
 //     setErrors(newErrors);
 //     return Object.keys(newErrors).length === 0;
-//   }, [formData.title, formData.priority, formData.description, selectedDate, selectedTeam, formData.assignedTo]);
+//   }, [formData.title, formData.priority, formData.description, selectedDate]);
 //   const handleAdd = useCallback(
 //     async () => {
 //       if (!validate()) {
@@ -826,11 +749,14 @@ var { g: global, __dirname } = __turbopack_context__;
 //           priority: formData.priority,
 //           deadline: combinedDateTime, // e.g., "2025-09-23T14:30:00"
 //           description: formData.description,
-//           assignedTo: formData.assignedTo,
+//           assignedTo: taskDetails?.assignedTo || formData.assignedTo, // Directly from taskDetails
 //           assignedBy: formData.assignedBy,
-//           teamId: selectedTeam.teamId,
-//           memberId: formData.memberId,
+//           teamId: taskDetails?.teamId || formData.teamId, // If available in taskDetails
+//           memberId: taskDetails?.memberId || formData.memberId, // Directly from taskDetails
 //           projectId: formData.projectId,
+//           // Include additional fields from taskDetails if needed for payload
+//           task_id: taskDetails?.task_id,
+//           projectName: taskDetails?.projectName,
 //         };
 //         await dispatch(createSubTask({ taskId, subTaskData })).unwrap();
 //         toast.success('Subtask added successfully');
@@ -844,7 +770,7 @@ var { g: global, __dirname } = __turbopack_context__;
 //       formData,
 //       selectedDate,
 //       selectedTime,
-//       selectedTeam,
+//       taskDetails,
 //       dispatch,
 //       taskId,
 //       subTaskError,
@@ -856,10 +782,8 @@ var { g: global, __dirname } = __turbopack_context__;
 //       formData.title.trim() &&
 //       formData.priority.trim() &&
 //       selectedDate &&
-//       formData.description.trim() &&
-//       selectedTeam &&
-//       formData.assignedTo,
-//     [formData.title, formData.priority, formData.description, selectedDate, selectedTeam, formData.assignedTo]
+//       formData.description.trim(),
+//     [formData.title, formData.priority, formData.description, selectedDate]
 //   );
 //   const handleClose = useCallback(() => {
 //     setOpen(false);
@@ -913,7 +837,7 @@ var { g: global, __dirname } = __turbopack_context__;
 //                 </p>
 //               )}
 //             </div>
-//             {/* Grid Layout */}
+//             {/* Grid Layout - Removed Assigned To */}
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 //               {/* Priority */}
 //               <div>
@@ -989,82 +913,6 @@ var { g: global, __dirname } = __turbopack_context__;
 //                   className="cursor-pointer w-full bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10"
 //                   placeholder="Select time (optional)"
 //                 />
-//               </div>
-//               {/* Team Selection */}
-//               <div>
-//                 <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-//                   <User className="h-4 w-4 text-blue-500 mr-2" />
-//                   Team <span className="text-red-500 ml-1">*</span>
-//                 </label>
-//                 <Select value={selectedTeam?.teamId || ''} onValueChange={handleTeamSelect}>
-//                   <SelectTrigger className="w-full bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10">
-//                     <SelectValue placeholder={teamStatus === 'loading' ? 'Loading teams...' : 'Select team'} />
-//                   </SelectTrigger>
-//                   <SelectContent className="bg-white shadow-lg border border-gray-200 rounded-lg text-black max-h-48">
-//                     {teamOptions.map((option) => (
-//                       <SelectItem key={option.value} value={option.value}>
-//                         {option.label}
-//                       </SelectItem>
-//                     ))}
-//                   </SelectContent>
-//                 </Select>
-//                 {errors.team && (
-//                   <p className="text-red-500 text-xs mt-1 flex items-center">
-//                     <X className="h-3 w-3 mr-1" /> {errors.team}
-//                   </p>
-//                 )}
-//               </div>
-//               {/* Assigned To */}
-//               <div>
-//                 <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-//                   <User className="h-4 w-4 text-blue-500 mr-2" />
-//                   Assigned To <span className="text-red-500 ml-1">*</span>
-//                 </label>
-//                 <Popover open={memberOpen} onOpenChange={setMemberOpen}>
-//                   <PopoverTrigger asChild>
-//                     <Button
-//                       variant="outline"
-//                       className="w-full justify-between bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-100 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10"
-//                       disabled={!selectedTeam || teamStatus === 'loading'}
-//                     >
-//                       {formData.assignedTo
-//                         ? teamMemberOptions.find((opt) => opt.value === formData.assignedTo)?.label
-//                         : !selectedTeam
-//                         ? 'Select team first'
-//                         : 'Search and select team member'}
-//                     </Button>
-//                   </PopoverTrigger>
-//                   <PopoverContent className="bg-white border border-gray-200 rounded-lg shadow-lg p-0 w-[300px] max-h-60">
-//                     <Command>
-//                       <CommandInput
-//                         placeholder="Search team members..."
-//                         value={memberSearchQuery}
-//                         onValueChange={setMemberSearchQuery}
-//                         className="h-10 text-sm p-2"
-//                       />
-//                       <CommandEmpty>No members found.</CommandEmpty>
-//                       <CommandGroup className="max-h-48 overflow-y-auto">
-//                         {teamMemberOptions.map((option) => (
-//                           <CommandItem
-//                             key={option.value}
-//                             value={option.value}
-//                             onSelect={() => handleMemberSelect(option.value)}
-//                             className={`cursor-pointer text-sm ${
-//                               formData.assignedTo === option.value ? 'bg-blue-100 text-blue-800' : ''
-//                             }`}
-//                           >
-//                             {option.label}
-//                           </CommandItem>
-//                         ))}
-//                       </CommandGroup>
-//                     </Command>
-//                   </PopoverContent>
-//                 </Popover>
-//                 {errors.assignedTo && (
-//                   <p className="text-red-500 text-xs mt-1 flex items-center">
-//                     <X className="h-3 w-3 mr-1" /> {errors.assignedTo}
-//                   </p>
-//                 )}
 //               </div>
 //             </div>
 //             {/* Description */}
@@ -1147,6 +995,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader.js [app-ssr] (ecmascript) <export default as Loader>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$flag$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Flag$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/flag.js [app-ssr] (ecmascript) <export default as Flag>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/date-fns/format.js [app-ssr] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$task$2f$slices$2f$subTaskSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/project-management/task/slices/subTaskSlice.js [app-ssr] (ecmascript)");
@@ -1173,16 +1022,24 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
     const { currentUser } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCurrentUser"])();
     const dispatch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDispatch"])();
     const { loading: subTaskLoading, error: subTaskError } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSelector"])((state)=>state.subTask);
-    // Initial state - Derive assignedTo and memberId from taskDetails
+    // Normalize assignees list (array of objects)
+    const assigneesList = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!taskDetails?.assignedTo) return [];
+        if (Array.isArray(taskDetails.assignedTo)) return taskDetails.assignedTo;
+        return [
+            taskDetails.assignedTo
+        ]; // if single object
+    }, [
+        taskDetails?.assignedTo
+    ]);
+    // Selected full assignee object (not just id/name)
+    const [selectedAssignee, setSelectedAssignee] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(assigneesList[0] || null);
     const initialFormData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>({
             title: '',
             priority: 'Medium',
             description: '',
-            assignedTo: taskDetails?.assignedTo || '',
-            assignedBy: currentUser?.name || taskDetails?.assignedBy || 'Current User',
-            projectId: taskDetails?.projectId || projectId || '',
-            teamId: '',
-            memberId: taskDetails?.memberId || ''
+            assignedBy: currentUser?.name || 'Current User',
+            projectId: taskDetails?.projectId || projectId || ''
         }), [
         currentUser?.name,
         taskDetails,
@@ -1192,19 +1049,20 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
     const [errors, setErrors] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({});
     const [selectedDate, setSelectedDate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [selectedTime, setSelectedTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
-    // Reset form only when modal opens, but preserve derived data from taskDetails
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (open) {
             setFormData(initialFormData);
+            setSelectedAssignee(assigneesList[0] || null);
             setErrors({});
             setSelectedDate(null);
             setSelectedTime('');
         }
     }, [
         open,
-        initialFormData
+        initialFormData,
+        assigneesList
     ]);
-    const handleChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+    const handleChange = (e)=>{
         const { name, value } = e.target;
         setFormData((prev)=>({
                 ...prev,
@@ -1214,243 +1072,187 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
                 ...prev,
                 [name]: ''
             }));
-    }, []);
-    const handleSelectChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((name, value)=>{
-        setFormData((prev)=>({
-                ...prev,
-                [name]: value
-            }));
-        setErrors((prev)=>({
-                ...prev,
-                [name]: ''
-            }));
-    }, []);
-    const handlePriorityChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((value)=>{
+    };
+    const handlePriorityChange = (value)=>{
         setFormData((prev)=>({
                 ...prev,
                 priority: value
             }));
+    };
+    // When user picks a member → store full object
+    const handleAssigneeChange = (memberId)=>{
+        const member = assigneesList.find((m)=>m.memberId === memberId || m._id === memberId);
+        setSelectedAssignee(member || null);
         setErrors((prev)=>({
                 ...prev,
-                priority: ''
+                assignedTo: ''
             }));
-    }, []);
-    const validate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+    };
+    const validate = ()=>{
         const newErrors = {};
         if (!formData.title.trim()) newErrors.title = 'Title is required';
-        if (!formData.priority.trim()) newErrors.priority = 'Priority is required';
+        if (!formData.priority) newErrors.priority = 'Priority is required';
         if (!selectedDate) newErrors.deadline = 'Deadline is required';
         if (!formData.description.trim()) newErrors.description = 'Description is required';
-        // No validation for assignedTo since it's derived from taskDetails
+        if (!selectedAssignee) newErrors.assignedTo = 'Please select assignee';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    }, [
-        formData.title,
-        formData.priority,
-        formData.description,
-        selectedDate
-    ]);
-    const handleAdd = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
+    };
+    const handleAdd = async ()=>{
         if (!validate()) {
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error('Please fill all required fields');
             return;
         }
+        const pad = (n)=>n < 10 ? '0' + n : n;
+        let deadline = null;
+        if (selectedDate) {
+            const d = new Date(selectedDate);
+            const [h = 23, m = 59] = selectedTime ? selectedTime.split(':').map(Number) : [];
+            d.setHours(h, m, 0, 0);
+            deadline = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
+        }
+        // THIS IS THE KEY PART — Send FULL assignee object
+        const subTaskData = {
+            title: formData.title.trim(),
+            priority: formData.priority,
+            deadline,
+            description: formData.description.trim(),
+            assignedTo: selectedAssignee ? {
+                memberId: selectedAssignee.memberId,
+                memberName: selectedAssignee.memberName,
+                role: selectedAssignee.role,
+                _id: selectedAssignee._id
+            } : null,
+            assignedBy: formData.assignedBy,
+            projectId: formData.projectId,
+            task_id: taskDetails?.task_id || taskId,
+            projectName: taskDetails?.projectName
+        };
         try {
-            // Combine date and time into ISO string - time is optional
-            function pad(n) {
-                return n < 10 ? '0' + n : n;
-            }
-            let combinedDateTime;
-            if (selectedDate) {
-                const dateObj = new Date(selectedDate);
-                const [hours, minutes] = selectedTime ? selectedTime.split(':').map(Number) : [
-                    23,
-                    59
-                ]; // Default to end of day if no time provided
-                dateObj.setHours(hours, minutes, 0, 0);
-                combinedDateTime = dateObj.getFullYear() + '-' + pad(dateObj.getMonth() + 1) + '-' + pad(dateObj.getDate()) + 'T' + pad(dateObj.getHours()) + ':' + pad(dateObj.getMinutes()) + ':' + pad(dateObj.getSeconds());
-            }
-            const subTaskData = {
-                title: formData.title,
-                priority: formData.priority,
-                deadline: combinedDateTime,
-                description: formData.description,
-                assignedTo: taskDetails?.assignedTo || formData.assignedTo,
-                assignedBy: formData.assignedBy,
-                teamId: taskDetails?.teamId || formData.teamId,
-                memberId: taskDetails?.memberId || formData.memberId,
-                projectId: formData.projectId,
-                // Include additional fields from taskDetails if needed for payload
-                task_id: taskDetails?.task_id,
-                projectName: taskDetails?.projectName
-            };
             await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$task$2f$slices$2f$subTaskSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createSubTask"])({
                 taskId,
                 subTaskData
             })).unwrap();
-            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success('Subtask added successfully');
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success('Subtask created successfully');
             setOpen(false);
         } catch (err) {
-            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(subTaskError || 'Failed to add subtask');
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(subTaskError || 'Failed to create subtask');
         }
-    }, [
-        validate,
-        formData,
-        selectedDate,
-        selectedTime,
-        taskDetails,
-        dispatch,
-        taskId,
-        subTaskError,
-        setOpen
-    ]);
-    const isButtonEnabled = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>formData.title.trim() && formData.priority.trim() && selectedDate && formData.description.trim(), [
-        formData.title,
-        formData.priority,
-        formData.description,
-        selectedDate
-    ]);
-    const handleClose = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
-        setOpen(false);
-    }, [
-        setOpen
-    ]);
-    // Display date and time
+    };
+    const isButtonEnabled = formData.title.trim() && formData.priority && selectedDate && formData.description.trim() && selectedAssignee;
     const displayDateTime = selectedDate ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(selectedDate, 'MMM dd, yyyy') + (selectedTime ? ` at ${selectedTime}` : ' (End of Day)') : '';
     if (!open) return null;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
         open: open,
-        onOpenChange: handleClose,
+        onOpenChange: setOpen,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
-            className: "w-full max-w-full h-[100vh] max-h-[100vh] sm:max-w-6xl sm:max-h-[85vh] bg-white shadow-lg border border-gray-200 rounded-lg text-black p-2",
+            className: "max-w-4xl max-h-[90vh] overflow-y-auto",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
-                    className: "bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 border-b border-gray-200 sticky top-0 z-10",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex justify-between items-center",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
-                                className: "text-base sm:text-lg font-bold text-gray-800 flex items-center",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                        className: "mr-2 h-4 w-4 text-blue-500"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 720,
-                                        columnNumber: 15
-                                    }, this),
-                                    "Add New Subtask"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 719,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogClose"], {
-                                asChild: true,
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                    variant: "ghost",
-                                    size: "icon",
-                                    className: "text-gray-500 hover:bg-gray-100 rounded-full h-7 w-7",
-                                    onClick: handleClose,
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                        className: "h-3 w-3"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 730,
-                                        columnNumber: 17
-                                    }, this)
+                    className: "bg-gradient-to-r from-blue-50 to-indigo-50",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
+                            className: "flex items-center text-lg font-bold",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                    className: "mr-2 h-5 w-5 text-blue-600"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                    lineNumber: 724,
-                                    columnNumber: 15
+                                    lineNumber: 513,
+                                    columnNumber: 13
+                                }, this),
+                                "Add New Subtask"
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                            lineNumber: 512,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogClose"], {
+                            asChild: true,
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                variant: "ghost",
+                                size: "icon",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {}, void 0, false, {
+                                    fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                    lineNumber: 517,
+                                    columnNumber: 49
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 723,
+                                lineNumber: 517,
                                 columnNumber: 13
                             }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                        lineNumber: 718,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
+                        }, void 0, false, {
+                            fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                            lineNumber: 516,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                    lineNumber: 717,
+                    lineNumber: 511,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-60px)]",
+                    className: "p-6",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                         onSubmit: (e)=>{
                             e.preventDefault();
                             handleAdd();
                         },
-                        className: "space-y-4",
+                        className: "space-y-5",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-full",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "flex items-center text-sm font-medium text-gray-700 mb-2",
+                                        className: "flex items-center gap-2 font-medium",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                                className: "h-4 w-4 text-blue-500 mr-2"
+                                                className: "h-4 w-4 text-blue-600"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 742,
-                                                columnNumber: 17
+                                                lineNumber: 526,
+                                                columnNumber: 70
                                             }, this),
-                                            "Subtask Title ",
+                                            " Subtask Title ",
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-red-500 ml-1",
+                                                className: "text-red-500",
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 743,
-                                                columnNumber: 31
+                                                lineNumber: 526,
+                                                columnNumber: 127
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 741,
+                                        lineNumber: 526,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
                                         name: "title",
                                         value: formData.title,
                                         onChange: handleChange,
-                                        className: "w-full bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10",
-                                        placeholder: "Enter subtask title"
+                                        placeholder: "Enter title",
+                                        className: "mt-2"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 745,
+                                        lineNumber: 527,
                                         columnNumber: 15
                                     }, this),
                                     errors.title && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-red-500 text-xs mt-1 flex items-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                className: "h-3 w-3 mr-1"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 754,
-                                                columnNumber: 19
-                                            }, this),
-                                            " ",
-                                            errors.title
-                                        ]
-                                    }, void 0, true, {
+                                        className: "text-red-500 text-sm mt-1",
+                                        children: errors.title
+                                    }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 753,
-                                        columnNumber: 17
+                                        lineNumber: 528,
+                                        columnNumber: 32
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 740,
+                                lineNumber: 525,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1459,28 +1261,28 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "flex items-center text-sm font-medium text-gray-700 mb-2",
+                                                className: "flex items-center gap-2 font-medium",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$flag$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Flag$3e$__["Flag"], {
-                                                        className: "h-4 w-4 text-blue-500 mr-2"
+                                                        className: "h-4 w-4 text-blue-600"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 764,
-                                                        columnNumber: 19
+                                                        lineNumber: 534,
+                                                        columnNumber: 72
                                                     }, this),
-                                                    "Priority ",
+                                                    " Priority ",
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        className: "text-red-500 ml-1",
+                                                        className: "text-red-500",
                                                         children: "*"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 765,
-                                                        columnNumber: 28
+                                                        lineNumber: 534,
+                                                        columnNumber: 124
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 763,
+                                                lineNumber: 534,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -1488,28 +1290,25 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
                                                 onValueChange: handlePriorityChange,
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
-                                                        className: "w-full bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10",
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {
-                                                            placeholder: "Select priority"
-                                                        }, void 0, false, {
+                                                        className: "mt-2",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 769,
-                                                            columnNumber: 21
+                                                            lineNumber: 536,
+                                                            columnNumber: 51
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 768,
+                                                        lineNumber: 536,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
-                                                        className: "bg-white shadow-lg border border-gray-200 rounded-lg text-black max-h-48",
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
                                                                 value: "Low",
                                                                 children: "Low"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 772,
+                                                                lineNumber: 538,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1517,7 +1316,7 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
                                                                 children: "Medium"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 773,
+                                                                lineNumber: 539,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -1525,70 +1324,146 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
                                                                 children: "High"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 774,
+                                                                lineNumber: 540,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 771,
+                                                        lineNumber: 537,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 767,
+                                                lineNumber: 535,
                                                 columnNumber: 17
-                                            }, this),
-                                            errors.priority && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-red-500 text-xs mt-1 flex items-center",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                        className: "h-3 w-3 mr-1"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 779,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    " ",
-                                                    errors.priority
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 778,
-                                                columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 762,
+                                        lineNumber: 533,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "flex items-center text-sm font-medium text-gray-700 mb-2",
+                                                className: "flex items-center gap-2 font-medium",
                                                 children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CalendarIcon$3e$__["CalendarIcon"], {
-                                                        className: "h-4 w-4 text-blue-500 mr-2"
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                                                        className: "h-4 w-4 text-blue-600"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 787,
-                                                        columnNumber: 19
+                                                        lineNumber: 547,
+                                                        columnNumber: 72
                                                     }, this),
-                                                    "Deadline ",
+                                                    " Assign To ",
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        className: "text-red-500 ml-1",
+                                                        className: "text-red-500",
                                                         children: "*"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 788,
-                                                        columnNumber: 28
+                                                        lineNumber: 547,
+                                                        columnNumber: 125
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 786,
+                                                lineNumber: 547,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
+                                                value: selectedAssignee?.memberId || '',
+                                                onValueChange: handleAssigneeChange,
+                                                disabled: assigneesList.length === 0,
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
+                                                        className: "mt-2",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {
+                                                            placeholder: assigneesList.length === 0 ? "No members" : "Select member"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                            lineNumber: 554,
+                                                            columnNumber: 21
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                        lineNumber: 553,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
+                                                        children: assigneesList.map((member)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
+                                                                value: member.memberId,
+                                                                children: [
+                                                                    member.memberName,
+                                                                    " (",
+                                                                    member.role,
+                                                                    ")"
+                                                                ]
+                                                            }, member._id, true, {
+                                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                                lineNumber: 558,
+                                                                columnNumber: 23
+                                                            }, this))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                        lineNumber: 556,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                lineNumber: 548,
+                                                columnNumber: 17
+                                            }, this),
+                                            errors.assignedTo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-red-500 text-sm mt-1",
+                                                children: errors.assignedTo
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                lineNumber: 564,
+                                                columnNumber: 39
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                        lineNumber: 546,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                lineNumber: 532,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "flex items-center gap-2 font-medium",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CalendarIcon$3e$__["CalendarIcon"], {
+                                                        className: "h-4 w-4 text-blue-600"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                        lineNumber: 571,
+                                                        columnNumber: 72
+                                                    }, this),
+                                                    " Deadline ",
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-red-500",
+                                                        children: "*"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                        lineNumber: 571,
+                                                        columnNumber: 132
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
+                                                lineNumber: 571,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Popover"], {
@@ -1597,272 +1472,193 @@ const CreateSubtaskModal = ({ projectId, taskDetails, open, setOpen, taskId })=>
                                                         asChild: true,
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
                                                             variant: "outline",
-                                                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('w-full justify-between bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-100 focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10', !selectedDate && 'text-gray-500'),
-                                                            children: displayDateTime || 'Select date'
+                                                            className: "w-full mt-2 justify-start",
+                                                            children: displayDateTime || "Pick date"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 792,
+                                                            lineNumber: 574,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 791,
+                                                        lineNumber: 573,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PopoverContent"], {
-                                                        className: "bg-white border border-gray-200 rounded-lg shadow-lg p-0 w-auto",
+                                                        className: "w-auto p-0",
                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$calendar$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Calendar"], {
                                                             mode: "single",
                                                             selected: selectedDate,
-                                                            onSelect: (date)=>{
-                                                                setSelectedDate(date);
-                                                                setErrors((prev)=>({
-                                                                        ...prev,
-                                                                        deadline: ''
-                                                                    }));
-                                                            },
-                                                            initialFocus: true,
-                                                            className: "rounded-lg text-black"
+                                                            onSelect: setSelectedDate
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 803,
+                                                            lineNumber: 579,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 802,
+                                                        lineNumber: 578,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 790,
+                                                lineNumber: 572,
                                                 columnNumber: 17
-                                            }, this),
-                                            errors.deadline && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-red-500 text-xs mt-1 flex items-center",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                        className: "h-3 w-3 mr-1"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 817,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    " ",
-                                                    errors.deadline
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 816,
-                                                columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 785,
+                                        lineNumber: 570,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                className: "flex items-center text-sm font-medium text-gray-700 mb-2",
+                                                className: "flex items-center gap-2 font-medium",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                                        className: "h-4 w-4 text-blue-500 mr-2"
+                                                        className: "h-4 w-4 text-blue-600"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 825,
-                                                        columnNumber: 19
+                                                        lineNumber: 584,
+                                                        columnNumber: 72
                                                     }, this),
-                                                    "Time"
+                                                    " Time (Optional)"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 824,
+                                                lineNumber: 584,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
                                                 type: "time",
                                                 value: selectedTime,
-                                                onChange: (e)=>{
-                                                    setSelectedTime(e.target.value);
-                                                },
-                                                className: "cursor-pointer w-full bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-500 h-10",
-                                                placeholder: "Select time (optional)"
+                                                onChange: (e)=>setSelectedTime(e.target.value),
+                                                className: "mt-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 828,
+                                                lineNumber: 585,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 823,
+                                        lineNumber: 583,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 760,
+                                lineNumber: 569,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-full",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                        className: "flex items-center text-sm font-medium text-gray-700 mb-2",
+                                        className: "font-medium",
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                                className: "h-4 w-4 text-blue-500 mr-2"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 843,
-                                                columnNumber: 17
-                                            }, this),
                                             "Description ",
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-red-500 ml-1",
+                                                className: "text-red-500",
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 844,
-                                                columnNumber: 29
+                                                lineNumber: 591,
+                                                columnNumber: 58
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 842,
+                                        lineNumber: 591,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
                                         name: "description",
                                         value: formData.description,
                                         onChange: handleChange,
-                                        className: "w-full h-40 sm:h-48 md:h-52 bg-white border border-gray-300 rounded-lg text-sm resize-vertical focus:ring-2 focus:ring-blue-200 focus:border-blue-500 p-3",
-                                        placeholder: "Enter detailed subtask description..."
+                                        placeholder: "Details...",
+                                        className: "mt-2 min-h-32"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 846,
+                                        lineNumber: 592,
                                         columnNumber: 15
                                     }, this),
                                     errors.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-red-500 text-xs mt-1 flex items-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                className: "h-3 w-3 mr-1"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 855,
-                                                columnNumber: 19
-                                            }, this),
-                                            " ",
-                                            errors.description
-                                        ]
-                                    }, void 0, true, {
+                                        className: "text-red-500 text-sm mt-1",
+                                        children: errors.description
+                                    }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 854,
-                                        columnNumber: 17
+                                        lineNumber: 593,
+                                        columnNumber: 38
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 841,
+                                lineNumber: 590,
                                 columnNumber: 13
                             }, this),
-                            subTaskError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "bg-red-50 border border-red-200 rounded-lg p-3",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-red-600 text-sm flex items-center",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                            className: "h-4 w-4 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                            lineNumber: 864,
-                                            columnNumber: 19
-                                        }, this),
-                                        " ",
-                                        subTaskError
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                    lineNumber: 863,
-                                    columnNumber: 17
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 862,
-                                columnNumber: 15
-                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200 mt-6",
+                                className: "flex justify-end gap-3 pt-4 border-t",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogClose"], {
-                                        asChild: true,
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                            type: "button",
-                                            variant: "outline",
-                                            onClick: handleClose,
-                                            className: "w-full sm:w-auto bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 rounded-lg text-sm px-4 py-2 h-10",
-                                            children: "Cancel"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                            lineNumber: 872,
-                                            columnNumber: 17
-                                        }, this)
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        type: "button",
+                                        variant: "outline",
+                                        onClick: ()=>setOpen(false),
+                                        children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 871,
+                                        lineNumber: 598,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
                                         type: "submit",
                                         disabled: !isButtonEnabled || subTaskLoading,
-                                        className: "w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm px-6 py-2 h-10 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed",
+                                        className: "bg-blue-600 hover:bg-blue-700",
                                         children: subTaskLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                             children: [
+                                                " ",
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader$3e$__["Loader"], {
                                                     className: "h-4 w-4 animate-spin mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                    lineNumber: 888,
-                                                    columnNumber: 21
+                                                    lineNumber: 604,
+                                                    columnNumber: 38
                                                 }, this),
-                                                "Adding Subtask..."
+                                                " Creating..."
                                             ]
-                                        }, void 0, true) : 'Assign Subtask'
+                                        }, void 0, true) : 'Create Subtask'
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 881,
+                                        lineNumber: 599,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 870,
+                                lineNumber: 597,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                        lineNumber: 738,
+                        lineNumber: 522,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                    lineNumber: 737,
+                    lineNumber: 521,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-            lineNumber: 715,
+            lineNumber: 510,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-        lineNumber: 714,
+        lineNumber: 509,
         columnNumber: 5
     }, this);
 };

@@ -4512,15 +4512,17 @@ const deleteSubTask = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
         return rejectWithValue(err.response?.data || err.message);
     }
 });
-const updateSubTaskStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])("subTask/updateStatus", async ({ taskId, subtaskId, status }, { rejectWithValue })=>{
+const updateSubTaskStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])("subTask/updateStatus", async ({ taskId, subtaskId, status, reviewStatus }, { rejectWithValue })=>{
     console.log("Updating subtask status:", {
         taskId,
         subtaskId,
-        status
+        status,
+        reviewStatus
     });
     try {
         const res = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["axiosInstance"].put(`/subtask/updatesubtaskstatus/${taskId}/${subtaskId}`, {
-            status
+            status,
+            reviewStatus
         });
         return res.data;
     } catch (err) {

@@ -6,9 +6,6 @@
     "[project]/src/app/(protected)/project/[id]/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/project/all/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
     "[project]/src/app/(protected)/projects/[projectId]/[[...slug]]/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
@@ -21,16 +18,7 @@
     "[project]/src/app/(protected)/workspace/task/[id]/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/workspace/task/edit/[id]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/workspace/task/my-tasks/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
     "[project]/src/app/(public)/login/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(public)/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
     "[project]/src/app/_not-found/page": [

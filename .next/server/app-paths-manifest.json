@@ -1,15 +1,11 @@
 {
   "/(protected)/(common)/dashboard/page": "app/(protected)/(common)/dashboard/page.js",
   "/(protected)/project/[id]/page": "app/(protected)/project/[id]/page.js",
-  "/(protected)/project/all/page": "app/(protected)/project/all/page.js",
   "/(protected)/projects/[projectId]/[[...slug]]/page": "app/(protected)/projects/[projectId]/[[...slug]]/page.js",
   "/(protected)/test/page": "app/(protected)/test/page.js",
   "/(protected)/workspace/task/[id]/[subtaskid]/page": "app/(protected)/workspace/task/[id]/[subtaskid]/page.js",
   "/(protected)/workspace/task/[id]/page": "app/(protected)/workspace/task/[id]/page.js",
-  "/(protected)/workspace/task/edit/[id]/page": "app/(protected)/workspace/task/edit/[id]/page.js",
-  "/(protected)/workspace/task/my-tasks/page": "app/(protected)/workspace/task/my-tasks/page.js",
   "/(public)/login/page": "app/(public)/login/page.js",
-  "/(public)/page": "app/(public)/page.js",
   "/_not-found/page": "app/_not-found/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js"
 }

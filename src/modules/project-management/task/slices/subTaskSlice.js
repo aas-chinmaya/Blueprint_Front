@@ -83,13 +83,13 @@ export const deleteSubTask = createAsyncThunk(
 // Update subtask status
 export const updateSubTaskStatus = createAsyncThunk(
   "subTask/updateStatus",
-  async ({ taskId, subtaskId, status }, { rejectWithValue }) => {
-    console.log("Updating subtask status:", { taskId, subtaskId, status });
+  async ({ taskId, subtaskId, status,reviewStatus }, { rejectWithValue }) => {
+    console.log("Updating subtask status:", { taskId, subtaskId, status,reviewStatus });
 
     try {
       const res = await axiosInstance.put(
         `/subtask/updatesubtaskstatus/${taskId}/${subtaskId}`,
-        { status }
+        { status ,reviewStatus}
       );
       return res.data;
     } catch (err) {

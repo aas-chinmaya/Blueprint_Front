@@ -3472,430 +3472,9 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //   Info,
  //   ChevronDown,
  //   ChevronUp,
- // } from "lucide-react";
- // import { useDispatch, useSelector } from "react-redux";
- // import {
- //   getSubTaskById,
- //   updateSubTaskStatus,
- // } from "@/modules/project-management/task/slices/subTaskSlice";
- // import { fetchTaskById } from "@/modules/project-management/task/slices/taskSlice";
- // import { formatDateTimeIST } from "@/utils/formatDate";
- // import { useCurrentUser } from "@/hooks/useCurrentUser";
- // import { toast } from "sonner";
- // import ReportBugModal from "@/modules/project-management/task/components/sub-task/ReportBugModal";
- // const SubTaskFullDetailsPage = ({ task_id, subtask_id }) => {
- //   const dispatch = useDispatch();
- //   const router = useRouter();
- //   const subTask = useSelector((state) => state.subTask.currentSubTask);
- //   const task = useSelector((state) => state.task.currentTask);
- //   const loading = useSelector((state) => state.subTask.status === "loading");
- //   const updating = useSelector((state) => state.subTask.updating);
- //   const { currentUser } = useCurrentUser();
- //   const [showFullDesc, setShowFullDesc] = useState(false);
- //   const [delayDialog, setDelayDialog] = useState(false);
- //   const [delayReason, setDelayReason] = useState("");
- //   const [isReportBugOpen, setIsReportBugOpen] = useState(false);
- //   // Normalize assignees
- //   const assignees = React.useMemo(() => {
- //     if (!subTask) return [];
- //     if (Array.isArray(subTask.assignedTo)) return subTask.assignedTo;
- //     if (subTask.assignedToDetails)
- //       return Array.isArray(subTask.assignedToDetails)
- //         ? subTask.assignedToDetails
- //         : [subTask.assignedToDetails];
- //     if (subTask.assignedTo) return [subTask.assignedTo];
- //     return [];
- //   }, [subTask]);
- //   const isAssignedToMe = assignees.some(
- //     (a) => a.memberId === currentUser?.id || a._id === currentUser?.id
- //   );
- //   const isTeamLeadOrCPC =
- //     currentUser?.role === "cpc" ||
- //     task?.teamLeadId === currentUser?.id ||
- //     currentUser?.position === "Team Lead";
- //   useEffect(() => {
- //     if (task_id && subtask_id) {
- //       dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
- //       dispatch(fetchTaskById(task_id));
- //     }
- //   }, [dispatch, task_id, subtask_id]);
- //   const getInitials = (name = "") =>
- //     name
- //       .split(" ")
- //       .map((n) => n[0])
- //       .join("")
- //       .slice(0, 2)
- //       .toUpperCase();
- //   // Status change handler
- //   const handleStatusChange = async () => {
- //     const current = subTask.status;
- //     let nextStatus = "";
- //     if (current === "Pending") nextStatus = "In Progress";
- //     else if (current === "In Progress") nextStatus = "Completed";
- //     else if (current === "Completed") nextStatus = "In Progress";
- //     // Deadline passed check
- //     if (
- //       nextStatus === "Completed" &&
- //       subTask.deadline &&
- //       new Date() > new Date(subTask.deadline)
- //     ) {
- //       setDelayDialog(true);
- //       return;
- //     }
- //     try {
- //       const payload = {
- //         taskId: task_id,
- //         subtaskId: subtask_id,
- //         status: nextStatus,
- //       };
- //       // Reopen logic
- //       if (current === "Completed") {
- //         payload.updates = { reviewStatus: "N/A", reopened: true };
- //       }
- //       await dispatch(updateSubTaskStatus(payload)).unwrap();
- //       toast.success(
- //         nextStatus === "Completed"
- //           ? "Subtask completed"
- //           : nextStatus === "In Progress" && current === "Completed"
- //           ? "Subtask reopened"
- //           : "Subtask started"
- //       );
- //       dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
- //     } catch (err) {
- //       toast.error("Failed to update status");
- //     }
- //   };
- //   // Delay submission
- //   const submitDelay = async () => {
- //     if (!delayReason.trim()) return;
- //     await dispatch(
- //       updateSubTaskStatus({
- //         taskId: task_id,
- //         subtaskId: subtask_id,
- //         status: "Completed",
- //         delayReason: delayReason.trim(),
- //       })
- //     ).unwrap();
- //     toast.success("Subtask completed with delay reason");
- //     setDelayDialog(false);
- //     setDelayReason("");
- //     dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
- //   };
- //   // Button configuration based on status & permissions
- //   const getActionButton = () => {
- //     if (!isAssignedToMe) return null;
- //     if (subTask.status === "Pending")
- //       return { text: "Start Subtask", color: "bg-orange-600 hover:bg-orange-700", icon: Clock };
- //     if (subTask.status === "In Progress")
- //       return { text: "Mark Completed", color: "bg-teal-600 hover:bg-teal-700", icon: CheckCircle };
- //     if (subTask.status === "Completed" && subTask.reviewStatus !== "Resolved")
- //       return { text: "Reopen Subtask", color: "bg-purple-600 hover:bg-purple-700", icon: RotateCcw };
- //     return null;
- //   };
- //   const actionBtn = getActionButton();
- //   if (loading) {
- //     return (
- //       <div className="min-h-screen bg-gray-50">
- //         <div className="bg-teal-600 h-32" />
- //         <div className="px-6 -mt-20">
- //           <Card className="shadow-xl">
- //             <CardContent className="p-10">
- //               <div className="h-10 bg-gray-200 rounded w-96 mb-6 animate-pulse" />
- //               <div className="space-y-4">
- //                 <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
- //                 <div className="h-64 bg-gray-100 rounded animate-pulse" />
- //               </div>
- //             </CardContent>
- //           </Card>
- //         </div>
- //       </div>
- //     );
- //   }
- //   if (!subTask) {
- //     return (
- //       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
- //         <Card className="text-center p-10">
- //           <h2 className="text-2xl font-bold mb-4">Subtask Not Found</h2>
- //           <Button onClick={() => router.back()} className="bg-teal-600 hover:bg-teal-700">
- //             <ChevronLeft className="mr-2 h-4 w-4" /> Back
- //           </Button>
- //         </Card>
- //       </div>
- //     );
- //   }
- //   return (
- //     <div className="min-h-screen bg-gray-50">
- //       {/* Header */}
- //       <div className="bg-teal-600 text-white">
- //         <div className="px-6 py-6">
- //           <div className="flex items-center gap-4">
- //             <Button
- //               size="sm"
- //               onClick={() => router.back()}
- //               className="bg-teal-700 hover:bg-teal-800 rounded-lg"
- //             >
- //               <ChevronLeft className="w-5 h-5 mr-1" /> Back
- //             </Button>
- //             <div>
- //               <h1 className="text-2xl font-bold">{subTask.title}</h1>
- //               <p className="text-teal-100 text-sm">
- //                 Subtask ID: {subTask.subtask_id || subTask._id}
- //               </p>
- //             </div>
- //           </div>
- //         </div>
- //       </div>
- //         <Card className="shadow-xl border-0">
- //           <CardContent className="p-8 space-y-10">
- //             {/* Status Badges + Action Buttons */}
- //             <div className="flex flex-wrap items-center justify-between gap-6">
- //               <div className="flex flex-wrap items-center gap-3">
- //                 <Badge
- //                   className={`px-4 py-1.5 text-sm font-medium text-white ${
- //                     subTask.status === "Completed"
- //                       ? "bg-gray-800"
- //                       : subTask.status === "In Progress"
- //                       ? "bg-blue-600"
- //                       : "bg-orange-600"
- //                   }`}
- //                 >
- //                   {subTask.status}
- //                 </Badge>
- //                 {subTask.reviewStatus && subTask.reviewStatus !== "N/A" && (
- //                   <Badge className="px-4 py-1.5 text-sm font-medium bg-green-100 text-green-800 border border-green-300">
- //                     {subTask.reviewStatus}
- //                   </Badge>
- //                 )}
- //                 <Badge
- //                   className={`px-4 py-1.5 text-sm font-medium ${
- //                     subTask.priority === "High"
- //                       ? "bg-red-100 text-red-700"
- //                       : subTask.priority === "Medium"
- //                       ? "bg-amber-100 text-amber-700"
- //                       : "bg-green-100 text-green-700"
- //                   }`}
- //                 >
- //                   {subTask.priority} 
- //                 </Badge>
- //               </div>
- //               {/* Action Buttons */}
- //               <div className="flex gap-3">
- //                 {actionBtn && (
- //                   <Button
- //                     onClick={handleStatusChange}
- //                     disabled={updating}
- //                     className={`${actionBtn.color} text-white rounded-lg`}
- //                   >
- //                     <actionBtn.icon className="w-4 h-4 mr-2" />
- //                     {actionBtn.text}
- //                   </Button>
- //                 )}
- //                 {isTeamLeadOrCPC &&
- //                   subTask.status === "Completed" &&
- //                   subTask.reviewStatus !== "Resolved" && (
- //                     <Button
- //                       onClick={() => setIsReportBugOpen(true)}
- //                       className="bg-red-600 hover:bg-red-700 text-white rounded-lg"
- //                     >
- //                       <BugIcon className="w-4 h-4 mr-2" /> Report Bug
- //                     </Button>
- //                   )}
- //               </div>
- //             </div>
- //             {/* Info Grid */}
- //             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-700">
- //               <div>
- //                 <p className="text-sm text-gray-500 flex items-center gap-2">
- //                   <Calendar className="w-4 h-4" /> Deadline
- //                 </p>
- //                 <p
- //                   className={`font-medium mt-1 ${
- //                     subTask.deadline && new Date() > new Date(subTask.deadline)
- //                       ? "text-red-600"
- //                       : ""
- //                   }`}
- //                 >
- //                   {formatDateTimeIST(subTask.deadline) || "No deadline"}
- //                 </p>
- //               </div>
- //               <div>
- //                 <p className="text-sm text-gray-500 flex items-center gap-2">
- //                   <Clock className="w-4 h-4" /> Created
- //                 </p>
- //                 <p className="font-medium mt-1">{formatDateTimeIST(subTask.createdAt)}</p>
- //               </div>
- //               <div>
- //                 <p className="text-sm text-gray-500 flex items-center gap-2">
- //                   <Flag className="w-4 h-4" /> Project
- //                 </p>
- //                 <p className="font-medium mt-1">
- //                   {subTask.projectName || task?.projectName || "—"}
- //                 </p>
- //               </div>
- //               <div>
- //                 <p className="text-sm text-gray-500 flex items-center gap-2">
- //                   <User className="w-4 h-4" /> Assigned To
- //                 </p>
- //                 <div className="flex -space-x-2 mt-2">
- //                   {assignees.length > 0 ? (
- //                     assignees.map((person, i) => (
- //                       <div key={person._id || i} className="group relative">
- //                         <Avatar className="w-10 h-10 ring-4 ring-white hover:z-10 transition-all">
- //                           <AvatarImage src={person.avatar} />
- //                           <AvatarFallback className="bg-teal-600 text-white text-xs font-bold">
- //                             {getInitials(person.memberName || person.name)}
- //                           </AvatarFallback>
- //                         </Avatar>
- //                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-8 opacity-0 group-hover:opacity-100 group-hover:translate-y-10 transition-all bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-20">
- //                           {person.memberName || person.name}
- //                         </div>
- //                       </div>
- //                     ))
- //                   ) : (
- //                     <span className="text-gray-400 mt-2">Unassigned</span>
- //                   )}
- //                   {assignees.length > 4 && (
- //                     <span className="text-sm text-gray-500 ml-3 mt-2">
- //                       +{assignees.length - 4} more
- //                     </span>
- //                   )}
- //                 </div>
- //               </div>
- //             </div>
- //             {/* Description */}
- //             <div>
- //               <p className="text-sm text-gray-500 mb-3 flex items-center gap-2">
- //                 <Info className="w-4 h-4" /> Description
- //               </p>
- //               <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
- //                 {subTask.description?.length > 600 && !showFullDesc ? (
- //                   <>
- //                     <div
- //                       dangerouslySetInnerHTML={{
- //                         __html:
- //                           subTask.description.slice(0, 600).replace(/\n/g, "<br/>") + "...",
- //                       }}
- //                     />
- //                     <button
- //                       onClick={() => setShowFullDesc(true)}
- //                       className="text-teal-600 font-medium text-sm mt-3 hover:underline flex items-center"
- //                     >
- //                       Show more <ChevronDown className="w-4 h-4 ml-1" />
- //                     </button>
- //                   </>
- //                 ) : (
- //                   <>
- //                     <div
- //                       dangerouslySetInnerHTML={{
- //                         __html: (subTask.description || "No description").replace(/\n/g, "<br/>"),
- //                       }}
- //                     />
- //                     {subTask.description?.length > 600 && showFullDesc && (
- //                       <button
- //                         onClick={() => setShowFullDesc(false)}
- //                         className="text-teal-600 font-medium text-sm mt-3 hover:underline flex items-center"
- //                       >
- //                         Show less <ChevronUp className="w-4 h-4 ml-1" />
- //                       </button>
- //                     )}
- //                   </>
- //                 )}
- //               </div>
- //             </div>
- //             {/* Delay Reason */}
- //             {subTask.delayReason && (
- //               <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
- //                 <p className="font-medium text-amber-800 flex items-center gap-2">
- //                   <AlertCircle className="w-5 h-5" /> Delay Reason
- //                 </p>
- //                 <p className="mt-2 text-amber-900">{subTask.delayReason}</p>
- //               </div>
- //             )}
- //           </CardContent>
- //         </Card>
- //       {/* Modals */}
- //       <ReportBugModal
- //         isOpen={isReportBugOpen}
- //         onClose={() => setIsReportBugOpen(false)}
- //         task_id={task_id}
- //         subtask_id={subtask_id}
- //         subtaskTitle={subTask.title}
- //         onBugReported={() =>
- //           dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }))
- //         }
- //       />
- //       <Dialog open={delayDialog} onOpenChange={setDelayDialog}>
- //         <DialogContent>
- //           <DialogHeader>
- //             <DialogTitle className="text-red-600 flex items-center gap-2">
- //               <AlertCircle className="w-5 h-5" /> Deadline Passed
- //             </DialogTitle>
- //           </DialogHeader>
- //           <div className="py-4">
- //             <Label>Reason for delay</Label>
- //             <textarea
- //               value={delayReason}
- //               onChange={(e) => setDelayReason(e.target.value)}
- //               className="w-full mt-2 p-3 border rounded-lg min-h-32 resize-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
- //               placeholder="Explain why the subtask is being completed after the deadline..."
- //             />
- //           </div>
- //           <DialogFooter>
- //             <Button variant="outline" onClick={() => setDelayDialog(false)}>
- //               Cancel
- //             </Button>
- //             <Button
- //               onClick={submitDelay}
- //               disabled={!delayReason.trim() || updating}
- //               className="bg-teal-600 hover:bg-teal-700"
- //             >
- //               Submit & Complete
- //             </Button>
- //           </DialogFooter>
- //         </DialogContent>
- //       </Dialog>
- //     </div>
- //   );
- // };
- // export default SubTaskFullDetailsPage;
- // "use client";
- // import React, { useEffect, useState } from "react";
- // import { useRouter } from "next/navigation";
- // import { Badge } from "@/components/ui/badge";
- // import { Button } from "@/components/ui/button";
- // import { Card, CardContent } from "@/components/ui/card";
- // import { Separator } from "@/components/ui/separator";
- // import {
- //   Dialog,
- //   DialogContent,
- //   DialogHeader,
- //   DialogTitle,
- //   DialogFooter,
- // } from "@/components/ui/dialog";
- // import { Label } from "@/components/ui/label";
- // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
- // import {
- //   ChevronLeft,
- //   User,
- //   Calendar,
- //   Clock,
- //   Flag,
- //   AlertCircle,
- //   CheckCircle,
- //   RotateCcw,
- //   Bug as BugIcon,
- //   Info,
- //   ChevronDown,
- //   ChevronUp,
  //   History,
- //   ListTodo,
  // } from "lucide-react";
- // import {
- //   Tooltip,
- //   TooltipContent,
- //   TooltipProvider,
- //   TooltipTrigger,
- // } from "@/components/ui/tooltip";
+ // import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
  // import { useDispatch, useSelector } from "react-redux";
  // import {
  //   getSubTaskById,
@@ -3919,7 +3498,12 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //   const [delayReason, setDelayReason] = useState("");
  //   const [pendingStatus, setPendingStatus] = useState(null);
  //   const [isReportBugOpen, setIsReportBugOpen] = useState(false);
- //   // Normalize assignees (supports both array and single object)
+ //   const [initialLoading, setInitialLoading] = useState(true); // For 2-sec skeleton
+ //   // Simulate initial loading
+ //   useEffect(() => {
+ //     const timer = setTimeout(() => setInitialLoading(false), 2000);
+ //     return () => clearTimeout(timer);
+ //   }, []);
  //   const assignees = React.useMemo(() => {
  //     if (!subTask) return [];
  //     if (Array.isArray(subTask.assignedTo)) return subTask.assignedTo;
@@ -3930,15 +3514,12 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //     if (subTask.assignedTo) return [subTask.assignedTo];
  //     return [];
  //   }, [subTask]);
- //   const isAssignedToMe = assignees.some(
- //     (a) => a.memberId === currentUser?.id || a._id === currentUser?.id
- //   );
+ //   const isAssignedToMe = assignees.some((a) => a.memberId === currentUser?.id);
  //   const isTeamLeadOrCPC =
  //     currentUser?.role === "cpc" ||
  //     task?.teamLeadId === currentUser?.id ||
  //     currentUser?.position === "Team Lead";
- //   const isSubTaskFullyClosed =
- //     subTask?.status === "Completed" && subTask?.reviewStatus === "Resolved";
+ //   const isFullyResolved = subTask?.reviewStatus === "Resolved";
  //   useEffect(() => {
  //     if (task_id && subtask_id) {
  //       dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
@@ -3952,39 +3533,26 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //       .join("")
  //       .slice(0, 2)
  //       .toUpperCase();
- //   // === Status Transition Logic ===
+ //   // Status Logic
  //   const getNextStatus = (current) => {
  //     if (current === "Pending") return "In Progress";
  //     if (current === "In Progress") return "Completed";
- //     if (current === "Completed") return "In Progress"; // Reopen
+ //     if (current === "Completed") return "In Progress";
  //     return null;
  //   };
  //   const getButtonConfig = () => {
- //     if (!isAssignedToMe || isSubTaskFullyClosed) return null;
+ //     if (!isAssignedToMe || isFullyResolved) return null;
  //     const current = subTask.status;
  //     if (current === "Pending")
- //       return {
- //         text: "Start Subtask",
- //         color: "bg-orange-600 hover:bg-orange-700",
- //         icon: Clock,
- //       };
+ //       return { text: "Start Work", color: "bg-blue-600", icon: Clock };
  //     if (current === "In Progress")
- //       return {
- //         text: "Mark Completed",
- //         color: "bg-teal-600 hover:bg-teal-700",
- //         icon: CheckCircle,
- //       };
- //     if (current === "Completed" && subTask.reviewStatus !== "Resolved")
- //       return {
- //         text: "Reopen Subtask",
- //         color: "bg-purple-600 hover:bg-purple-700",
- //         icon: RotateCcw,
- //       };
+ //       return { text: "Mark Complete", color: "bg-teal-600", icon: CheckCircle };
+ //     if (current === "Completed")
+ //       return { text: "Reopen", color: "bg-purple-600", icon: RotateCcw };
  //     return null;
  //   };
  //   const handleStatusChange = async () => {
  //     const next = getNextStatus(subTask.status);
- //     // Deadline check for completion
  //     if (next === "Completed" && subTask.deadline && new Date() > new Date(subTask.deadline)) {
  //       setPendingStatus("Completed");
  //       setDelayDialog(true);
@@ -3995,19 +3563,12 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //       subtaskId: subtask_id,
  //       status: next,
  //     };
- //     // Reopen logic
  //     if (subTask.status === "Completed") {
  //       payload.updates = { reviewStatus: "N/A", reopened: true };
  //     }
  //     try {
  //       await dispatch(updateSubTaskStatus(payload)).unwrap();
- //       toast.success(
- //         next === "Completed"
- //           ? "Subtask completed"
- //           : next === "In Progress" && subTask.status === "Completed"
- //           ? "Subtask reopened"
- //           : "Subtask started"
- //       );
+ //       toast.success(next === "Completed" ? "Marked as Complete" : "Status updated");
  //       dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
  //     } catch (err) {
  //       toast.error("Failed to update status");
@@ -4023,13 +3584,11 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //         delayReason: delayReason.trim(),
  //       })
  //     ).unwrap();
- //     toast.success("Subtask completed with delay reason");
+ //     toast.success("Completed with delay reason");
  //     setDelayDialog(false);
  //     setDelayReason("");
- //     setPendingStatus(null);
  //     dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
  //   };
- //   // Mark as Resolved (TL/CPC only)
  //   const handleMarkAsResolved = async () => {
  //     try {
  //       await dispatch(
@@ -4039,38 +3598,47 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //           updates: { reviewStatus: "Resolved", resolvedAt: new Date().toISOString() },
  //         })
  //       ).unwrap();
- //       toast.success("Subtask marked as Resolved");
+ //       toast.success("Subtask Resolved Permanently");
  //       dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }));
  //     } catch (err) {
- //       toast.error("Failed to resolve subtask");
+ //       toast.error("Failed to resolve");
  //     }
  //   };
  //   const actionBtn = getButtonConfig();
- //   if (loading) {
+ //   // Full Page Skeleton
+ //   if (initialLoading || loading) {
  //     return (
- //       <div className="min-h-screen bg-gray-50">
- //         <div className="bg-teal-600 h-32" />
- //         <div className="px-6 -mt-20">
- //           <Card className="shadow-xl">
- //             <CardContent className="p-10">
- //               <div className="h-10 bg-gray-200 rounded w-96 mb-6 animate-pulse" />
- //               <div className="space-y-4">
- //                 <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
- //                 <div className="h-64 bg-gray-100 rounded animate-pulse" />
- //               </div>
- //             </CardContent>
- //           </Card>
- //         </div>
+ //       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+ //         <Card className="w-full max-w-4xl mx-4 p-10 shadow-xl">
+ //           <div className="space-y-8 animate-pulse">
+ //             <div className="h-10 bg-gray-200 rounded w-3/4" />
+ //             <div className="flex gap-4">
+ //               <div className="h-8 bg-gray-200 rounded w-32" />
+ //               <div className="h-8 bg-gray-200 rounded w-32" />
+ //             </div>
+ //             <div className="grid grid-cols-4 gap-6">
+ //               {[1, 2, 3, 4].map((i) => (
+ //                 <div key={i} className="space-y-3">
+ //                   <div className="h-4 bg-gray-200 rounded w-24" />
+ //                   <div className="h-6 bg-gray-300 rounded w-32" />
+ //                 </div>
+ //               ))}
+ //             </div>
+ //             <div className="h-48 bg-gray-100 rounded-lg" />
+ //           </div>
+ //         </Card>
  //       </div>
  //     );
  //   }
+ //   // Full Page Not Found
  //   if (!subTask) {
  //     return (
  //       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
- //         <Card className="text-center p-10">
- //           <h2 className="text-2xl font-bold mb-4">Subtask Not Found</h2>
+ //         <Card className="text-center p-12 shadow-xl">
+ //           <h1 className="text-3xl font-bold text-gray-800 mb-4">Subtask Not Found</h1>
+ //           <p className="text-gray-600 mb-8">The subtask you're looking for doesn't exist or has been removed.</p>
  //           <Button onClick={() => router.back()} className="bg-teal-600 hover:bg-teal-700">
- //             <ChevronLeft className="mr-2 h-4 w-4" /> Back
+ //             <ChevronLeft className="mr-2" /> Go Back
  //           </Button>
  //         </Card>
  //       </div>
@@ -4080,10 +3648,9 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //     <TooltipProvider>
  //       <div className="min-h-screen bg-gray-50">
  //         {/* Header */}
- //         <div className="bg-teal-600 text-white">
- //           <div className="px-6 py-6">
- //             <div className="flex items-center gap-4">
- //               <Button
+ //         <div className="bg-teal-600 text-white py-8 px-6">
+ //           <div className="flex items-center gap-4">
+ //                <Button
  //                 size="sm"
  //                 onClick={() => router.back()}
  //                 className="bg-teal-700 hover:bg-teal-800 rounded-lg"
@@ -4091,195 +3658,83 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //                 <ChevronLeft className="w-5 h-5 mr-1" /> Back
  //               </Button>
  //               <div>
- //                 <h1 className="text-2xl font-bold">{subTask.title}</h1>
- //                 <p className="text-teal-100 text-sm">
- //                   Subtask ID: {subTask.subtask_id || subTask._id}
- //                 </p>
- //               </div>
+ //               <p className="text-teal-100 text-sm">Subtask • {subTask.subtask_id || subTask._id}</p>
  //             </div>
  //           </div>
  //         </div>
- //         <div className="px-6 -mt-20">
- //           <Card className="shadow-xl border-0">
+ //           <Card className="shadow-xl border-0 min-h-screen">
  //             <CardContent className="p-8 space-y-10">
- //               {/* Status + Actions */}
+ //               {/* Status Badges */}
  //               <div className="flex flex-wrap items-center justify-between gap-6">
- //                 <div className="flex flex-wrap items-center gap-3">
- //                   <Badge
- //                     className={`px-4 py-1.5 text-sm font-medium text-white ${
- //                       subTask.status === "Completed"
- //                         ? "bg-gray-800"
- //                         : subTask.status === "In Progress"
- //                         ? "bg-blue-600"
- //                         : "bg-orange-600"
- //                     }`}
- //                   >
- //                     {subTask.status}
+ //                 <div className="flex flex-wrap gap-3">
+ //                   <Badge className={`px-4 py-2 text-sm font-semibold ${
+ //                     subTask.status === "Completed" ? "bg-gray-700" :
+ //                     subTask.status === "In Progress" ? "bg-blue-600" : "bg-orange-600"
+ //                   } text-white`}>
+ //                     {subTask.status === "Completed" ? "Complete" : subTask.status === "In Progress" ? "Open" : "Pending"}
  //                   </Badge>
  //                   {subTask.reviewStatus && subTask.reviewStatus !== "N/A" && (
- //                     <Badge
- //                       className={`px-4 py-1.5 text-sm font-medium ${
- //                         subTask.reviewStatus === "Resolved"
- //                           ? "bg-green-100 text-green-800 border border-green-300"
- //                           : "bg-yellow-100 text-yellow-800 border border-yellow-300"
- //                       }`}
- //                     >
+ //                     <Badge className={`px-4 py-2 text-sm font-semibold ${
+ //                       subTask.reviewStatus === "Resolved" ? "bg-green-600 text-white" : "bg-amber-600 text-white"
+ //                     }`}>
  //                       {subTask.reviewStatus}
  //                     </Badge>
  //                   )}
- //                   <Badge
- //                     className={`px-4 py-1.5 text-sm font-medium ${
- //                       subTask.priority === "High"
- //                         ? "bg-red-100 text-red-700"
- //                         : subTask.priority === "Medium"
- //                         ? "bg-amber-100 text-amber-700"
- //                         : "bg-green-100 text-green-700"
- //                     }`}
- //                   >
- //                     {subTask.priority} Priority
+ //                   <Badge className={`px-4 py-2 text-sm font-semibold ${
+ //                     subTask.priority === "High" ? "bg-red-600" :
+ //                     subTask.priority === "Medium" ? "bg-yellow-600" : "bg-green-600"
+ //                   } text-white`}>
+ //                     {subTask.priority}
  //                   </Badge>
  //                 </div>
- //                 {/* Action Buttons */}
- //                 <div className="flex flex-wrap gap-3">
+ //                 <div className="flex gap-3">
  //                   {actionBtn && (
- //                     <Tooltip>
- //                       <TooltipTrigger asChild>
- //                         <Button
- //                           onClick={handleStatusChange}
- //                           disabled={updating}
- //                           className={`${actionBtn.color} text-white rounded-lg`}
- //                         >
- //                           <actionBtn.icon className="w-4 h-4 mr-2" />
- //                           {actionBtn.text}
- //                         </Button>
- //                       </TooltipTrigger>
- //                       <TooltipContent>
- //                         {subTask.status === "Completed" ? "Reopen as In Progress" : actionBtn.text}
- //                       </TooltipContent>
- //                     </Tooltip>
+ //                     <Button onClick={handleStatusChange} disabled={updating} className={`${actionBtn.color} text-white`}>
+ //                       <actionBtn.icon className="w-4 h-4 mr-2" />
+ //                       {actionBtn.text}
+ //                     </Button>
  //                   )}
- //                   {/* Mark as Resolved */}
- //                   {isTeamLeadOrCPC &&
- //                     subTask.status === "Completed" &&
- //                     subTask.reviewStatus === "N/A" && (
- //                       <Tooltip>
- //                         <TooltipTrigger asChild>
- //                           <Button
- //                             onClick={handleMarkAsResolved}
- //                             disabled={updating}
- //                             className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg"
- //                           >
- //                             <CheckCircle className="w-4 h-4 mr-2" />
- //                             Mark as Resolved
- //                           </Button>
- //                         </TooltipTrigger>
- //                         <TooltipContent>Close subtask permanently</TooltipContent>
- //                       </Tooltip>
- //                     )}
- //                   {/* Report Bug */}
- //                   {isTeamLeadOrCPC && subTask.status === "Completed" && (
- //                     <Tooltip>
- //                       <TooltipTrigger asChild>
- //                         <Button
- //                           onClick={() => setIsReportBugOpen(true)}
- //                           className="bg-red-600 hover:bg-red-700 text-white rounded-lg"
- //                         >
- //                           <BugIcon className="w-4 h-4 mr-2" /> Report Bug
- //                         </Button>
- //                       </TooltipTrigger>
- //                       <TooltipContent>Report an issue with this completed work</TooltipContent>
- //                     </Tooltip>
+ //                   {isTeamLeadOrCPC && subTask.status === "Completed" && subTask.reviewStatus === "N/A" && (
+ //                     <Button onClick={handleMarkAsResolved} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+ //                       <CheckCircle className="w-4 h-4 mr-2" />
+ //                       Approve & Close
+ //                     </Button>
+ //                   )}
+ //                   {isTeamLeadOrCPC && subTask.status === "Completed" && !isFullyResolved && (
+ //                     <Button onClick={() => setIsReportBugOpen(true)} className="bg-gray-700 hover:bg-gray-800 text-white">
+ //                       <BugIcon className="w-4 h-4 mr-2" />
+ //                       Report Issue
+ //                     </Button>
  //                   )}
  //                 </div>
  //               </div>
- //               {/* Info Grid */}
- //               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-700">
- //                 <div>
- //                   <p className="text-sm text-gray-500 flex items-center gap-2">
- //                     <Calendar className="w-4 h-4" /> Deadline
- //                   </p>
- //                   <p
- //                     className={`font-medium mt-1 ${
- //                       subTask.deadline && new Date() > new Date(subTask.deadline)
- //                         ? "text-red-600"
- //                         : ""
- //                     }`}
- //                   >
- //                     {formatDateTimeIST(subTask.deadline) || "No deadline"}
- //                   </p>
- //                 </div>
- //                 <div>
- //                   <p className="text-sm text-gray-500 flex items-center gap-2">
- //                     <Clock className="w-4 h-4" /> Created
- //                   </p>
- //                   <p className="font-medium mt-1">{formatDateTimeIST(subTask.createdAt)}</p>
- //                 </div>
- //                 <div>
- //                   <p className="text-sm text-gray-500 flex items-center gap-2">
- //                     <Flag className="w-4 h-4" /> Project
- //                   </p>
- //                   <p className="font-medium mt-1">
- //                     {subTask.projectName || task?.projectName || "—"}
- //                   </p>
- //                 </div>
- //                 <div>
- //                   <p className="text-sm text-gray-500 flex items-center gap-2">
- //                     <User className="w-4 h-4" /> Assigned To
- //                   </p>
- //                   <div className="flex -space-x-2 mt-2">
- //                     {assignees.length > 0 ? (
- //                       assignees.map((person, i) => (
- //                         <div key={person._id || i} className="group relative">
- //                           <Avatar className="w-10 h-10 ring-4 ring-white hover:z-10 transition-all">
- //                             <AvatarImage src={person.avatar} />
- //                             <AvatarFallback className="bg-teal-600 text-white text-xs font-bold">
- //                               {getInitials(person.memberName || person.name)}
- //                             </AvatarFallback>
- //                           </Avatar>
- //                           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-8 opacity-0 group-hover:opacity-100 group-hover:translate-y-10 transition-all bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-20">
- //                             {person.memberName || person.name}
- //                           </div>
- //                         </div>
- //                       ))
- //                     ) : (
- //                       <span className="text-gray-400 mt-2">Unassigned</span>
- //                     )}
- //                   </div>
- //                 </div>
- //               </div>
- //               {/* Description */}
+ //     {/* title */}
  //               <div>
- //                 <p className="text-sm text-gray-500 mb-3 flex items-center gap-2">
- //                   <Info className="w-4 h-4" /> Description
- //                 </p>
- //                 <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+ //                 <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+ //                   <Info className="w-5 h-5 text-teal-600" /> Title
+ //                 </h3>
+ //                 <div className="  text-gray-700 leading-relaxed whitespace-pre-wrap">
+ //                   {subTask.title || "No title provided."}
+ //                 </div>
+ //               </div>
+ //               {/* descripotion */}
+ //               <div>
+ //                 <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+ //                   <Info className="w-5 h-5 text-teal-600" /> Description
+ //                 </h3>
+ //                 <div className="   text-gray-700 leading-relaxed whitespace-pre-wrap">
  //                   {subTask.description?.length > 600 && !showFullDesc ? (
  //                     <>
- //                       <div
- //                         dangerouslySetInnerHTML={{
- //                           __html:
- //                             subTask.description.slice(0, 600).replace(/\n/g, "<br/>") + "...",
- //                         }}
- //                       />
- //                       <button
- //                         onClick={() => setShowFullDesc(true)}
- //                         className="text-teal-600 font-medium text-sm mt-3 hover:underline flex items-center"
- //                       >
+ //                       <div dangerouslySetInnerHTML={{ __html: subTask.description.slice(0, 600).replace(/\n/g, "<br/>") + "..." }} />
+ //                       <button onClick={() => setShowFullDesc(true)} className="text-teal-600 font-medium text-sm mt-3 flex items-center hover:underline">
  //                         Show more <ChevronDown className="w-4 h-4 ml-1" />
  //                       </button>
  //                     </>
  //                   ) : (
  //                     <>
- //                       <div
- //                         dangerouslySetInnerHTML={{
- //                           __html: (subTask.description || "No description").replace(/\n/g, "<br/>"),
- //                         }}
- //                       />
+ //                       <div dangerouslySetInnerHTML={{ __html: (subTask.description || "No description provided.").replace(/\n/g, "<br/>") }} />
  //                       {subTask.description?.length > 600 && showFullDesc && (
- //                         <button
- //                           onClick={() => setShowFullDesc(false)}
- //                           className="text-teal-600 font-medium text-sm mt-3 hover:underline flex items-center"
- //                         >
+ //                         <button onClick={() => setShowFullDesc(false)} className="text-teal-600 font-medium text-sm mt-3 flex items-center hover:underline">
  //                           Show less <ChevronUp className="w-4 h-4 ml-1" />
  //                         </button>
  //                       )}
@@ -4287,73 +3742,59 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //                   )}
  //                 </div>
  //               </div>
+ //               {/* Info Grid */}
+ //               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-700">
+ //                 <div>
+ //                   <p className="text-sm text-gray-500 flex items-center gap-2"><Calendar className="w-4 h-4" /> Deadline</p>
+ //                   <p className={`font-semibold mt-1 ${new Date() > new Date(subTask.deadline) ? "text-red-600" : ""}`}>
+ //                     {formatDateTimeIST(subTask.deadline) || "No deadline"}
+ //                   </p>
+ //                 </div>
+ //                 <div>
+ //                   <p className="text-sm text-gray-500 flex items-center gap-2"><Clock className="w-4 h-4" /> Created</p>
+ //                   <p className="font-semibold mt-1">{formatDateTimeIST(subTask.createdAt)}</p>
+ //                 </div>
+ //                 <div>
+ //                   <p className="text-sm text-gray-500 flex items-center gap-2"><Flag className="w-4 h-4" /> Project</p>
+ //                   <p className="font-semibold mt-1">{subTask.projectName || task?.projectName || "—"}</p>
+ //                 </div>
+ //                 <div>
+ //                   <p className="text-sm text-gray-500 flex items-center gap-2"><User className="w-4 h-4" /> Assigned</p>
+ //                   <div className="flex -space-x-3 mt-2">
+ //                     {assignees.length > 0 ? assignees.map((p, i) => (
+ //                       <Avatar key={i} className="w-10 h-10 ring-4 ring-white">
+ //                         <AvatarImage src={p.avatar} />
+ //                         <AvatarFallback className="bg-teal-600 text-white text-xs">
+ //                           {getInitials(p.memberName || p.name)}
+ //                         </AvatarFallback>
+ //                       </Avatar>
+ //                     )) : <span className="text-gray-400">Unassigned</span>}
+ //                   </div>
+ //                 </div>
+ //               </div>
  //               {/* Delay Reason */}
  //               {subTask.delayReason && (
- //                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
- //                   <p className="font-medium text-amber-800 flex items-center gap-2">
+ //                 <div className="bg-amber-50 border border-amber-300 rounded-lg p-5">
+ //                   <p className="font-semibold text-amber-800 flex items-center gap-2">
  //                     <AlertCircle className="w-5 h-5" /> Delay Reason
  //                   </p>
  //                   <p className="mt-2 text-amber-900">{subTask.delayReason}</p>
  //                 </div>
  //               )}
- //               {/* Reported Bugs */}
+ //               {/* Bugs - Clean List */}
  //               {subTask.bugs && subTask.bugs.length > 0 && (
  //                 <>
- //                   <Separator />
+ //                   <Separator className="my-8" />
  //                   <div>
- //                     <h3 className="text-lg font-semibold mb-4 text-teal-700 flex items-center gap-2">
- //                       <BugIcon className="w-5 h-5" /> Reported Bugs
- //                     </h3>
+ //                     <h3 className="text-lg font-semibold mb-4 text-gray-800">Reported Issues</h3>
  //                     <div className="space-y-3">
  //                       {subTask.bugs.map((bug, i) => (
- //                         <div
- //                           key={i}
- //                           className="bg-red-50 border border-red-200 rounded-lg p-4 flex justify-between items-center"
- //                         >
+ //                         <div key={i} className="bg-gray-50 border rounded-lg p-4 flex justify-between items-center">
  //                           <div>
- //                             <p className="font-medium text-red-900">{bug.title}</p>
- //                             <p className="text-sm text-red-700 mt-1">{bug.description}</p>
+ //                             <p className="font-medium text-gray-800">{bug.title}</p>
+ //                             <p className="text-sm text-gray-600 mt-1">{formatDateTimeIST(bug.createdAt)}</p>
  //                           </div>
- //                           <div className="text-right text-sm">
- //                             <Badge className="bg-red-600 text-white">{bug.status || "Open"}</Badge>
- //                             <p className="text-xs text-gray-600 mt-1">
- //                               {formatDateTimeIST(bug.createdAt)}
- //                             </p>
- //                           </div>
- //                         </div>
- //                       ))}
- //                     </div>
- //                   </div>
- //                 </>
- //               )}
- //               {/* Review History */}
- //               {subTask.history && subTask.history.length > 0 && (
- //                 <>
- //                   <Separator />
- //                   <div>
- //                     <h3 className="text-lg font-semibold mb-4 text-teal-700 flex items-center gap-2">
- //                       <History className="w-5 h-5" /> Review & Activity History
- //                     </h3>
- //                     <div className="space-y-3 max-h-96 overflow-y-auto">
- //                       {subTask.history.map((entry, i) => (
- //                         <div
- //                           key={i}
- //                           className="bg-gray-50 border rounded-lg p-4 text-sm"
- //                         >
- //                           <div className="flex justify-between">
- //                             <span className="font-medium">{entry.action || entry.type}</span>
- //                             <span className="text-gray-500">
- //                               {formatDateTimeIST(entry.timestamp || entry.createdAt)}
- //                             </span>
- //                           </div>
- //                           {entry.comments && (
- //                             <p className="mt-2 italic text-gray-700">"{entry.comments}"</p>
- //                           )}
- //                           {entry.user && (
- //                             <p className="text-xs text-gray-500 mt-1">
- //                               by {entry.user.name || entry.user.email}
- //                             </p>
- //                           )}
+ //                           <Badge className={bug.status === "Resolved" ? "bg-green-600" : "bg-orange-600"}>{bug.status || "Open"}</Badge>
  //                         </div>
  //                       ))}
  //                     </div>
@@ -4362,7 +3803,6 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //               )}
  //             </CardContent>
  //           </Card>
- //         </div>
  //         {/* Modals */}
  //         <ReportBugModal
  //           isOpen={isReportBugOpen}
@@ -4370,24 +3810,20 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //           task_id={task_id}
  //           subtask_id={subtask_id}
  //           subtaskTitle={subTask.title}
- //           onBugReported={() =>
- //             dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }))
- //           }
+ //           onBugReported={() => dispatch(getSubTaskById({ taskId: task_id, subTaskId: subtask_id }))}
  //         />
  //         <Dialog open={delayDialog} onOpenChange={setDelayDialog}>
  //           <DialogContent>
  //             <DialogHeader>
- //               <DialogTitle className="text-red-600 flex items-center gap-2">
- //                 <AlertCircle className="w-5 h-5" /> Deadline Passed
- //               </DialogTitle>
+ //               <DialogTitle className="text-red-600">Deadline Missed</DialogTitle>
  //             </DialogHeader>
  //             <div className="py-4">
- //               <Label>Reason for delay</Label>
+ //               <Label>Reason for delay (required)</Label>
  //               <textarea
  //                 value={delayReason}
  //                 onChange={(e) => setDelayReason(e.target.value)}
- //                 className="w-full mt-2 p-3 border rounded-lg min-h-32 resize-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
- //                 placeholder="Explain why the subtask is being completed after the deadline..."
+ //                 className="w-full mt-2 p-3 border rounded-lg min-h-32 resize-none focus:ring-2 focus:ring-teal-500"
+ //                 placeholder="Please explain why this was completed after the deadline..."
  //               />
  //             </div>
  //             <DialogFooter>
@@ -4399,7 +3835,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
  //                 disabled={!delayReason.trim() || updating}
  //                 className="bg-teal-600 hover:bg-teal-700"
  //               >
- //                 Submit & Complete
+ //                 Complete with Reason
  //               </Button>
  //             </DialogFooter>
  //           </DialogContent>

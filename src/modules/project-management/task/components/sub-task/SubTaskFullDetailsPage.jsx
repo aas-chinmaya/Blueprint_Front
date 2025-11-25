@@ -534,6 +534,3 @@ export default SubTaskFullDetailsPage;
 
 
 
-
-
-

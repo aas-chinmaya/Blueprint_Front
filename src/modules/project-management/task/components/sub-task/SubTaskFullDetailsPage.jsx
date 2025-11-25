@@ -269,9 +269,6 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id }) => {
       </div>
     )}
 
-{
-      console.log(subTask)
-}
     
     
   {/* delay reason */}

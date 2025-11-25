@@ -36,13 +36,7 @@ export default function UserAvatar({ user }) {
  
         <AvatarImage src={profileImageUrl} alt={user?.fullName || "User"} className="object-cover" />
     
-      {/* {profileImageUrl ? (
-        <AvatarImage src={profileImageUrl} alt={user?.fullName || "User"} className="object-cover" />
-      ) : (
-        <AvatarFallback className="text-gray-700 bg-gray-200 flex items-center justify-center text-sm font-medium">
-          {fallbackChar}
-        </AvatarFallback>
-      )} */}
+    
     </Avatar>
   );
 }

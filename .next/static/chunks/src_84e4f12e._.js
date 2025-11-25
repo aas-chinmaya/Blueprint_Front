@@ -2139,7 +2139,6 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                             lineNumber: 263,
                             columnNumber: 7
                         }, this),
-                        console.log(subTask),
                         subTask.delayReason && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2147,7 +2146,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: " Reason of delays"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 281,
+                                    lineNumber: 278,
                                     columnNumber: 9
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -2155,13 +2154,13 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: subTask.delayReason
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 282,
+                                    lineNumber: 279,
                                     columnNumber: 9
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 279,
+                            lineNumber: 276,
                             columnNumber: 7
                         }, this),
                         subTask.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2172,7 +2171,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: "Description"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 290,
+                                    lineNumber: 287,
                                     columnNumber: 9
                                 }, this),
                                 subTask.description.length > 600 && !showFullDesc ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2183,7 +2182,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 293,
+                                            lineNumber: 290,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2195,13 +2194,13 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     className: "w-4 h-4 ml-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 300,
+                                                    lineNumber: 297,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 296,
+                                            lineNumber: 293,
                                             columnNumber: 13
                                         }, this)
                                     ]
@@ -2213,7 +2212,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 305,
+                                            lineNumber: 302,
                                             columnNumber: 13
                                         }, this),
                                         subTask.description.length > 600 && showFullDesc && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2225,13 +2224,13 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     className: "w-4 h-4 ml-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 313,
+                                                    lineNumber: 310,
                                                     columnNumber: 27
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 309,
+                                            lineNumber: 306,
                                             columnNumber: 15
                                         }, this)
                                     ]
@@ -2239,7 +2238,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 289,
+                            lineNumber: 286,
                             columnNumber: 7
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2252,7 +2251,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 327,
+                                            lineNumber: 324,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2262,7 +2261,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Project"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 329,
+                                                    lineNumber: 326,
                                                     columnNumber: 13
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2270,19 +2269,19 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: subTask.projectName || task?.projectName
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 330,
+                                                    lineNumber: 327,
                                                     columnNumber: 13
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 328,
+                                            lineNumber: 325,
                                             columnNumber: 11
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 326,
+                                    lineNumber: 323,
                                     columnNumber: 9
                                 }, this),
                                 subTask.priority && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2292,7 +2291,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 343,
+                                            lineNumber: 340,
                                             columnNumber: 5
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2302,7 +2301,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Priority"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 346,
+                                                    lineNumber: 343,
                                                     columnNumber: 7
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2313,19 +2312,19 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: subTask.priority
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 348,
+                                                    lineNumber: 345,
                                                     columnNumber: 7
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 345,
+                                            lineNumber: 342,
                                             columnNumber: 5
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 340,
+                                    lineNumber: 337,
                                     columnNumber: 3
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2335,7 +2334,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 369,
+                                            lineNumber: 366,
                                             columnNumber: 9
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2346,7 +2345,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Assigned to"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 371,
+                                                    lineNumber: 368,
                                                     columnNumber: 11
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2359,7 +2358,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                                     alt: p.memberName || p.name
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                                    lineNumber: 376,
+                                                                    lineNumber: 373,
                                                                     columnNumber: 19
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
@@ -2367,37 +2366,37 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                                     children: getInitials(p.memberName || p.name)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                                    lineNumber: 377,
+                                                                    lineNumber: 374,
                                                                     columnNumber: 19
                                                                 }, this)
                                                             ]
                                                         }, i, true, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                            lineNumber: 375,
+                                                            lineNumber: 372,
                                                             columnNumber: 17
                                                         }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-gray-500 text-sm mt-1",
                                                         children: "Unassigned"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                        lineNumber: 383,
+                                                        lineNumber: 380,
                                                         columnNumber: 15
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 372,
+                                                    lineNumber: 369,
                                                     columnNumber: 11
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 370,
+                                            lineNumber: 367,
                                             columnNumber: 9
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 368,
+                                    lineNumber: 365,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2407,7 +2406,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 396,
+                                            lineNumber: 393,
                                             columnNumber: 3
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2417,7 +2416,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Status"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 400,
+                                                    lineNumber: 397,
                                                     columnNumber: 5
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2428,19 +2427,19 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: subTask.status === "Completed" ? "Complete" : subTask.status
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 402,
+                                                    lineNumber: 399,
                                                     columnNumber: 5
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 399,
+                                            lineNumber: 396,
                                             columnNumber: 3
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 393,
+                                    lineNumber: 390,
                                     columnNumber: 1
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2450,7 +2449,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 423,
+                                            lineNumber: 420,
                                             columnNumber: 9
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2460,7 +2459,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Created"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 425,
+                                                    lineNumber: 422,
                                                     columnNumber: 11
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2468,19 +2467,19 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$formatDate$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateTimeIST"])(subTask.createdAt)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 426,
+                                                    lineNumber: 423,
                                                     columnNumber: 11
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 424,
+                                            lineNumber: 421,
                                             columnNumber: 9
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 422,
+                                    lineNumber: 419,
                                     columnNumber: 7
                                 }, this),
                                 subTask.deadline && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2490,7 +2489,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 435,
+                                            lineNumber: 432,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2500,7 +2499,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Deadline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 437,
+                                                    lineNumber: 434,
                                                     columnNumber: 13
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2508,19 +2507,19 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$formatDate$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateTimeIST"])(subTask.deadline)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 438,
+                                                    lineNumber: 435,
                                                     columnNumber: 13
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 436,
+                                            lineNumber: 433,
                                             columnNumber: 11
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 434,
+                                    lineNumber: 431,
                                     columnNumber: 9
                                 }, this),
                                 subTask.reviewStatus && subTask.reviewStatus !== "N/A" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2530,7 +2529,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 448,
+                                            lineNumber: 445,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2540,7 +2539,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: "Review"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 450,
+                                                    lineNumber: 447,
                                                     columnNumber: 13
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -2548,25 +2547,25 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                     children: subTask.reviewStatus || "N/A"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 451,
+                                                    lineNumber: 448,
                                                     columnNumber: 13
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 449,
+                                            lineNumber: 446,
                                             columnNumber: 11
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 447,
+                                    lineNumber: 444,
                                     columnNumber: 9
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 322,
+                            lineNumber: 319,
                             columnNumber: 5
                         }, this),
                         subTask.delayReason && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2579,14 +2578,14 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 464,
+                                            lineNumber: 461,
                                             columnNumber: 11
                                         }, this),
                                         " Delay Reason"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 463,
+                                    lineNumber: 460,
                                     columnNumber: 9
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2594,13 +2593,13 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: subTask.delayReason
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 466,
+                                    lineNumber: 463,
                                     columnNumber: 9
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 462,
+                            lineNumber: 459,
                             columnNumber: 7
                         }, this),
                         subTask.bugs && subTask.bugs.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2609,7 +2608,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     className: "my-10"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 473,
+                                    lineNumber: 470,
                                     columnNumber: 9
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2619,7 +2618,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                             children: "Reported Issues"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 475,
+                                            lineNumber: 472,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2634,7 +2633,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                                     children: bug.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                                    lineNumber: 480,
+                                                                    lineNumber: 477,
                                                                     columnNumber: 19
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2645,13 +2644,13 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                                    lineNumber: 481,
+                                                                    lineNumber: 478,
                                                                     columnNumber: 19
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                            lineNumber: 479,
+                                                            lineNumber: 476,
                                                             columnNumber: 17
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -2659,24 +2658,24 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                                             children: bug.status || "Open"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                            lineNumber: 485,
+                                                            lineNumber: 482,
                                                             columnNumber: 17
                                                         }, this)
                                                     ]
                                                 }, i, true, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                                    lineNumber: 478,
+                                                    lineNumber: 475,
                                                     columnNumber: 15
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                            lineNumber: 476,
+                                            lineNumber: 473,
                                             columnNumber: 11
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 474,
+                                    lineNumber: 471,
                                     columnNumber: 9
                                 }, this)
                             ]
@@ -2706,7 +2705,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                     }))
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                lineNumber: 498,
+                lineNumber: 495,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -2720,12 +2719,12 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                 children: "Deadline Missed"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                lineNumber: 513,
+                                lineNumber: 510,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 512,
+                            lineNumber: 509,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2735,7 +2734,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: "Reason for delay (required)"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 516,
+                                    lineNumber: 513,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2745,13 +2744,13 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     placeholder: "Please explain why this was completed after the deadline..."
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 517,
+                                    lineNumber: 514,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 515,
+                            lineNumber: 512,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -2762,7 +2761,7 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 525,
+                                    lineNumber: 522,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2772,24 +2771,24 @@ const SubTaskFullDetailsPage = ({ task_id, subtask_id })=>{
                                     children: "Complete with Reason"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                                    lineNumber: 526,
+                                    lineNumber: 523,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                            lineNumber: 524,
+                            lineNumber: 521,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                    lineNumber: 511,
+                    lineNumber: 508,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/task/components/sub-task/SubTaskFullDetailsPage.jsx",
-                lineNumber: 510,
+                lineNumber: 507,
                 columnNumber: 7
             }, this)
         ]

@@ -88,7 +88,7 @@ export const updateSubTaskStatus = createAsyncThunk(
 
     try {
       const res = await axiosInstance.put(
-        `/subtask/updatesubtaskstatus/${taskId}/${subtaskId}`,
+        `/subtask/updatesubtask/${taskId}/${subtaskId}`,
         { status ,reviewStatus}
       );
       return res.data;

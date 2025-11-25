@@ -253,18 +253,13 @@
     --color-purple-900: oklch(38.1% .176 304.987);
     --color-pink-50: oklch(97.1% .014 343.198);
     --color-rose-100: oklch(94.1% .03 12.58);
-    --color-rose-200: oklch(89.2% .058 10.001);
     --color-rose-300: oklch(81% .117 11.638);
     --color-rose-500: oklch(64.5% .246 16.439);
     --color-rose-600: oklch(58.6% .253 17.585);
     --color-rose-700: oklch(51.4% .222 16.935);
     --color-rose-800: oklch(45.5% .188 13.697);
     --color-rose-900: oklch(41% .159 10.272);
-    --color-slate-50: oklch(98.4% .003 247.858);
-    --color-slate-100: oklch(96.8% .007 247.896);
     --color-slate-200: oklch(92.9% .013 255.508);
-    --color-slate-500: oklch(55.4% .046 257.417);
-    --color-slate-600: oklch(44.6% .043 257.281);
     --color-slate-800: oklch(27.9% .041 260.031);
     --color-gray-50: oklch(98.5% .002 247.839);
     --color-gray-100: oklch(96.7% .003 264.542);
@@ -885,10 +880,6 @@
 
   .my-6 {
     margin-block: calc(var(--spacing) * 6);
-  }
-
-  .my-8 {
-    margin-block: calc(var(--spacing) * 8);
   }
 
   .my-10 {
@@ -1948,7 +1939,7 @@
     flex-shrink: 0;
   }
 
-  .flex-grow, .grow {
+  .grow {
     flex-grow: 1;
   }
 
@@ -2832,10 +2823,6 @@
     border-color: var(--color-red-500);
   }
 
-  .border-rose-200 {
-    border-color: var(--color-rose-200);
-  }
-
   .border-rose-500 {
     border-color: var(--color-rose-500);
   }
@@ -2920,10 +2907,6 @@
     background-color: var(--color-amber-500);
   }
 
-  .bg-amber-600 {
-    background-color: var(--color-amber-600);
-  }
-
   .bg-background {
     background-color: var(--background);
   }
@@ -2978,16 +2961,6 @@
 
   .bg-blue-600 {
     background-color: var(--color-blue-600);
-  }
-
-  .bg-blue-600\/70 {
-    background-color: #155dfcb3;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-blue-600\/70 {
-      background-color: color-mix(in oklab, var(--color-blue-600) 70%, transparent);
-    }
   }
 
   .bg-blue-700 {
@@ -3310,10 +3283,6 @@
     background-color: var(--color-rose-500);
   }
 
-  .bg-rose-600 {
-    background-color: var(--color-rose-600);
-  }
-
   .bg-secondary {
     background-color: var(--secondary);
   }
@@ -3326,20 +3295,8 @@
     background-color: var(--sidebar-border);
   }
 
-  .bg-slate-50 {
-    background-color: var(--color-slate-50);
-  }
-
-  .bg-slate-100 {
-    background-color: var(--color-slate-100);
-  }
-
   .bg-slate-200 {
     background-color: var(--color-slate-200);
-  }
-
-  .bg-slate-600 {
-    background-color: var(--color-slate-600);
   }
 
   .bg-teal-50 {
@@ -3402,10 +3359,6 @@
 
   .bg-yellow-200 {
     background-color: var(--color-yellow-200);
-  }
-
-  .bg-yellow-500 {
-    background-color: var(--color-yellow-500);
   }
 
   .bg-gradient-to-br {
@@ -3770,10 +3723,6 @@
     padding-block: calc(var(--spacing) * 4);
   }
 
-  .py-5 {
-    padding-block: calc(var(--spacing) * 5);
-  }
-
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
   }
@@ -3941,11 +3890,6 @@
     line-height: var(--tw-leading, var(--text-4xl--line-height));
   }
 
-  .text-6xl {
-    font-size: var(--text-6xl);
-    line-height: var(--tw-leading, var(--text-6xl--line-height));
-  }
-
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -4083,10 +4027,6 @@
 
   .text-accent-foreground {
     color: var(--accent-foreground);
-  }
-
-  .text-amber-500 {
-    color: var(--color-amber-500);
   }
 
   .text-amber-600 {
@@ -4339,14 +4279,6 @@
     }
   }
 
-  .text-slate-500 {
-    color: var(--color-slate-500);
-  }
-
-  .text-slate-600 {
-    color: var(--color-slate-600);
-  }
-
   .text-slate-800 {
     color: var(--color-slate-800);
   }
@@ -4453,20 +4385,12 @@
     opacity: .5;
   }
 
-  .opacity-60 {
-    opacity: .6;
-  }
-
   .opacity-70 {
     opacity: .7;
   }
 
   .opacity-75 {
     opacity: .75;
-  }
-
-  .opacity-80 {
-    opacity: .8;
   }
 
   .opacity-90 {
@@ -5117,10 +5041,6 @@
     color: var(--foreground);
   }
 
-  .placeholder\:text-gray-400::placeholder {
-    color: var(--color-gray-400);
-  }
-
   .placeholder\:text-muted-foreground::placeholder {
     color: var(--muted-foreground);
   }
@@ -5297,24 +5217,6 @@
   @media (hover: hover) {
     .hover\:bg-accent:hover {
       background-color: var(--accent);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-accent\/50:hover {
-      background-color: var(--accent);
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\:bg-accent\/50:hover {
-        background-color: color-mix(in oklab, var(--accent) 50%, transparent);
-      }
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-amber-700:hover {
-      background-color: var(--color-amber-700);
     }
   }
 
@@ -5579,12 +5481,6 @@
   @media (hover: hover) {
     .hover\:bg-red-800:hover {
       background-color: var(--color-red-800);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-rose-700:hover {
-      background-color: var(--color-rose-700);
     }
   }
 
@@ -5857,12 +5753,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:opacity-90:hover {
-      opacity: .9;
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:opacity-100:hover {
       opacity: 1;
     }
@@ -5897,13 +5787,6 @@
   }
 
   @media (hover: hover) {
-    .hover\:shadow-sm:hover {
-      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, #0000001a), 0 1px 2px -1px var(--tw-shadow-color, #0000001a);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:shadow-xl:hover {
       --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, #0000001a), 0 8px 10px -6px var(--tw-shadow-color, #0000001a);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -5914,12 +5797,6 @@
     .hover\:ring-4:hover {
       --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:ring-teal-400:hover {
-      --tw-ring-color: var(--color-teal-400);
     }
   }
 
@@ -6085,11 +5962,6 @@
       outline-offset: 2px;
       outline: 2px solid #0000;
     }
-  }
-
-  .focus\:outline-1:focus {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
   }
 
   .focus\:outline-none:focus {

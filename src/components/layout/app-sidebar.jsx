@@ -28,7 +28,6 @@ import {
 
 
 export  function AppSidebar({ navMainItems,...props }) {
-// console.log(navMainItems)
 
   return (
     <Sidebar collapsible="icon" className="bg-[#0F1D41]" {...props}>

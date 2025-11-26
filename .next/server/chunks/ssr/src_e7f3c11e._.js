@@ -2882,488 +2882,6 @@ function MomContent({ meeting, meetingId }) {
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-// import React, { useEffect, useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { Card, CardContent } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Textarea } from "@/components/ui/textarea";
-// import { Label } from "@/components/ui/label";
-// import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-// import { Alert, AlertDescription } from "@/components/ui/alert";
-// import { Skeleton } from "@/components/ui/skeleton";
-// import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-// import { ChevronLeft, Save, X } from "lucide-react";
-// import { format } from "date-fns";
-// import {
-//   fetchMeetingById,
-//   updateMeeting,
-//   rescheduleMeet,
-//   updateMeetingStatus,
-//   clearSelectedMeeting,
-//   clearError,
-// } from "@/modules/meet/slices/meetSlice";
-// import MeetingDetailsContent from "./MeetingDetailsContent";
-// import ProposalContent from "./ProposalContent"; // External component import
-// import MomContent from "./MomContent"; // External component import
-// export default function MeetingController({ meetingId }) {
-//   const dispatch = useDispatch();
-//   const { selectedMeeting, status, error } = useSelector((state) => state.meet);
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [editForm, setEditForm] = useState(null);
-//   const [showReschedule, setShowReschedule] = useState(false);
-//   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
-//   const [statusUpdateType, setStatusUpdateType] = useState(null);
-//   const [endNote, setEndNote] = useState("");
-//   const [localError, setLocalError] = useState(null);
-//   const [updateStatus, setUpdateStatus] = useState("idle");
-//   // Removed unused variables: mom, quotation, showMOM, showQuotation, meetingEnded, hasMOM, hasQuotation, hasEndNote
-//   const canUpdateStatus =
-//     selectedMeeting?.meetingStatus === "scheduled" ||
-//     selectedMeeting?.meetingStatus === "rescheduled";
-//   useEffect(() => {
-//     if (meetingId) {
-//       dispatch(fetchMeetingById(meetingId));
-//     }
-//     return () => {
-//       dispatch(clearSelectedMeeting());
-//       dispatch(clearError());
-//     };
-//   }, [dispatch, meetingId]);
-//   useEffect(() => {
-//     if (selectedMeeting) {
-//       try {
-//         setEditForm({
-//           title: selectedMeeting.title || "",
-//           date: selectedMeeting.date ? format(new Date(selectedMeeting.date), "yyyy-MM-dd") : "",
-//           startTime: selectedMeeting.startTime
-//             ? format(new Date(selectedMeeting.startTime), "HH:mm")
-//             : "",
-//           endTime: selectedMeeting.endTime
-//             ? format(new Date(selectedMeeting.endTime), "HH:mm")
-//             : "",
-//           agenda: selectedMeeting.agenda || "",
-//           mode: selectedMeeting.mode || "online",
-//           meetingLink: selectedMeeting.meetingLink || "",
-//           meetingStatus: selectedMeeting.meetingStatus || "scheduled",
-//         });
-//         setLocalError(null);
-//       } catch (err) {
-//         console.error("Error syncing editForm:", err);
-//         setLocalError("Invalid meeting data. Please try again.");
-//       }
-//     }
-//   }, [selectedMeeting]);
-//   const formatDate = (dateStr) => {
-//     if (!dateStr) return "N/A";
-//     try {
-//       return format(new Date(dateStr), "MMM d, yyyy");
-//     } catch {
-//       return "Invalid Date";
-//     }
-//   };
-//   const formatDateTime = (dateStr) => {
-//     if (!dateStr) return "N/A";
-//     try {
-//       return format(new Date(dateStr), "MMM d, yyyy h:mm a");
-//     } catch {
-//       return "Invalid Date";
-//     }
-//   };
-//   const handleSave = async () => {
-//     if (!editForm?.title || !editForm.date || !editForm.startTime || !editForm.endTime) {
-//       setLocalError("Please fill all required fields.");
-//       return;
-//     }
-//     if (editForm.mode === "online" && !editForm.meetingLink) {
-//       setLocalError("Please provide a meeting link for online mode.");
-//       return;
-//     }
-//     try {
-//       setLocalError(null);
-//       await dispatch(
-//         updateMeeting({
-//           meetingId,
-//           updates: {
-//             ...editForm,
-//             startTime: `${editForm.date}T${editForm.startTime}:00.000Z`,
-//             endTime: `${editForm.date}T${editForm.endTime}:00.000Z`,
-//             meetingLink: editForm.mode === "online" ? editForm.meetingLink : null,
-//             meetingStatus: editForm.meetingStatus,
-//           },
-//         })
-//       ).unwrap();
-//       setIsEditing(false);
-//     } catch (err) {
-//       setLocalError(err.payload || "Failed to update meeting.");
-//     }
-//   };
-//   const handleReschedule = async () => {
-//     if (!editForm?.date || !editForm.startTime || !editForm.endTime) {
-//       setLocalError("Please fill all required fields.");
-//       return;
-//     }
-//     try {
-//       setLocalError(null);
-//       await dispatch(
-//         rescheduleMeet({
-//           meetingId,
-//           date: editForm.date,
-//           startTime: `${editForm.date}T${editForm.startTime}:00.000Z`,
-//           endTime: `${editForm.date}T${editForm.endTime}:00.000Z`,
-//           meetingStatus: "rescheduled",
-//         })
-//       ).unwrap();
-//       setShowReschedule(false);
-//     } catch (err) {
-//       setLocalError(err.payload || "Failed to reschedule meeting.");
-//     }
-//   };
-//   const handleStatusUpdate = async () => {
-//     if (!endNote.trim()) {
-//       setLocalError("Please provide a feedback note.");
-//       return;
-//     }
-//     try {
-//       setLocalError(null);
-//       setUpdateStatus("loading");
-//       await dispatch(
-//         updateMeetingStatus({
-//           meetingId,
-//           meetingStatus: statusUpdateType,
-//           endNote,
-//         })
-//       ).unwrap();
-//       setShowStatusUpdate(false);
-//       setEndNote("");
-//       setStatusUpdateType(null);
-//     } catch (err) {
-//       setLocalError(err.payload || "Failed to update meeting status.");
-//     } finally {
-//       setUpdateStatus("idle");
-//     }
-//   };
-//   const openStatusUpdateModal = (type) => {
-//     setStatusUpdateType(type);
-//     setShowStatusUpdate(true);
-//   };
-//   if (status === "loading") {
-//     return (
-//       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
-//         <div className="max-w-6xl mx-auto space-y-4">
-//           <Skeleton className="h-8 w-32" />
-//           <Card className="shadow-lg border-0">
-//             <div className="p-6">
-//               <Skeleton className="h-10 w-3/4" />
-//               <div className="grid lg:grid-cols-5 gap-6 mt-6">
-//                 <div className="lg:col-span-4 space-y-4">
-//                   <Skeleton className="h-6 w-40" />
-//                   <Skeleton className="h-4 w-full" />
-//                   <Skeleton className="h-4 w-full" />
-//                   <Skeleton className="h-4 w-full" />
-//                 </div>
-//                 <div className="lg:col-span-1 space-y-4">
-//                   <Skeleton className="h-6 w-40" />
-//                   <Skeleton className="h-4 w-full" />
-//                   <Skeleton className="h-4 w-full" />
-//                 </div>
-//               </div>
-//             </div>
-//           </Card>
-//         </div>
-//       </div>
-//     );
-//   }
-//   if (status === "failed" || localError) {
-//     return (
-//       <Alert variant="destructive" className="max-w-2xl mx-auto mt-8">
-//         <AlertDescription>{localError || error || "No meeting found."}</AlertDescription>
-//       </Alert>
-//     );
-//   }
-//   if (!selectedMeeting) {
-//     return (
-//       <Alert variant="destructive" className="max-w-2xl mx-auto mt-8">
-//         <AlertDescription>Meeting data unavailable.</AlertDescription>
-//       </Alert>
-//     );
-//   }
-//   return (
-//     <div className="min-h-screen">
-//       <div className="mx-auto">
-//         <div className="bg-gradient-to-r from-teal-600 to-cyan-600 p-4 rounded-t-lg shadow-md">
-//           <div className="flex items-center justify-between flex-wrap gap-4">
-//             <div className="flex items-center gap-4">
-//               <Button
-//                 size="sm"
-//                 className="bg-teal-600 hover:bg-teal-700 text-white"
-//                 onClick={() => window.history.back()}
-//               >
-//                 <ChevronLeft className="w-5 h-5 mr-1" /> Back
-//               </Button>
-//               <div>
-//                 <h1 className="text-xl font-bold text-white">{selectedMeeting.title}</h1>
-//                 <p className="text-teal-100 text-sm">Meeting Id: {meetingId}</p>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         <Card className="shadow-lg border-0 rounded-t-none">
-//           <CardContent className="p-4 sm:p-6">
-//             <Tabs defaultValue="details" className="w-full">
-//               <TabsList className="flex w-fit bg-teal-50 rounded-lg p-1 mb-4">
-//                 <TabsTrigger
-//                   value="details"
-//                   className="px-4 py-2 text-sm font-medium text-teal-700 rounded-md transition-all duration-200 ease-in-out data-[state=active]:bg-teal-600 data-[state=active]:text-white hover:bg-teal-100 hover:text-teal-800"
-//                 >
-//                   Details
-//                 </TabsTrigger>
-//                 <TabsTrigger
-//                   value="proposal"
-//                   className="px-4 py-2 text-sm font-medium text-teal-700 rounded-md transition-all duration-200 ease-in-out data-[state=active]:bg-teal-600 data-[state=active]:text-white hover:bg-teal-100 hover:text-teal-800"
-//                 >
-//                   Proposal
-//                 </TabsTrigger>
-//                 <TabsTrigger
-//                   value="mom"
-//                   className="px-4 py-2 text-sm font-medium text-teal-700 rounded-md transition-all duration-200 ease-in-out data-[state=active]:bg-teal-600 data-[state=active]:text-white hover:bg-teal-100 hover:text-teal-800"
-//                 >
-//                   MOM
-//                 </TabsTrigger>
-//               </TabsList>
-//               <TabsContent value="details" className="min-h-screen">
-//                 <MeetingDetailsContent
-//                   selectedMeeting={selectedMeeting}
-//                   formatDate={formatDate}
-//                   formatDateTime={formatDateTime}
-//                   canUpdateStatus={canUpdateStatus}
-//                   updateStatus={updateStatus}
-//                   openStatusUpdateModal={openStatusUpdateModal}
-//                   setShowReschedule={setShowReschedule}
-//                   setIsEditing={setIsEditing}
-//                 />
-//               </TabsContent>
-//               <TabsContent value="proposal" className="min-h-screen">
-//                 <ProposalContent meetingId={meetingId} />
-//               </TabsContent>
-//               <TabsContent value="mom" className="min-h-screen">
-//                 <MomContent meeting={selectedMeeting} meetingId={meetingId} />
-//               </TabsContent>
-//             </Tabs>
-//           </CardContent>
-//         </Card>
-//       </div>
-//       <Dialog open={isEditing} onOpenChange={setIsEditing}>
-//         <DialogContent className="max-w-lg bg-white sm:p-6 p-4">
-//           <DialogHeader>
-//             <DialogTitle className="text-teal-700">Edit Meeting</DialogTitle>
-//           </DialogHeader>
-//           {editForm && (
-//             <div className="space-y-4">
-//               <div>
-//                 <Label>Title <span className="text-red-500">*</span></Label>
-//                 <Input
-//                   value={editForm.title}
-//                   onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-//                   className="border-teal-300 focus:border-teal-600"
-//                 />
-//               </div>
-//               <div>
-//                 <Label>Date <span className="text-red-500">*</span></Label>
-//                 <Input
-//                   type="date"
-//                   value={editForm.date}
-//                   onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-//                   className="border-teal-300 focus:border-teal-600"
-//                 />
-//               </div>
-//               <div className="grid grid-cols-2 gap-4">
-//                 <div>
-//                   <Label>Start Time <span className="text-red-500">*</span></Label>
-//                   <Input
-//                     type="time"
-//                     value={editForm.startTime}
-//                     onChange={(e) => setEditForm({ ...editForm, startTime: e.target.value })}
-//                     className="border-teal-300 focus:border-teal-600"
-//                   />
-//                 </div>
-//                 <div>
-//                   <Label>End Time <span className="text-red-500">*</span></Label>
-//                   <Input
-//                     type="time"
-//                     value={editForm.endTime}
-//                     onChange={(e) => setEditForm({ ...editForm, endTime: e.target.value })}
-//                     className="border-teal-300 focus:border-teal-600"
-//                   />
-//                 </div>
-//               </div>
-//               <div>
-//                 <Label>Agenda</Label>
-//                 <Textarea
-//                   value={editForm.agenda}
-//                   onChange={(e) => setEditForm({ ...editForm, agenda: e.target.value })}
-//                   className="border-teal-300 focus:border-teal-600"
-//                 />
-//               </div>
-//               <div>
-//                 <Label>Mode <span className="text-red-500">*</span></Label>
-//                 <select
-//                   value={editForm.mode}
-//                   onChange={(e) => setEditForm({ ...editForm, mode: e.target.value })}
-//                   className="w-full p-2 border border-teal-300 rounded focus:border-teal-600"
-//                 >
-//                   <option value="online">Online</option>
-//                   <option value="offline">Offline</option>
-//                 </select>
-//               </div>
-//               {editForm.mode === "online" && (
-//                 <div>
-//                   <Label>Join Link <span className="text-red-500">*</span></Label>
-//                   <Input
-//                     value={editForm.meetingLink}
-//                     onChange={(e) => setEditForm({ ...editForm, meetingLink: e.target.value })}
-//                     className="border-teal-300 focus:border-teal-600"
-//                   />
-//                 </div>
-//               )}
-//               <div>
-//                 <Label>Meeting Status</Label>
-//                 <select
-//                   value={editForm.meetingStatus}
-//                   onChange={(e) => setEditForm({ ...editForm, meetingStatus: e.target.value })}
-//                   className="w-full p-2 border border-teal-300 rounded focus:border-teal-600"
-//                 >
-//                   <option value="scheduled">Scheduled</option>
-//                   <option value="rescheduled">Rescheduled</option>
-//                   <option value="canceled">Canceled</option>
-//                   <option value="completed">Completed</option>
-//                 </select>
-//               </div>
-//               {localError && (
-//                 <Alert variant="destructive">
-//                   <AlertDescription>{localError}</AlertDescription>
-//                 </Alert>
-//               )}
-//               <div className="flex justify-end gap-2">
-//                 <Button
-//                   variant="outline"
-//                   onClick={() => setIsEditing(false)}
-//                   className="border-teal-600 text-teal-600 hover:bg-teal-50"
-//                 >
-//                   <X className="w-4 h-4 mr-1" /> Cancel
-//                 </Button>
-//                 <Button
-//                   onClick={handleSave}
-//                   disabled={updateStatus === "loading"}
-//                   className="bg-teal-600 hover:bg-teal-700 text-white"
-//                 >
-//                   <Save className="w-4 h-4 mr-1" /> Save
-//                 </Button>
-//               </div>
-//             </div>
-//           )}
-//         </DialogContent>
-//       </Dialog>
-//       <Dialog open={showReschedule} onOpenChange={setShowReschedule}>
-//         <DialogContent className="max-w-lg bg-white sm:p-6 p-4">
-//           <DialogHeader>
-//             <DialogTitle className="text-teal-700">Reschedule Meeting</DialogTitle>
-//           </DialogHeader>
-//           {editForm && (
-//             <div className="space-y-4">
-//               <div>
-//                 <Label>Date <span className="text-red-500">*</span></Label>
-//                 <Input
-//                   type="date"
-//                   value={editForm.date}
-//                   onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-//                   className="border-teal-300 focus:border-teal-600"
-//                 />
-//               </div>
-//               <div className="grid grid-cols-2 gap-4">
-//                 <div>
-//                   <Label>Start Time <span className="text-red-500">*</span></Label>
-//                   <Input
-//                     type="time"
-//                     value={editForm.startTime}
-//                     onChange={(e) => setEditForm({ ...editForm, startTime: e.target.value })}
-//                     className="border-teal-300 focus:border-teal-600"
-//                   />
-//                 </div>
-//                 <div>
-//                   <Label>End Time <span className="text-red-500">*</span></Label>
-//                   <Input
-//                     type="time"
-//                     value={editForm.endTime}
-//                     onChange={(e) => setEditForm({ ...editForm, endTime: e.target.value })}
-//                     className="border-teal-300 focus:border-teal-600"
-//                   />
-//                 </div>
-//               </div>
-//               {localError && (
-//                 <Alert variant="destructive">
-//                   <AlertDescription>{localError}</AlertDescription>
-//                 </Alert>
-//               )}
-//               <Button
-//                 className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-//                 onClick={handleReschedule}
-//                 disabled={updateStatus === "loading"}
-//               >
-//                 Reschedule
-//               </Button>
-//             </div>
-//           )}
-//         </DialogContent>
-//       </Dialog>
-//       <Dialog open={showStatusUpdate} onOpenChange={setShowStatusUpdate}>
-//         <DialogContent className="max-w-lg bg-white sm:p-6 p-4">
-//           <DialogHeader>
-//             <DialogTitle className="text-teal-700">
-//               {statusUpdateType === "completed" ? "Mark Meeting as Completed" : "Cancel Meeting"}
-//             </DialogTitle>
-//           </DialogHeader>
-//           <div className="space-y-4">
-//             <div>
-//               <Label>Feedback Note</Label>
-//               <Textarea
-//                 placeholder="Enter feedback note (e.g., what was discussed, outcomes, or reason for cancellation)"
-//                 value={endNote}
-//                 onChange={(e) => setEndNote(e.target.value)}
-//                 className="border-teal-300 focus:border-teal-600"
-//               />
-//             </div>
-//             {localError && (
-//               <Alert variant="destructive">
-//                 <AlertDescription>{localError}</AlertDescription>
-//               </Alert>
-//             )}
-//             <div className="flex justify-end gap-2">
-//               <Button
-//                 variant="outline"
-//                 onClick={() => {
-//                   setShowStatusUpdate(false);
-//                   setEndNote("");
-//                   setStatusUpdateType(null);
-//                 }}
-//                 className="border-teal-600 text-teal-600 hover:bg-teal-50"
-//               >
-//                 <X className="w-4 h-4 mr-1" /> Cancel
-//               </Button>
-//               <Button
-//                 onClick={handleStatusUpdate}
-//                 disabled={updateStatus === "loading" || !endNote.trim()}
-//                 className="bg-teal-600 hover:bg-teal-700 text-white"
-//               >
-//                 <Save className="w-4 h-4 mr-1" /> Save
-//               </Button>
-//             </div>
-//           </div>
-//         </DialogContent>
-//       </Dialog>
-//     </div>
-//   );
-// }
 __turbopack_context__.s({
     "default": (()=>MeetingController)
 });
@@ -3587,7 +3105,7 @@ function MeetingController({ meetingId }) {
                         className: "h-8 w-32"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 741,
+                        lineNumber: 227,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -3597,7 +3115,7 @@ function MeetingController({ meetingId }) {
                                 className: "h-10 w-3/4"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 743,
+                                lineNumber: 229,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3609,49 +3127,49 @@ function MeetingController({ meetingId }) {
                                             className: "h-6 w-40"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 746,
+                                            lineNumber: 232,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                             className: "h-4 w-full"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 747,
+                                            lineNumber: 233,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
                                             className: "h-4 w-full"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 748,
+                                            lineNumber: 234,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 745,
+                                    lineNumber: 231,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 744,
+                                lineNumber: 230,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 742,
+                        lineNumber: 228,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 740,
+                lineNumber: 226,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-            lineNumber: 739,
+            lineNumber: 225,
             columnNumber: 7
         }, this);
     }
@@ -3664,12 +3182,12 @@ function MeetingController({ meetingId }) {
                 children: localError || error || "No meeting found."
             }, void 0, false, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 761,
+                lineNumber: 247,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-            lineNumber: 760,
+            lineNumber: 246,
             columnNumber: 7
         }, this);
     }
@@ -3681,12 +3199,12 @@ function MeetingController({ meetingId }) {
                 children: "Meeting data unavailable."
             }, void 0, false, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 769,
+                lineNumber: 255,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-            lineNumber: 768,
+            lineNumber: 254,
             columnNumber: 7
         }, this);
     }
@@ -3713,14 +3231,14 @@ function MeetingController({ meetingId }) {
                                                     className: "w-5 h-5 mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 786,
+                                                    lineNumber: 272,
                                                     columnNumber: 17
                                                 }, this),
                                                 " Back"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 781,
+                                            lineNumber: 267,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3730,7 +3248,7 @@ function MeetingController({ meetingId }) {
                                                     children: selectedMeeting.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 789,
+                                                    lineNumber: 275,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3741,19 +3259,19 @@ function MeetingController({ meetingId }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 790,
+                                                    lineNumber: 276,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 788,
+                                            lineNumber: 274,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 780,
+                                    lineNumber: 266,
                                     columnNumber: 13
                                 }, this),
                                 isFinalStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$badge$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Badge$3e$__["Badge"], {
@@ -3762,18 +3280,18 @@ function MeetingController({ meetingId }) {
                                     children: selectedMeeting.meetingStatus.toUpperCase()
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 794,
+                                    lineNumber: 280,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 779,
+                            lineNumber: 265,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 778,
+                        lineNumber: 264,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -3793,7 +3311,7 @@ function MeetingController({ meetingId }) {
                                                 children: "Details"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                lineNumber: 805,
+                                                lineNumber: 291,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsTrigger"], {
@@ -3802,7 +3320,7 @@ function MeetingController({ meetingId }) {
                                                 children: "Proposal"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                lineNumber: 808,
+                                                lineNumber: 294,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsTrigger"], {
@@ -3811,13 +3329,13 @@ function MeetingController({ meetingId }) {
                                                 children: "MOM"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                lineNumber: 811,
+                                                lineNumber: 297,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 804,
+                                        lineNumber: 290,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -3835,12 +3353,12 @@ function MeetingController({ meetingId }) {
                                             setIsEditing: setIsEditing
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 817,
+                                            lineNumber: 303,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 816,
+                                        lineNumber: 302,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -3850,12 +3368,12 @@ function MeetingController({ meetingId }) {
                                             meetingId: meetingId
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 832,
+                                            lineNumber: 318,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 831,
+                                        lineNumber: 317,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -3865,34 +3383,34 @@ function MeetingController({ meetingId }) {
                                             meetingId: meetingId
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 836,
+                                            lineNumber: 322,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 835,
+                                        lineNumber: 321,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 803,
+                                lineNumber: 289,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 802,
+                            lineNumber: 288,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 801,
+                        lineNumber: 287,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 776,
+                lineNumber: 262,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -3907,12 +3425,12 @@ function MeetingController({ meetingId }) {
                                 children: "Edit Meeting"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 847,
+                                lineNumber: 333,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 846,
+                            lineNumber: 332,
                             columnNumber: 11
                         }, this),
                         editForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3928,13 +3446,13 @@ function MeetingController({ meetingId }) {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 852,
+                                                    lineNumber: 338,
                                                     columnNumber: 30
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 852,
+                                            lineNumber: 338,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -3946,13 +3464,13 @@ function MeetingController({ meetingId }) {
                                             className: "border-teal-300 focus:border-teal-600"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 853,
+                                            lineNumber: 339,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 851,
+                                    lineNumber: 337,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3965,13 +3483,13 @@ function MeetingController({ meetingId }) {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 861,
+                                                    lineNumber: 347,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 861,
+                                            lineNumber: 347,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -3984,13 +3502,13 @@ function MeetingController({ meetingId }) {
                                             className: "border-teal-300 focus:border-teal-600"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 862,
+                                            lineNumber: 348,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 860,
+                                    lineNumber: 346,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4006,13 +3524,13 @@ function MeetingController({ meetingId }) {
                                                             children: "*"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 872,
+                                                            lineNumber: 358,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 872,
+                                                    lineNumber: 358,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4025,13 +3543,13 @@ function MeetingController({ meetingId }) {
                                                     className: "border-teal-300 focus:border-teal-600"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 873,
+                                                    lineNumber: 359,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 871,
+                                            lineNumber: 357,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4044,13 +3562,13 @@ function MeetingController({ meetingId }) {
                                                             children: "*"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 881,
+                                                            lineNumber: 367,
                                                             columnNumber: 35
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 881,
+                                                    lineNumber: 367,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4063,19 +3581,19 @@ function MeetingController({ meetingId }) {
                                                     className: "border-teal-300 focus:border-teal-600"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 882,
+                                                    lineNumber: 368,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 880,
+                                            lineNumber: 366,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 870,
+                                    lineNumber: 356,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4084,7 +3602,7 @@ function MeetingController({ meetingId }) {
                                             children: "Agenda"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 892,
+                                            lineNumber: 378,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -4096,13 +3614,13 @@ function MeetingController({ meetingId }) {
                                             className: "border-teal-300 focus:border-teal-600"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 893,
+                                            lineNumber: 379,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 891,
+                                    lineNumber: 377,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4115,13 +3633,13 @@ function MeetingController({ meetingId }) {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 901,
+                                                    lineNumber: 387,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 901,
+                                            lineNumber: 387,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -4137,7 +3655,7 @@ function MeetingController({ meetingId }) {
                                                     children: "Online"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 907,
+                                                    lineNumber: 393,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4145,19 +3663,19 @@ function MeetingController({ meetingId }) {
                                                     children: "Offline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 908,
+                                                    lineNumber: 394,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 902,
+                                            lineNumber: 388,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 900,
+                                    lineNumber: 386,
                                     columnNumber: 15
                                 }, this),
                                 editForm.mode === "online" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4170,13 +3688,13 @@ function MeetingController({ meetingId }) {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 914,
+                                                    lineNumber: 400,
                                                     columnNumber: 36
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 914,
+                                            lineNumber: 400,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4188,13 +3706,13 @@ function MeetingController({ meetingId }) {
                                             className: "border-teal-300 focus:border-teal-600"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 915,
+                                            lineNumber: 401,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 913,
+                                    lineNumber: 399,
                                     columnNumber: 17
                                 }, this),
                                 localError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
@@ -4203,12 +3721,12 @@ function MeetingController({ meetingId }) {
                                         children: localError
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 925,
+                                        lineNumber: 411,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 924,
+                                    lineNumber: 410,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4223,14 +3741,14 @@ function MeetingController({ meetingId }) {
                                                     className: "w-4 h-4 mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 935,
+                                                    lineNumber: 421,
                                                     columnNumber: 19
                                                 }, this),
                                                 " Cancel"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 930,
+                                            lineNumber: 416,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4242,37 +3760,37 @@ function MeetingController({ meetingId }) {
                                                     className: "w-4 h-4 mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 942,
+                                                    lineNumber: 428,
                                                     columnNumber: 19
                                                 }, this),
                                                 " Save"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 937,
+                                            lineNumber: 423,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 929,
+                                    lineNumber: 415,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 850,
+                            lineNumber: 336,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                    lineNumber: 845,
+                    lineNumber: 331,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 844,
+                lineNumber: 330,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -4287,12 +3805,12 @@ function MeetingController({ meetingId }) {
                                 children: "Reschedule Meeting"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 954,
+                                lineNumber: 440,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 953,
+                            lineNumber: 439,
                             columnNumber: 11
                         }, this),
                         editForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4308,13 +3826,13 @@ function MeetingController({ meetingId }) {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 959,
+                                                    lineNumber: 445,
                                                     columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 959,
+                                            lineNumber: 445,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4327,13 +3845,13 @@ function MeetingController({ meetingId }) {
                                             className: "border-teal-300 focus:border-teal-600"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 960,
+                                            lineNumber: 446,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 958,
+                                    lineNumber: 444,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4349,13 +3867,13 @@ function MeetingController({ meetingId }) {
                                                             children: "*"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 970,
+                                                            lineNumber: 456,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 970,
+                                                    lineNumber: 456,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4368,13 +3886,13 @@ function MeetingController({ meetingId }) {
                                                     className: "border-teal-300 focus:border-teal-600"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 971,
+                                                    lineNumber: 457,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 969,
+                                            lineNumber: 455,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4387,13 +3905,13 @@ function MeetingController({ meetingId }) {
                                                             children: "*"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 979,
+                                                            lineNumber: 465,
                                                             columnNumber: 35
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 979,
+                                                    lineNumber: 465,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4406,19 +3924,19 @@ function MeetingController({ meetingId }) {
                                                     className: "border-teal-300 focus:border-teal-600"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 980,
+                                                    lineNumber: 466,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 978,
+                                            lineNumber: 464,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 968,
+                                    lineNumber: 454,
                                     columnNumber: 15
                                 }, this),
                                 localError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
@@ -4427,12 +3945,12 @@ function MeetingController({ meetingId }) {
                                         children: localError
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 991,
+                                        lineNumber: 477,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 990,
+                                    lineNumber: 476,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4442,24 +3960,24 @@ function MeetingController({ meetingId }) {
                                     children: "Reschedule"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 995,
+                                    lineNumber: 481,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 957,
+                            lineNumber: 443,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                    lineNumber: 952,
+                    lineNumber: 438,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 951,
+                lineNumber: 437,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -4474,12 +3992,12 @@ function MeetingController({ meetingId }) {
                                 children: statusUpdateType === "completed" ? "Mark as Completed" : "Cancel Meeting"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 1011,
+                                lineNumber: 497,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 1010,
+                            lineNumber: 496,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4495,13 +4013,13 @@ function MeetingController({ meetingId }) {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 1017,
+                                                    lineNumber: 503,
                                                     columnNumber: 36
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 1017,
+                                            lineNumber: 503,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -4511,13 +4029,13 @@ function MeetingController({ meetingId }) {
                                             className: "border-teal-300 focus:border-teal-600"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 1018,
+                                            lineNumber: 504,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 1016,
+                                    lineNumber: 502,
                                     columnNumber: 13
                                 }, this),
                                 localError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
@@ -4526,12 +4044,12 @@ function MeetingController({ meetingId }) {
                                         children: localError
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 1028,
+                                        lineNumber: 514,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 1027,
+                                    lineNumber: 513,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4550,14 +4068,14 @@ function MeetingController({ meetingId }) {
                                                     className: "w-4 h-4 mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 1042,
+                                                    lineNumber: 528,
                                                     columnNumber: 17
                                                 }, this),
                                                 " Cancel"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 1033,
+                                            lineNumber: 519,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4569,43 +4087,43 @@ function MeetingController({ meetingId }) {
                                                     className: "w-4 h-4 mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 1049,
+                                                    lineNumber: 535,
                                                     columnNumber: 17
                                                 }, this),
                                                 " Save"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 1044,
+                                            lineNumber: 530,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 1032,
+                                    lineNumber: 518,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 1015,
+                            lineNumber: 501,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                    lineNumber: 1009,
+                    lineNumber: 495,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 1008,
+                lineNumber: 494,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/modules/meet/components/MeetingController.js",
-        lineNumber: 775,
+        lineNumber: 261,
         columnNumber: 5
     }, this);
 }

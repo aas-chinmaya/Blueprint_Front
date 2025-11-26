@@ -1132,6 +1132,455 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
 {
+// "use client";
+// import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { createSubTask } from "@/modules/project-management/task/slices/subTaskSlice";
+// import {
+//   Plus,
+//   User,
+//   Flag,
+//   Info,
+//   X,
+//   Loader,
+//   CalendarIcon,
+// } from "lucide-react";
+// import { toast } from "sonner";
+// import { Textarea } from "@/components/ui/textarea";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "@/components/ui/popover";
+// import { Calendar } from "@/components/ui/calendar";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogClose,
+// } from "@/components/ui/dialog";
+// import {
+//   Command,
+//   CommandEmpty,
+//   CommandGroup,
+//   CommandInput,
+//   CommandItem,
+// } from "@/components/ui/command";
+// import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// import { format } from "date-fns";
+// import { cn } from "@/lib/utils";
+// const priorityConfig = {
+//   Low: { color: "bg-emerald-100 text-emerald-800", badge: "Low" },
+//   Medium: { color: "bg-amber-100 text-amber-800", badge: "Medium" },
+//   High: { color: "bg-rose-100 text-rose-800", badge: "High" },
+// };
+// const getInitials = (name) => {
+//   if (!name) return "??";
+//   const parts = name.trim().split(" ").filter(Boolean);
+//   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+//   return parts.map((p) => p[0]).join("").toUpperCase().slice(0, 2);
+// };
+// const CreateSubtaskModal = ({ open, setOpen, taskId, projectId }) => {
+//   const dispatch = useDispatch();
+//   const { currentTask } = useSelector((state) => state.task);
+//   const { loading: subTaskLoading, error: subTaskError } = useSelector(
+//     (state) => state.subTask
+//   );
+//   // Track previous open value to detect real "open" transitions
+//   const prevOpenRef = useRef(open);
+//   const [internalOpen, setInternalOpen] = useState(false);
+//   const resolvedProjectId = currentTask?.projectId || projectId || "";
+//   const assigneesList = useMemo(() => {
+//     if (!currentTask?.assignedTo) return [];
+//     return Array.isArray(currentTask.assignedTo)
+//       ? currentTask.assignedTo
+//       : [currentTask.assignedTo];
+//   }, [currentTask?.assignedTo]);
+//   // Form states
+//   const [formData, setFormData] = useState({
+//     title: "",
+//     description: "",
+//     priority: "Medium",
+//     projectId: resolvedProjectId,
+//   });
+//   const [selectedAssignee, setSelectedAssignee] = useState(null);
+//   const [selectedDateTime, setSelectedDateTime] = useState(null);
+//   const [errors, setErrors] = useState({});
+//   const [searchOpen, setSearchOpen] = useState(false);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   // Reset form every time modal truly opens (false → true)
+//   useEffect(() => {
+//     const justOpened = open && !prevOpenRef.current;
+//     if (justOpened) {
+//       setFormData({
+//         title: "",
+//         description: "",
+//         priority: "Medium",
+//         projectId: resolvedProjectId,
+//       });
+//       setSelectedAssignee(null);
+//       setSelectedDateTime(null);
+//       setErrors({});
+//       setSearchQuery("");
+//       setSearchOpen(false);
+//     }
+//     setInternalOpen(open);
+//     prevOpenRef.current = open;
+//   }, [open, resolvedProjectId]);
+//   const filteredMembers = useMemo(() => {
+//     const q = searchQuery.toLowerCase();
+//     return assigneesList
+//       .filter((m) => m.memberName?.toLowerCase().includes(q))
+//       .map((m) => ({
+//         memberId: m.memberId || m.id,
+//         memberName: m.memberName || m.name,
+//         role: m.role || "Member",
+//       }));
+//   }, [assigneesList, searchQuery]);
+//   const validate = useCallback(() => {
+//     const newErrors = {};
+//     if (!formData.title.trim()) newErrors.title = "Title is required";
+//     if (!formData.description.trim())
+//       newErrors.description = "Description is required";
+//     if (!selectedDateTime) newErrors.deadline = "Deadline is required";
+//     if (!selectedAssignee) newErrors.assignedTo = "Please assign a member";
+//     setErrors(newErrors);
+//     return Object.keys(newErrors).length === 0;
+//   }, [formData, selectedDateTime, selectedAssignee]);
+//   const handleCreate = useCallback(
+//     async (e) => {
+//       e.preventDefault();
+//       if (!validate()) {
+//         toast.error("Please fill all required fields");
+//         return;
+//       }
+//       const deadline = selectedDateTime
+//         ? selectedDateTime.toISOString().slice(0, 16) + ":00"
+//         : null;
+//       const subTaskData = {
+//         ...formData,
+//         deadline,
+//         task_id: taskId,
+//         assignedTo: selectedAssignee
+//           ? {
+//               memberId: selectedAssignee.memberId,
+//               memberName: selectedAssignee.memberName,
+//               role: selectedAssignee.role,
+//             }
+//           : null,
+//       };
+//       try {
+//         await dispatch(createSubTask({ taskId, subTaskData })).unwrap();
+//         toast.success("Subtask created successfully");
+//         setOpen(false); // Close modal
+//       } catch (err) {
+//         toast.error(subTaskError || "Failed to create subtask");
+//       }
+//     },
+//     [
+//       validate,
+//       formData,
+//       selectedDateTime,
+//       selectedAssignee,
+//       taskId,
+//       dispatch,
+//       subTaskError,
+//       setOpen,
+//     ]
+//   );
+//   const displayDateTime = selectedDateTime
+//     ? format(selectedDateTime, "MMM dd, yyyy 'at' HH:mm")
+//     : "Select date & time";
+//   const isSaveEnabled =
+//     formData.title.trim() &&
+//     formData.description.trim() &&
+//     selectedDateTime &&
+//     selectedAssignee;
+//   return (
+//     <Dialog open={internalOpen} onOpenChange={setOpen}>
+//       <DialogContent className="w-full max-w-full h-[100vh] max-h-[100vh] sm:max-w-6xl sm:max-h-[85vh] bg-white shadow-lg border border-gray-200 rounded-lg text-black p-2">
+//         <DialogHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 border-b border-gray-200 sticky top-0 z-10">
+//           <div className="flex justify-between items-center">
+//             <DialogTitle className="text-base sm:text-lg font-bold text-gray-800 flex items-center">
+//               <Plus className="mr-2 h-4 w-4 text-blue-500" />
+//               Add New Subtask
+//             </DialogTitle>
+//             <DialogClose asChild>
+//               <Button
+//                 variant="ghost"
+//                 size="icon"
+//                 className="text-gray-500 hover:bg-gray-100 rounded-full h-7 w-7"
+//               >
+//                 <X className="h-3 w-3" />
+//               </Button>
+//             </DialogClose>
+//           </div>
+//         </DialogHeader>
+//         <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-60px)]">
+//           <form onSubmit={handleCreate} className="space-y-4">
+//             {/* Title */}
+//             <div className="w-full">
+//               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                 <Plus className="h-4 w-4 text-blue-500 mr-2" /> Subtask Title{" "}
+//                 <span className="text-red-500 ml-1">*</span>
+//               </label>
+//               <Textarea
+//                 value={formData.title}
+//                 onChange={(e) =>
+//                   setFormData((prev) => ({ ...prev, title: e.target.value }))
+//                 }
+//                 className="w-full h-24 sm:h-28 md:h-32 bg-white border border-gray-300 rounded-lg text-sm resize-vertical focus:ring-2 focus:ring-blue-200 focus:border-blue-500 p-3"
+//                 placeholder="Enter subtask title..."
+//               />
+//               {errors.title && (
+//                 <p className="text-red-500 text-xs mt-1 flex items-center">
+//                   <X className="h-3 w-3 mr-1" /> {errors.title}
+//                 </p>
+//               )}
+//             </div>
+//             {/* Priority & Deadline */}
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//               <div>
+//                 <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                   <Flag className="h-4 w-4 text-blue-500 mr-2" /> Priority
+//                 </label>
+//                 <Select
+//                   value={formData.priority}
+//                   onValueChange={(v) =>
+//                     setFormData((prev) => ({ ...prev, priority: v }))
+//                   }
+//                 >
+//                   <SelectTrigger className="w-full h-10">
+//                     <SelectValue>
+//                       <span
+//                         className={cn(
+//                           "px-2 py-1 rounded-full text-xs font-medium",
+//                           priorityConfig[formData.priority]?.color
+//                         )}
+//                       >
+//                         {priorityConfig[formData.priority]?.badge}
+//                       </span>
+//                     </SelectValue>
+//                   </SelectTrigger>
+//                   <SelectContent>
+//                     {Object.entries(priorityConfig).map(([key, config]) => (
+//                       <SelectItem key={key} value={key}>
+//                         <span
+//                           className={cn(
+//                             "px-2 py-1 rounded-full text-xs font-medium",
+//                             config.color
+//                           )}
+//                         >
+//                           {config.badge}
+//                           </span>
+//                         </SelectItem>
+//                       ))}
+//                   </SelectContent>
+//                 </Select>
+//               </div>
+//               <div>
+//                 <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                   <CalendarIcon className="h-4 w-4 text-blue-500 mr-2" /> Deadline{" "}
+//                   <span className="text-red-500 ml-1">*</span>
+//                 </label>
+//                 <Popover>
+//                   <PopoverTrigger asChild>
+//                     <Button
+//                       variant="outline"
+//                       className={cn(
+//                         "w-full justify-between h-10 text-sm",
+//                         !selectedDateTime && "text-gray-500"
+//                       )}
+//                     >
+//                       {displayDateTime}
+//                     </Button>
+//                   </PopoverTrigger>
+//                   <PopoverContent className="w-auto p-0 bg-white border border-gray-200 rounded-lg shadow-lg">
+//                     <Calendar
+//                       mode="single"
+//                       selected={selectedDateTime}
+//                       onSelect={setSelectedDateTime}
+//                       initialFocus
+//                       className="rounded-lg"
+//                     />
+//                     <div className="p-3 border-t flex items-center gap-2">
+//                       <input
+//                         type="time"
+//                         value={
+//                           selectedDateTime
+//                             ? format(selectedDateTime, "HH:mm")
+//                             : ""
+//                         }
+//                         onChange={(e) => {
+//                           if (selectedDateTime) {
+//                             const [h, m] = e.target.value.split(":");
+//                             const newDt = new Date(selectedDateTime);
+//                             newDt.setHours(parseInt(h), parseInt(m));
+//                             setSelectedDateTime(newDt);
+//                           }
+//                         }}
+//                         className="h-10 border rounded px-3 text-sm w-full"
+//                       />
+//                     </div>
+//                   </PopoverContent>
+//                 </Popover>
+//                 {errors.deadline && (
+//                   <p className="text-red-500 text-xs mt-1 flex items-center">
+//                     <X className="h-3 w-3 mr-1" /> {errors.deadline}
+//                   </p>
+//                 )}
+//               </div>
+//             </div>
+//             {/* Assignee */}
+//             <div>
+//               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                 <User className="h-4 w-4 text-blue-500 mr-2" /> Assign To{" "}
+//                 <span className="text-red-500 ml-1">*</span>
+//               </label>
+//               <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+//                 <PopoverTrigger asChild>
+//                   <Button
+//                     variant="outline"
+//                     className="w-full justify-between h-12 text-sm"
+//                   >
+//                     {selectedAssignee ? (
+//                       <div className="flex items-center gap-3">
+//                         <Avatar className="h-8 w-8">
+//                           <AvatarFallback className="bg-teal-600 text-white text-xs">
+//                             {getInitials(selectedAssignee.memberName)}
+//                           </AvatarFallback>
+//                         </Avatar>
+//                         <div className="text-left">
+//                           <div className="font-medium">
+//                             {selectedAssignee.memberName}
+//                           </div>
+//                           <div className="text-xs text-gray-500">
+//                             {selectedAssignee.role}
+//                           </div>
+//                         </div>
+//                       </div>
+//                     ) : (
+//                       "Select team member..."
+//                     )}
+//                     <User className="h-4 w-4 text-gray-500 ml-auto" />
+//                   </Button>
+//                 </PopoverTrigger>
+//                 <PopoverContent className="w-full p-0" align="start">
+//                   <Command>
+//                     <CommandInput
+//                       placeholder="Search members..."
+//                       value={searchQuery}
+//                       onValueChange={setSearchQuery}
+//                     />
+//                     <CommandEmpty>No members found</CommandEmpty>
+//                     <CommandGroup className="max-h-64 overflow-auto">
+//                       {filteredMembers.map((m) => (
+//                         <CommandItem
+//                           key={m.memberId}
+//                           onSelect={() => {
+//                             setSelectedAssignee(m);
+//                             setSearchOpen(false);
+//                           }}
+//                         >
+//                           <Avatar className="h-8 w-8 mr-3">
+//                             <AvatarFallback className="text-xs bg-teal-600 text-white">
+//                               {getInitials(m.memberName)}
+//                             </AvatarFallback>
+//                           </Avatar>
+//                           <div>
+//                             <div className="font-medium">{m.memberName}</div>
+//                             <div className="text-xs text-gray-500">
+//                               {m.role}
+//                             </div>
+//                           </div>
+//                         </CommandItem>
+//                       ))}
+//                     </CommandGroup>
+//                   </Command>
+//                 </PopoverContent>
+//               </Popover>
+//               {selectedAssignee && (
+//                 <Button
+//                   type="button"
+//                   variant="ghost"
+//                   size="sm"
+//                   onClick={() => setSelectedAssignee(null)}
+//                   className="mt-2 text-red-600"
+//                 >
+//                   <X className="h-4 w-4 mr-1" /> Remove assignee
+//                 </Button>
+//               )}
+//               {errors.assignedTo && (
+//                 <p className="text-red-500 text-xs mt-1 flex items-center">
+//                   <X className="h-3 w-3 mr-1" /> {errors.assignedTo}
+//                 </p>
+//               )}
+//             </div>
+//             {/* Description */}
+//             <div className="w-full">
+//               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                 <Info className="h-4 w-4 text-blue-500 mr-2" /> Description{" "}
+//                 <span className="text-red-500 ml-1">*</span>
+//               </label>
+//               <Textarea
+//                 value={formData.description}
+//                 onChange={(e) =>
+//                   setFormData((prev) => ({
+//                     ...prev,
+//                     description: e.target.value,
+//                   }))
+//                 }
+//                 className="w-full h-40 sm:h-48 md:h-52 bg-white border border-gray-300 rounded-lg text-sm resize-vertical focus:ring-2 focus:ring-blue-200 focus:border-blue-500 p-3"
+//                 placeholder="Enter detailed subtask description..."
+//               />
+//               {errors.description && (
+//                 <p className="text-red-500 text-xs mt-1 flex items-center">
+//                   <X className="h-3 w-3 mr-1" /> {errors.description}
+//                 </p>
+//               )}
+//             </div>
+//             {subTaskError && (
+//               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+//                 <p className="text-red-600 text-sm flex items-center">
+//                   <X className="h-4 w-4 mr-2" /> {subTaskError}
+//                 </p>
+//               </div>
+//             )}
+//             <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200 mt-6">
+//               <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+//                 Cancel
+//               </Button>
+//               <Button
+//                 type="submit"
+//                 disabled={!isSaveEnabled || subTaskLoading}
+//                 className="bg-blue-600 hover:bg-blue-700 text-white"
+//               >
+//                 {subTaskLoading ? (
+//                   <>
+//                     <Loader className="mr-2 h-4 w-4 animate-spin" />
+//                     Creating...
+//                   </>
+//                 ) : (
+//                   "Create Subtask"
+//                 )}
+//               </Button>
+//             </div>
+//           </form>
+//         </div>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// };
+// export default CreateSubtaskModal;
 __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
@@ -1157,9 +1606,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$c
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/avatar.jsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/date-fns/format.js [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/useCurrentUser.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -1201,12 +1652,11 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
     const { currentTask } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"])({
         "CreateSubtaskModal.useSelector": (state)=>state.task
     }["CreateSubtaskModal.useSelector"]);
+    const { currentUser } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCurrentUser"])(); // Your custom hook
     const { loading: subTaskLoading, error: subTaskError } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"])({
         "CreateSubtaskModal.useSelector": (state)=>state.subTask
     }["CreateSubtaskModal.useSelector"]);
-    // Track previous open value to detect real "open" transitions
     const prevOpenRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(open);
-    const [internalOpen, setInternalOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const resolvedProjectId = currentTask?.projectId || projectId || "";
     const assigneesList = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "CreateSubtaskModal.useMemo[assigneesList]": ()=>{
@@ -1218,7 +1668,6 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
     }["CreateSubtaskModal.useMemo[assigneesList]"], [
         currentTask?.assignedTo
     ]);
-    // Form states
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
         title: "",
         description: "",
@@ -1230,7 +1679,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
     const [errors, setErrors] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [searchOpen, setSearchOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [searchQuery, setSearchQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    // Reset form every time modal truly opens (false → true)
+    // Reset form when modal opens
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "CreateSubtaskModal.useEffect": ()=>{
             const justOpened = open && !prevOpenRef.current;
@@ -1247,7 +1696,6 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                 setSearchQuery("");
                 setSearchOpen(false);
             }
-            setInternalOpen(open);
             prevOpenRef.current = open;
         }
     }["CreateSubtaskModal.useEffect"], [
@@ -1258,11 +1706,11 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
         "CreateSubtaskModal.useMemo[filteredMembers]": ()=>{
             const q = searchQuery.toLowerCase();
             return assigneesList.filter({
-                "CreateSubtaskModal.useMemo[filteredMembers]": (m)=>m.memberName?.toLowerCase().includes(q)
+                "CreateSubtaskModal.useMemo[filteredMembers]": (m)=>m?.memberName?.toLowerCase().includes(q)
             }["CreateSubtaskModal.useMemo[filteredMembers]"]).map({
                 "CreateSubtaskModal.useMemo[filteredMembers]": (m)=>({
-                        memberId: m.memberId || m.id,
-                        memberName: m.memberName || m.name,
+                        memberId: m.memberId || m._id || m.id,
+                        memberName: m.memberName || m.name || "Unknown Member",
                         role: m.role || "Member"
                     })
             }["CreateSubtaskModal.useMemo[filteredMembers]"]);
@@ -1278,7 +1726,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
             if (!formData.description.trim()) newErrors.description = "Description is required";
             if (!selectedDateTime) newErrors.deadline = "Deadline is required";
             if (!selectedAssignee) newErrors.assignedTo = "Please assign a member";
-            setErrors(newErrors);
+            setErrors(newErrors); // Fixed: was setErrors(newErrors(newErrors); ← syntax error!
             return Object.keys(newErrors).length === 0;
         }
     }["CreateSubtaskModal.useCallback[validate]"], [
@@ -1293,26 +1741,41 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Please fill all required fields");
                 return;
             }
-            const deadline = selectedDateTime ? selectedDateTime.toISOString().slice(0, 16) + ":00" : null;
+            if (!taskId) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Task ID is missing");
+                return;
+            }
+            const deadlineISO = selectedDateTime ? selectedDateTime.toISOString() : null;
             const subTaskData = {
-                ...formData,
-                deadline,
+                title: formData.title.trim(),
+                description: formData.description.trim(),
+                priority: formData.priority,
+                projectId: resolvedProjectId,
                 task_id: taskId,
-                assignedTo: selectedAssignee ? {
+                deadline: deadlineISO,
+                assignedTo: {
                     memberId: selectedAssignee.memberId,
                     memberName: selectedAssignee.memberName,
                     role: selectedAssignee.role
-                } : null
+                },
+                // actionedBy is now properly sent
+                actionedBy: {
+                    note: "Created subtask",
+                    performedBy: currentUser?.name || "Unknown User",
+                    timestamp: new Date().toISOString()
+                }
             };
             try {
                 await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$task$2f$slices$2f$subTaskSlice$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createSubTask"])({
                     taskId,
                     subTaskData
                 })).unwrap();
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("Subtask created successfully");
-                setOpen(false); // Close modal
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("Subtask created successfully!");
+                setOpen(false);
             } catch (err) {
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(subTaskError || "Failed to create subtask");
+                const msg = subTaskError || err?.message || "Failed to create subtask";
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(msg);
+                console.error("Create subtask error:", err);
             }
         }
     }["CreateSubtaskModal.useCallback[handleCreate]"], [
@@ -1321,6 +1784,8 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
         selectedDateTime,
         selectedAssignee,
         taskId,
+        resolvedProjectId,
+        currentUser,
         dispatch,
         subTaskError,
         setOpen
@@ -1328,7 +1793,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
     const displayDateTime = selectedDateTime ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(selectedDateTime, "MMM dd, yyyy 'at' HH:mm") : "Select date & time";
     const isSaveEnabled = formData.title.trim() && formData.description.trim() && selectedDateTime && selectedAssignee;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
-        open: internalOpen,
+        open: open,
         onOpenChange: setOpen,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogContent"], {
             className: "w-full max-w-full h-[100vh] max-h-[100vh] sm:max-w-6xl sm:max-h-[85vh] bg-white shadow-lg border border-gray-200 rounded-lg text-black p-2",
@@ -1345,14 +1810,14 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         className: "mr-2 h-4 w-4 text-blue-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 217,
+                                        lineNumber: 710,
                                         columnNumber: 15
                                     }, this),
                                     "Add New Subtask"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 216,
+                                lineNumber: 709,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogClose"], {
@@ -1365,28 +1830,28 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         className: "h-3 w-3"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 226,
+                                        lineNumber: 719,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                    lineNumber: 221,
+                                    lineNumber: 714,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 220,
+                                lineNumber: 713,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                        lineNumber: 215,
+                        lineNumber: 708,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                    lineNumber: 214,
+                    lineNumber: 707,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1405,7 +1870,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-4 w-4 text-blue-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 237,
+                                                lineNumber: 730,
                                                 columnNumber: 17
                                             }, this),
                                             " Subtask Title",
@@ -1415,13 +1880,13 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 238,
+                                                lineNumber: 731,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 236,
+                                        lineNumber: 729,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -1434,7 +1899,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         placeholder: "Enter subtask title..."
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 240,
+                                        lineNumber: 733,
                                         columnNumber: 15
                                     }, this),
                                     errors.title && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1444,7 +1909,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-3 w-3 mr-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 250,
+                                                lineNumber: 743,
                                                 columnNumber: 19
                                             }, this),
                                             " ",
@@ -1452,13 +1917,13 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 249,
+                                        lineNumber: 742,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 235,
+                                lineNumber: 728,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1473,14 +1938,14 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                         className: "h-4 w-4 text-blue-500 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 259,
+                                                        lineNumber: 752,
                                                         columnNumber: 19
                                                     }, this),
                                                     " Priority"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 258,
+                                                lineNumber: 751,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -1498,17 +1963,17 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                 children: priorityConfig[formData.priority]?.badge
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 269,
+                                                                lineNumber: 762,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 268,
+                                                            lineNumber: 761,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 267,
+                                                        lineNumber: 760,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1519,29 +1984,29 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                     children: config.badge
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                    lineNumber: 282,
+                                                                    lineNumber: 775,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, key, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 281,
+                                                                lineNumber: 774,
                                                                 columnNumber: 23
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 279,
+                                                        lineNumber: 772,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 261,
+                                                lineNumber: 754,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 257,
+                                        lineNumber: 750,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1553,24 +2018,23 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                         className: "h-4 w-4 text-blue-500 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 298,
+                                                        lineNumber: 791,
                                                         columnNumber: 19
                                                     }, this),
-                                                    " Deadline",
-                                                    " ",
+                                                    " Deadline    ",
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-red-500 ml-1",
                                                         children: "*"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 299,
-                                                        columnNumber: 19
+                                                        lineNumber: 791,
+                                                        columnNumber: 87
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 297,
-                                                columnNumber: 17
+                                                lineNumber: 790,
+                                                columnNumber: 18
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
                                                 children: [
@@ -1582,12 +2046,12 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                             children: displayDateTime
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 303,
+                                                            lineNumber: 796,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 302,
+                                                        lineNumber: 795,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -1601,7 +2065,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                 className: "rounded-lg"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 314,
+                                                                lineNumber: 807,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1620,24 +2084,24 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                     className: "h-10 border rounded px-3 text-sm w-full"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                    lineNumber: 322,
+                                                                    lineNumber: 815,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                lineNumber: 321,
+                                                                lineNumber: 814,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 313,
+                                                        lineNumber: 806,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 301,
+                                                lineNumber: 794,
                                                 columnNumber: 17
                                             }, this),
                                             errors.deadline && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1647,7 +2111,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                         className: "h-3 w-3 mr-1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                        lineNumber: 344,
+                                                        lineNumber: 837,
                                                         columnNumber: 21
                                                     }, this),
                                                     " ",
@@ -1655,19 +2119,19 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 343,
+                                                lineNumber: 836,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 296,
+                                        lineNumber: 789,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 256,
+                                lineNumber: 749,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1679,7 +2143,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-4 w-4 text-blue-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 353,
+                                                lineNumber: 846,
                                                 columnNumber: 17
                                             }, this),
                                             " Assign To",
@@ -1689,13 +2153,13 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 354,
+                                                lineNumber: 847,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 352,
+                                        lineNumber: 845,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
@@ -1718,12 +2182,12 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                         children: getInitials(selectedAssignee.memberName)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                        lineNumber: 365,
+                                                                        lineNumber: 858,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                    lineNumber: 364,
+                                                                    lineNumber: 857,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1734,7 +2198,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                             children: selectedAssignee.memberName
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                            lineNumber: 370,
+                                                                            lineNumber: 863,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1742,37 +2206,37 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                             children: selectedAssignee.role
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                            lineNumber: 373,
+                                                                            lineNumber: 866,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                    lineNumber: 369,
+                                                                    lineNumber: 862,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 363,
+                                                            lineNumber: 856,
                                                             columnNumber: 23
                                                         }, this) : "Select team member...",
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
                                                             className: "h-4 w-4 text-gray-500 ml-auto"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 381,
+                                                            lineNumber: 874,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                    lineNumber: 358,
+                                                    lineNumber: 851,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 357,
+                                                lineNumber: 850,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -1786,14 +2250,14 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                             onValueChange: setSearchQuery
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 386,
+                                                            lineNumber: 879,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$command$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CommandEmpty"], {
                                                             children: "No members found"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 391,
+                                                            lineNumber: 884,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$command$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CommandGroup"], {
@@ -1811,12 +2275,12 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                                 children: getInitials(m.memberName)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                                lineNumber: 402,
+                                                                                lineNumber: 895,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                            lineNumber: 401,
+                                                                            lineNumber: 894,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1826,7 +2290,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                                     children: m.memberName
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                                    lineNumber: 407,
+                                                                                    lineNumber: 900,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1834,41 +2298,41 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                                                     children: m.role
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                                    lineNumber: 408,
+                                                                                    lineNumber: 901,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                            lineNumber: 406,
+                                                                            lineNumber: 899,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, m.memberId, true, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                                    lineNumber: 394,
+                                                                    lineNumber: 887,
                                                                     columnNumber: 25
                                                                 }, this))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                            lineNumber: 392,
+                                                            lineNumber: 885,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                    lineNumber: 385,
+                                                    lineNumber: 878,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 384,
+                                                lineNumber: 877,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 356,
+                                        lineNumber: 849,
                                         columnNumber: 15
                                     }, this),
                                     selectedAssignee && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1882,14 +2346,14 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-4 w-4 mr-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 427,
+                                                lineNumber: 920,
                                                 columnNumber: 19
                                             }, this),
                                             " Remove assignee"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 420,
+                                        lineNumber: 913,
                                         columnNumber: 17
                                     }, this),
                                     errors.assignedTo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1899,7 +2363,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-3 w-3 mr-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 432,
+                                                lineNumber: 925,
                                                 columnNumber: 19
                                             }, this),
                                             " ",
@@ -1907,13 +2371,13 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 431,
+                                        lineNumber: 924,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 351,
+                                lineNumber: 844,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1926,7 +2390,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-4 w-4 text-blue-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 440,
+                                                lineNumber: 933,
                                                 columnNumber: 17
                                             }, this),
                                             " Description",
@@ -1936,13 +2400,13 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 441,
+                                                lineNumber: 934,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 439,
+                                        lineNumber: 932,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -1955,7 +2419,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         placeholder: "Enter detailed subtask description..."
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 443,
+                                        lineNumber: 936,
                                         columnNumber: 15
                                     }, this),
                                     errors.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1965,7 +2429,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                 className: "h-3 w-3 mr-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                lineNumber: 456,
+                                                lineNumber: 949,
                                                 columnNumber: 19
                                             }, this),
                                             " ",
@@ -1973,13 +2437,13 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 455,
+                                        lineNumber: 948,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 438,
+                                lineNumber: 931,
                                 columnNumber: 13
                             }, this),
                             subTaskError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1991,7 +2455,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                             className: "h-4 w-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                            lineNumber: 464,
+                                            lineNumber: 958,
                                             columnNumber: 19
                                         }, this),
                                         " ",
@@ -1999,12 +2463,12 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                    lineNumber: 463,
+                                    lineNumber: 957,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 462,
+                                lineNumber: 956,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2017,7 +2481,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 470,
+                                        lineNumber: 965,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2030,7 +2494,7 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                                     className: "mr-2 h-4 w-4 animate-spin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                                    lineNumber: 480,
+                                                    lineNumber: 975,
                                                     columnNumber: 21
                                                 }, this),
                                                 "Creating..."
@@ -2038,42 +2502,43 @@ const CreateSubtaskModal = ({ open, setOpen, taskId, projectId })=>{
                                         }, void 0, true) : "Create Subtask"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                        lineNumber: 473,
+                                        lineNumber: 968,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                                lineNumber: 469,
+                                lineNumber: 964,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                        lineNumber: 233,
+                        lineNumber: 726,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-                    lineNumber: 232,
+                    lineNumber: 725,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-            lineNumber: 213,
+            lineNumber: 706,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/modules/project-management/task/components/sub-task/CreateSubTaskModal.jsx",
-        lineNumber: 212,
+        lineNumber: 705,
         columnNumber: 5
     }, this);
 };
-_s(CreateSubtaskModal, "Xd3zr7ywD4F+lTh8AeICmcdsfsc=", false, function() {
+_s(CreateSubtaskModal, "5yp8VKa539wrLCowKBUTOYxwC+0=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useDispatch"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCurrentUser"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"]
     ];
 });
@@ -2090,6 +2555,319 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
 {
+// "use client";
+// import { useState, useEffect, useMemo, useCallback } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { updateSubTask } from "@/modules/project-management/task/slices/subTaskSlice";
+// import { Edit, User, Flag, Info, X, Loader, CalendarIcon } from "lucide-react";
+// import { toast } from "sonner";
+// import { Textarea } from "@/components/ui/textarea";
+// import { Button } from "@/components/ui/button";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+// import { Calendar } from "@/components/ui/calendar";
+// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+// import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+// import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// import { format } from "date-fns";
+// import { cn } from "@/lib/utils";
+// const priorityConfig = {
+//   Low: { color: "bg-emerald-100 text-emerald-800", badge: "Low" },
+//   Medium: { color: "bg-amber-100 text-amber-800", badge: "Medium" },
+//   High: { color: "bg-rose-100 text-rose-800", badge: "High" },
+// };
+// const getInitials = (name) => {
+//   if (!name) return "??";
+//   const parts = name.trim().split(" ").filter(Boolean);
+//   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+//   return parts.map((p) => p[0]).join("").toUpperCase().slice(0, 2);
+// };
+// const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtaskEdit }) => {
+//   const dispatch = useDispatch();
+//   const { currentTask } = useSelector((state) => state.task);
+//   const { loading: subTaskLoading, error: subTaskError } = useSelector((state) => state.subTask);
+//   const resolvedProjectId = projectId || currentTask?.projectId || subtask?.projectId || "";
+//   const assigneesList = useMemo(() => {
+//     if (!currentTask?.assignedTo) return [];
+//     return Array.isArray(currentTask.assignedTo) ? currentTask.assignedTo : [currentTask.assignedTo];
+//   }, [currentTask?.assignedTo]);
+//   const [formData, setFormData] = useState({
+//     title: "",
+//     description: "",
+//     priority: "Medium",
+//     projectId: resolvedProjectId,
+//   });
+//   const [selectedAssignee, setSelectedAssignee] = useState(null); // { memberId, memberName, role }
+//   const [selectedDateTime, setSelectedDateTime] = useState(null);
+//   const [errors, setErrors] = useState({});
+//   const [searchOpen, setSearchOpen] = useState(false);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   // Initialize form when modal opens
+//   useEffect(() => {
+//     if (open && subtask) {
+//       setFormData({
+//         title: subtask.title || "",
+//         description: subtask.description || "",
+//         priority: subtask.priority || "Medium",
+//         projectId: resolvedProjectId,
+//       });
+//       // Safe assignee handling (supports both object and string)
+//       let assigneeObj = {};
+//       if (subtask.assignedTo && typeof subtask.assignedTo === "object") {
+//         assigneeObj = subtask.assignedTo;
+//       } else {
+//         assigneeObj = {
+//           memberId: subtask.assignedTo || subtask.memberId,
+//           memberName: subtask.assignedToName || subtask.memberName,
+//           role: subtask.memberRole || "Member",
+//         };
+//       }
+//       setSelectedAssignee({
+//         memberId: assigneeObj.memberId || assigneeObj._id || subtask.memberId,
+//         memberName: assigneeObj.memberName || subtask.assignedToName || subtask.memberName || "Unknown",
+//         role: assigneeObj.role || subtask.memberRole || "Member",
+//       });
+//       // Deadline
+//       if (subtask.deadline) {
+//         setSelectedDateTime(new Date(subtask.deadline));
+//       } else {
+//         setSelectedDateTime(null);
+//       }
+//       setErrors({});
+//       setSearchQuery("");
+//     }
+//   }, [open, subtask, resolvedProjectId]);
+// console.log(currentTask);
+//   const filteredMembers = useMemo(() => {
+//     const q = searchQuery.toLowerCase();
+//     return assigneesList
+//       .filter((m) => m.memberName?.toLowerCase().includes(q))
+//       .map((m) => ({
+//         memberId: m.memberId,
+//         memberName: m.memberName,
+//         role: m.role || "Member",
+//       }));
+//   }, [assigneesList, searchQuery]);
+//   const handleUpdate = useCallback(
+//     async (e) => {
+//       e.preventDefault();
+//       if (!formData.title.trim() || !formData.description.trim() || !selectedDateTime || !selectedAssignee?.memberId) {
+//         toast.error("Please fill all required fields");
+//         return;
+//       }
+//       const deadline = selectedDateTime.toISOString().slice(0, 16) + ":00";
+//       const subTaskData = {
+//         ...formData,
+//         deadline,
+//         assignedTo: {
+//           memberId: selectedAssignee.memberId,
+//           memberName: selectedAssignee.memberName,
+//           role: selectedAssignee.role,
+//         },
+//       };
+//       try {
+//         await dispatch(
+//           updateSubTask({
+//             taskId,
+//             subTaskId: subtask.subtask_id || subtask.id,
+//             subTaskData,
+//           })
+//         ).unwrap();
+//         toast.success("Subtask updated successfully");
+//         onSubtaskEdit?.();
+//         setOpen(false);
+//       } catch (err) {
+//         toast.error(subTaskError || "Failed to update subtask");
+//       }
+//     },
+//     [formData, selectedDateTime, selectedAssignee, taskId, subtask, dispatch, subTaskError, onSubtaskEdit, setOpen]
+//   );
+//   const displayDateTime = selectedDateTime
+//     ? format(selectedDateTime, "MMM dd, yyyy 'at' HH:mm")
+//     : "Select date & time";
+//   const isSaveEnabled = formData.title.trim() && formData.description.trim() && selectedDateTime && selectedAssignee?.memberId;
+//   if (!open) return null;
+//   return (
+//     <Dialog open={open} onOpenChange={setOpen}>
+//       <DialogContent className="w-full max-w-full h-[100vh] max-h-[100vh] sm:max-w-6xl sm:max-h-[85vh] bg-white shadow-lg border border-gray-200 rounded-lg text-black p-2">
+//         <DialogHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 border-b border-gray-200 sticky top-0 z-10">
+//           <div className="flex justify-between items-center">
+//             <DialogTitle className="text-base sm:text-lg font-bold text-gray-800 flex items-center">
+//               <Edit className="mr-2 h-4 w-4 text-blue-500" />
+//               Edit Subtask
+//             </DialogTitle>
+//             <DialogClose asChild>
+//               <Button variant="ghost" size="icon" className="text-gray-500 hover:bg-gray-100 rounded-full h-7 w-7">
+//                 <X className="h-3 w-3" />
+//               </Button>
+//             </DialogClose>
+//           </div>
+//         </DialogHeader>
+//         <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-60px)]">
+//           <form onSubmit={handleUpdate} className="space-y-4">
+//             {/* Title */}
+//             <div className="w-full">
+//               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                 <Edit className="h-4 w-4 text-blue-500 mr-2" /> Subtask Title <span className="text-red-500 ml-1">*</span>
+//               </label>
+//               <Textarea
+//                 value={formData.title}
+//                 onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
+//                 className="w-full h-24 sm:h-28 md:h-32 bg-white border border-gray-300 rounded-lg text-sm resize-vertical focus:ring-2 focus:ring-blue-200 focus:border-blue-500 p-3"
+//                 placeholder="Enter subtask title..."
+//               />
+//               {errors.title && <p className="text-red-500 text-xs mt-1 flex items-center"><X className="h-3 w-3 mr-1" /> {errors.title}</p>}
+//             </div>
+//             {/* Priority & Deadline (Single Picker) */}
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//               <div>
+//                 <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                   <Flag className="h-4 w-4 text-blue-500 mr-2" /> Priority
+//                 </label>
+//                 <Select value={formData.priority} onValueChange={(v) => setFormData((prev) => ({ ...prev, priority: v }))}>
+//                   <SelectTrigger className="w-full h-10">
+//                     <SelectValue>
+//                       <span className={cn("px-2 py-1 rounded-full text-xs font-medium", priorityConfig[formData.priority]?.color)}>
+//                         {priorityConfig[formData.priority]?.badge}
+//                       </span>
+//                     </SelectValue>
+//                   </SelectTrigger>
+//                   <SelectContent>
+//                     {Object.entries(priorityConfig).map(([k, c]) => (
+//                       <SelectItem key={k} value={k}>
+//                         <span className={cn("px-2 py-1 rounded-full text-xs font-medium", c.color)}>{c.badge}</span>
+//                       </SelectItem>
+//                     ))}
+//                   </SelectContent>
+//                 </Select>
+//               </div>
+//               <div>
+//                 <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                   <CalendarIcon className="h-4 w-4 text-blue-500 mr-2" /> Deadline <span className="text-red-500 ml-1">*</span>
+//                 </label>
+//                 <Popover>
+//                   <PopoverTrigger asChild>
+//                     <Button variant="outline" className={cn("w-full justify-between h-10 text-sm", !selectedDateTime && "text-gray-500")}>
+//                       {displayDateTime}
+//                     </Button>
+//                   </PopoverTrigger>
+//                   <PopoverContent className="w-auto p-0 bg-white border border-gray-200 rounded-lg shadow-lg">
+//                     <Calendar mode="single" selected={selectedDateTime} onSelect={setSelectedDateTime} initialFocus className="rounded-lg" />
+//                     <div className="p-3 border-t flex items-center gap-2">
+//                       <input
+//                         type="time"
+//                         value={selectedDateTime ? format(selectedDateTime, "HH:mm") : ""}
+//                         onChange={(e) => {
+//                           if (selectedDateTime) {
+//                             const [h, m] = e.target.value.split(":");
+//                             const newDt = new Date(selectedDateTime);
+//                             newDt.setHours(parseInt(h), parseInt(m));
+//                             setSelectedDateTime(newDt);
+//                           }
+//                         }}
+//                         className="h-10 border rounded px-3 text-sm w-full"
+//                       />
+//                     </div>
+//                   </PopoverContent>
+//                 </Popover>
+//                 {errors.deadline && <p className="text-red-500 text-xs mt-1 flex items-center"><X className="h-3 w-3 mr-1" /> {errors.deadline}</p>}
+//               </div>
+//             </div>
+//             {/* Assignee */}
+//             <div>
+//               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                 <User className="h-4 w-4 text-blue-500 mr-2" /> Assign To <span className="text-red-500 ml-1">*</span>
+//               </label>
+//               <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+//                 <PopoverTrigger asChild>
+//                   <Button variant="outline" className="w-full justify-between h-12 text-sm">
+//                     {selectedAssignee ? (
+//                       <div className="flex items-center gap-3">
+//                         <Avatar className="h-8 w-8">
+//                           <AvatarFallback className="bg-teal-600 text-white text-xs">
+//                             {getInitials(selectedAssignee.memberName)}
+//                           </AvatarFallback>
+//                         </Avatar>
+//                         <div className="text-left">
+//                           <div className="font-medium">{selectedAssignee.memberName}</div>
+//                           <div className="text-xs text-gray-500">{selectedAssignee.role} </div>
+//                         </div>
+//                       </div>
+//                     ) : "Select team member..."}
+//                     <User className="h-4 w-4 text-gray-500 ml-auto" />
+//                   </Button>
+//                 </PopoverTrigger>
+//                 <PopoverContent className="w-full p-0" align="start">
+//                   <Command>
+//                     <CommandInput placeholder="Search members..." value={searchQuery} onValueChange={setSearchQuery} />
+//                     <CommandEmpty>No members found</CommandEmpty>
+//                     <CommandGroup className="max-h-64 overflow-auto">
+//                       {filteredMembers.map((m) => (
+//                         <CommandItem key={m.memberId} onSelect={() => { setSelectedAssignee(m); setSearchOpen(false); }}>
+//                           <Avatar className="h-8 w-8 mr-3">
+//                             <AvatarFallback className="text-xs bg-teal-600 text-white">
+//                               {getInitials(m.memberName)}
+//                             </AvatarFallback>
+//                           </Avatar>
+//                           <div>
+//                             <div className="font-medium">{m.memberName}</div>
+//                             <div className="text-xs text-gray-500">{m.role} </div>
+//                           </div>
+//                         </CommandItem>
+//                       ))}
+//                     </CommandGroup>
+//                   </Command>
+//                 </PopoverContent>
+//               </Popover>
+//               {selectedAssignee && (
+//                 <Button type="button" variant="ghost" size="sm" onClick={() => setSelectedAssignee(null)} className="mt-2 text-red-600">
+//                   <X className="h-4 w-4 mr-1" /> Remove assignee
+//                 </Button>
+//               )}
+//               {errors.assignedTo && <p className="text-red-500 text-xs mt-1 flex items-center"><X className="h-3 w-3 mr-1" /> {errors.assignedTo}</p>}
+//             </div>
+//             {/* Description */}
+//             <div className="w-full">
+//               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+//                 <Info className="h-4 w-4 text-blue-500 mr-2" /> Description <span className="text-red-500 ml-1">*</span>
+//               </label>
+//               <Textarea
+//                 value={formData.description}
+//                 onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+//                 className="w-full h-40 sm:h-48 md:h-52 bg-white border border-gray-300 rounded-lg text-sm resize-vertical focus:ring-2 focus:ring-blue-200 focus:border-blue-500 p-3"
+//                 placeholder="Enter detailed subtask description..."
+//               />
+//               {errors.description && <p className="text-red-500 text-xs mt-1 flex items-center"><X className="h-3 w-3 mr-1" /> {errors.description}</p>}
+//             </div>
+//             {subTaskError && (
+//               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+//                 <p className="text-red-600 text-sm flex items-center">
+//                   <X className="h-4 w-4 mr-2" /> {subTaskError}
+//                 </p>
+//               </div>
+//             )}
+//             <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200 mt-6">
+//               <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+//                 Cancel
+//               </Button>
+//               <Button type="submit" disabled={!isSaveEnabled || subTaskLoading} className="bg-blue-600 hover:bg-blue-700 text-white">
+//                 {subTaskLoading ? (
+//                   <>
+//                     <Loader className="h-4 w-4 animate-spin mr-2" />
+//                     Updating...
+//                   </>
+//                 ) : (
+//                   "Update Subtask"
+//                 )}
+//               </Button>
+//             </div>
+//           </form>
+//         </div>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// };
+// export default EditSubtaskModal;
 __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
@@ -2097,6 +2875,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-redux/dist/react-redux.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$task$2f$slices$2f$subTaskSlice$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/project-management/task/slices/subTaskSlice.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/useCurrentUser.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2d$pen$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/square-pen.js [app-client] (ecmascript) <export default as Edit>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-client] (ecmascript) <export default as User>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$flag$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Flag$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/flag.js [app-client] (ecmascript) <export default as Flag>");
@@ -2118,6 +2897,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$js__$
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -2159,6 +2939,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
     const { currentTask } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"])({
         "EditSubtaskModal.useSelector": (state)=>state.task
     }["EditSubtaskModal.useSelector"]);
+    const { currentUser } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCurrentUser"])(); // For actionedBy
     const { loading: subTaskLoading, error: subTaskError } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"])({
         "EditSubtaskModal.useSelector": (state)=>state.subTask
     }["EditSubtaskModal.useSelector"]);
@@ -2179,7 +2960,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
         priority: "Medium",
         projectId: resolvedProjectId
     });
-    const [selectedAssignee, setSelectedAssignee] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null); // { memberId, memberName, role }
+    const [selectedAssignee, setSelectedAssignee] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [selectedDateTime, setSelectedDateTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [errors, setErrors] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [searchOpen, setSearchOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -2187,38 +2968,31 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
     // Initialize form when modal opens
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "EditSubtaskModal.useEffect": ()=>{
-            if (open && subtask) {
-                setFormData({
-                    title: subtask.title || "",
-                    description: subtask.description || "",
-                    priority: subtask.priority || "Medium",
-                    projectId: resolvedProjectId
-                });
-                // Safe assignee handling (supports both object and string)
-                let assigneeObj = {};
-                if (subtask.assignedTo && typeof subtask.assignedTo === "object") {
-                    assigneeObj = subtask.assignedTo;
-                } else {
-                    assigneeObj = {
-                        memberId: subtask.assignedTo || subtask.memberId,
-                        memberName: subtask.assignedToName || subtask.memberName,
-                        role: subtask.memberRole || "Member"
-                    };
-                }
-                setSelectedAssignee({
-                    memberId: assigneeObj.memberId || assigneeObj._id || subtask.memberId,
-                    memberName: assigneeObj.memberName || subtask.assignedToName || subtask.memberName || "Unknown",
-                    role: assigneeObj.role || subtask.memberRole || "Member"
-                });
-                // Deadline
-                if (subtask.deadline) {
-                    setSelectedDateTime(new Date(subtask.deadline));
-                } else {
-                    setSelectedDateTime(null);
-                }
-                setErrors({});
-                setSearchQuery("");
+            if (!open || !subtask) return;
+            setFormData({
+                title: subtask.title || "",
+                description: subtask.description || "",
+                priority: subtask.priority || "Medium",
+                projectId: resolvedProjectId
+            });
+            // Safely extract current assignee — supports all possible formats
+            const assignedTo = subtask.assignedTo || {};
+            const memberId = assignedTo.memberId || assignedTo._id || subtask.memberId;
+            const memberName = assignedTo.memberName || assignedTo.name || subtask.assignedToName || subtask.memberName || "Unknown User";
+            const role = assignedTo.role || subtask.memberRole || "Member";
+            setSelectedAssignee(memberId ? {
+                memberId,
+                memberName,
+                role
+            } : null);
+            // Deadline
+            if (subtask.deadline) {
+                setSelectedDateTime(new Date(subtask.deadline));
+            } else {
+                setSelectedDateTime(null);
             }
+            setErrors({});
+            setSearchQuery("");
         }
     }["EditSubtaskModal.useEffect"], [
         open,
@@ -2229,11 +3003,11 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
         "EditSubtaskModal.useMemo[filteredMembers]": ()=>{
             const q = searchQuery.toLowerCase();
             return assigneesList.filter({
-                "EditSubtaskModal.useMemo[filteredMembers]": (m)=>m.memberName?.toLowerCase().includes(q)
+                "EditSubtaskModal.useMemo[filteredMembers]": (m)=>m?.memberName?.toLowerCase().includes(q)
             }["EditSubtaskModal.useMemo[filteredMembers]"]).map({
                 "EditSubtaskModal.useMemo[filteredMembers]": (m)=>({
-                        memberId: m.memberId,
-                        memberName: m.memberName,
+                        memberId: m.memberId || m._id || m.id,
+                        memberName: m.memberName || m.name || "Unknown",
                         role: m.role || "Member"
                     })
             }["EditSubtaskModal.useMemo[filteredMembers]"]);
@@ -2245,24 +3019,31 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
     const handleUpdate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "EditSubtaskModal.useCallback[handleUpdate]": async (e)=>{
             e.preventDefault();
-            if (!formData.title.trim() || !formData.description.trim() || !selectedDateTime || !selectedAssignee?.memberId) {
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Please fill all required fields");
-                return;
-            }
-            const deadline = selectedDateTime.toISOString().slice(0, 16) + ":00";
+            if (!formData.title.trim()) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Title is required");
+            if (!formData.description.trim()) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Description is required");
+            if (!selectedDateTime) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Deadline is required");
+            if (!selectedAssignee?.memberId) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Please assign a member");
             const subTaskData = {
-                ...formData,
-                deadline,
+                title: formData.title.trim(),
+                description: formData.description.trim(),
+                priority: formData.priority,
+                deadline: selectedDateTime.toISOString(),
                 assignedTo: {
                     memberId: selectedAssignee.memberId,
                     memberName: selectedAssignee.memberName,
                     role: selectedAssignee.role
+                },
+                // Send actionedBy so activity log shows who edited
+                actionedBy: {
+                    note: "Updated subtask details",
+                    performedBy: currentUser?.name || currentUser?.email || "Unknown User",
+                    timestamp: new Date().toISOString()
                 }
             };
             try {
                 await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$task$2f$slices$2f$subTaskSlice$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateSubTask"])({
                     taskId,
-                    subTaskId: subtask.subtask_id || subtask.id,
+                    subTaskId: subtask.subtask_id || subtask._id || subtask.id,
                     subTaskData
                 })).unwrap();
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("Subtask updated successfully");
@@ -2270,6 +3051,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                 setOpen(false);
             } catch (err) {
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(subTaskError || "Failed to update subtask");
+                console.error("Update failed:", err);
             }
         }
     }["EditSubtaskModal.useCallback[handleUpdate]"], [
@@ -2278,6 +3060,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
         selectedAssignee,
         taskId,
         subtask,
+        currentUser,
         dispatch,
         subTaskError,
         onSubtaskEdit,
@@ -2304,14 +3087,14 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         className: "mr-2 h-4 w-4 text-blue-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 168,
+                                        lineNumber: 563,
                                         columnNumber: 15
                                     }, this),
                                     "Edit Subtask"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 167,
+                                lineNumber: 562,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogClose"], {
@@ -2324,28 +3107,28 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         className: "h-3 w-3"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 173,
+                                        lineNumber: 568,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                    lineNumber: 172,
+                                    lineNumber: 567,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 171,
+                                lineNumber: 566,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                        lineNumber: 166,
+                        lineNumber: 561,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                    lineNumber: 165,
+                    lineNumber: 560,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2364,7 +3147,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 className: "h-4 w-4 text-blue-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 184,
+                                                lineNumber: 579,
                                                 columnNumber: 17
                                             }, this),
                                             " Subtask Title ",
@@ -2373,13 +3156,13 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 184,
+                                                lineNumber: 579,
                                                 columnNumber: 79
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 183,
+                                        lineNumber: 578,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2392,31 +3175,13 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         placeholder: "Enter subtask title..."
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 186,
+                                        lineNumber: 581,
                                         columnNumber: 15
-                                    }, this),
-                                    errors.title && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-red-500 text-xs mt-1 flex items-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                className: "h-3 w-3 mr-1"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 192,
-                                                columnNumber: 91
-                                            }, this),
-                                            " ",
-                                            errors.title
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 192,
-                                        columnNumber: 32
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 182,
+                                lineNumber: 577,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2431,14 +3196,14 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                         className: "h-4 w-4 text-blue-500 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 199,
+                                                        lineNumber: 593,
                                                         columnNumber: 19
                                                     }, this),
                                                     " Priority"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 198,
+                                                lineNumber: 592,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -2456,17 +3221,17 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                 children: priorityConfig[formData.priority]?.badge
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                lineNumber: 204,
+                                                                lineNumber: 598,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 203,
+                                                            lineNumber: 597,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 202,
+                                                        lineNumber: 596,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -2477,29 +3242,29 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                     children: c.badge
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                    lineNumber: 212,
+                                                                    lineNumber: 606,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, k, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                lineNumber: 211,
+                                                                lineNumber: 605,
                                                                 columnNumber: 23
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 209,
+                                                        lineNumber: 603,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 201,
+                                                lineNumber: 595,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 197,
+                                        lineNumber: 591,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2511,7 +3276,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                         className: "h-4 w-4 text-blue-500 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 221,
+                                                        lineNumber: 615,
                                                         columnNumber: 19
                                                     }, this),
                                                     " Deadline ",
@@ -2520,13 +3285,13 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                         children: "*"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 221,
+                                                        lineNumber: 615,
                                                         columnNumber: 84
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 220,
+                                                lineNumber: 614,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
@@ -2539,12 +3304,12 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                             children: displayDateTime
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 225,
+                                                            lineNumber: 619,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 224,
+                                                        lineNumber: 618,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -2558,7 +3323,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                 className: "rounded-lg"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                lineNumber: 230,
+                                                                lineNumber: 624,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2577,54 +3342,36 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                     className: "h-10 border rounded px-3 text-sm w-full"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                    lineNumber: 232,
+                                                                    lineNumber: 626,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                lineNumber: 231,
+                                                                lineNumber: 625,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 229,
+                                                        lineNumber: 623,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 223,
+                                                lineNumber: 617,
                                                 columnNumber: 17
-                                            }, this),
-                                            errors.deadline && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-red-500 text-xs mt-1 flex items-center",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                        className: "h-3 w-3 mr-1"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                        lineNumber: 248,
-                                                        columnNumber: 96
-                                                    }, this),
-                                                    " ",
-                                                    errors.deadline
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 248,
-                                                columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 219,
+                                        lineNumber: 613,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 196,
+                                lineNumber: 590,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2636,7 +3383,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 className: "h-4 w-4 text-blue-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 255,
+                                                lineNumber: 648,
                                                 columnNumber: 17
                                             }, this),
                                             " Assign To ",
@@ -2645,13 +3392,13 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 255,
+                                                lineNumber: 648,
                                                 columnNumber: 75
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 254,
+                                        lineNumber: 647,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
@@ -2674,12 +3421,12 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                         children: getInitials(selectedAssignee.memberName)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                        lineNumber: 263,
+                                                                        lineNumber: 656,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                    lineNumber: 262,
+                                                                    lineNumber: 655,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2690,48 +3437,45 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                             children: selectedAssignee.memberName
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                            lineNumber: 268,
+                                                                            lineNumber: 661,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                             className: "text-xs text-gray-500",
-                                                                            children: [
-                                                                                selectedAssignee.role,
-                                                                                " "
-                                                                            ]
-                                                                        }, void 0, true, {
+                                                                            children: selectedAssignee.role
+                                                                        }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                            lineNumber: 269,
+                                                                            lineNumber: 662,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                    lineNumber: 267,
+                                                                    lineNumber: 660,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 261,
+                                                            lineNumber: 654,
                                                             columnNumber: 23
                                                         }, this) : "Select team member...",
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
                                                             className: "h-4 w-4 text-gray-500 ml-auto"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 273,
+                                                            lineNumber: 668,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                    lineNumber: 259,
+                                                    lineNumber: 652,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 258,
+                                                lineNumber: 651,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -2745,14 +3489,14 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                             onValueChange: setSearchQuery
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 278,
+                                                            lineNumber: 673,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$command$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CommandEmpty"], {
                                                             children: "No members found"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 279,
+                                                            lineNumber: 674,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$command$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CommandGroup"], {
@@ -2770,12 +3514,12 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                                 children: getInitials(m.memberName)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                                lineNumber: 284,
+                                                                                lineNumber: 685,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                            lineNumber: 283,
+                                                                            lineNumber: 684,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2785,52 +3529,49 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                                                     children: m.memberName
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                                    lineNumber: 289,
+                                                                                    lineNumber: 690,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                                     className: "text-xs text-gray-500",
-                                                                                    children: [
-                                                                                        m.role,
-                                                                                        " "
-                                                                                    ]
-                                                                                }, void 0, true, {
+                                                                                    children: m.role
+                                                                                }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                                    lineNumber: 290,
+                                                                                    lineNumber: 691,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 689,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, m.memberId, true, {
                                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                                    lineNumber: 282,
+                                                                    lineNumber: 677,
                                                                     columnNumber: 25
                                                                 }, this))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                            lineNumber: 280,
+                                                            lineNumber: 675,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                    lineNumber: 277,
+                                                    lineNumber: 672,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 276,
+                                                lineNumber: 671,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 257,
+                                        lineNumber: 650,
                                         columnNumber: 15
                                     }, this),
                                     selectedAssignee && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2844,38 +3585,20 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 className: "h-4 w-4 mr-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 300,
+                                                lineNumber: 702,
                                                 columnNumber: 19
                                             }, this),
                                             " Remove assignee"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 299,
+                                        lineNumber: 701,
                                         columnNumber: 17
-                                    }, this),
-                                    errors.assignedTo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-red-500 text-xs mt-1 flex items-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                className: "h-3 w-3 mr-1"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 303,
-                                                columnNumber: 96
-                                            }, this),
-                                            " ",
-                                            errors.assignedTo
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 303,
-                                        columnNumber: 37
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 253,
+                                lineNumber: 646,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2888,7 +3611,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 className: "h-4 w-4 text-blue-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 309,
+                                                lineNumber: 710,
                                                 columnNumber: 17
                                             }, this),
                                             " Description ",
@@ -2897,13 +3620,13 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                                 children: "*"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 309,
+                                                lineNumber: 710,
                                                 columnNumber: 77
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 308,
+                                        lineNumber: 709,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2916,31 +3639,13 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         placeholder: "Enter detailed subtask description..."
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 311,
+                                        lineNumber: 712,
                                         columnNumber: 15
-                                    }, this),
-                                    errors.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-red-500 text-xs mt-1 flex items-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                className: "h-3 w-3 mr-1"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                lineNumber: 317,
-                                                columnNumber: 97
-                                            }, this),
-                                            " ",
-                                            errors.description
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 317,
-                                        columnNumber: 38
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 307,
+                                lineNumber: 708,
                                 columnNumber: 13
                             }, this),
                             subTaskError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2952,7 +3657,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                             className: "h-4 w-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                            lineNumber: 323,
+                                            lineNumber: 723,
                                             columnNumber: 19
                                         }, this),
                                         " ",
@@ -2960,12 +3665,12 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                    lineNumber: 322,
+                                    lineNumber: 722,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 321,
+                                lineNumber: 721,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2978,7 +3683,7 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 329,
+                                        lineNumber: 729,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2988,10 +3693,10 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         children: subTaskLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader$3e$__["Loader"], {
-                                                    className: "h-4 w-4 animate-spin mr-2"
+                                                    className: "mr-2 h-4 w-4 animate-spin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                                    lineNumber: 335,
+                                                    lineNumber: 739,
                                                     columnNumber: 21
                                                 }, this),
                                                 "Updating..."
@@ -2999,42 +3704,43 @@ const EditSubtaskModal = ({ open, setOpen, subtask, taskId, projectId, onSubtask
                                         }, void 0, true) : "Update Subtask"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                        lineNumber: 332,
+                                        lineNumber: 732,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                                lineNumber: 328,
+                                lineNumber: 728,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                        lineNumber: 180,
+                        lineNumber: 575,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-                    lineNumber: 179,
+                    lineNumber: 574,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-            lineNumber: 164,
+            lineNumber: 559,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/modules/project-management/task/components/sub-task/EditSubTaskModal.jsx",
-        lineNumber: 163,
+        lineNumber: 558,
         columnNumber: 5
     }, this);
 };
-_s(EditSubtaskModal, "Ppr+G43EC0tKjTBgVEfDt6ZaSZY=", false, function() {
+_s(EditSubtaskModal, "UwwKphlxrw4X9bYRDAOk9OOceaQ=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useDispatch"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCurrentUser"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSelector"]
     ];
 });

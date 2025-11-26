@@ -678,6 +678,7 @@ const ProjectbugList = ({ projectId, teamLeadId }) => {
             isOpen={showAssignModal}
             onOpenChange={setShowAssignModal}
             bug={selectedBugForAssign}
+            projectId={projectId}
             bugId={selectedBugForAssign?.bug_id}
             teamMembers={teamMembersByProjectId || []}
           />

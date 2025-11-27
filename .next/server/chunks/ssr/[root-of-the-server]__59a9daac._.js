@@ -4111,11 +4111,12 @@ const updateTask = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modu
         return rejectWithValue(error.response?.data?.message || error.message || 'Failed to update task');
     }
 });
-const updateTaskStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])('task/updateTaskStatus', async ({ taskId, status, delayReason }, { rejectWithValue })=>{
+const updateTaskStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])('task/updateTaskStatus', async ({ taskId, status, actionedBy, delayReason }, { rejectWithValue })=>{
     try {
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["axiosInstance"].put(`/task/update/${taskId}`, {
             status,
-            delayReason
+            delayReason,
+            actionedBy
         }, {
             headers: {
                 'Content-Type': 'application/json'

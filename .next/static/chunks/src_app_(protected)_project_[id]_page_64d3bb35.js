@@ -12,7 +12,7 @@
   "static/chunks/node_modules_date-fns_49b83c7a._.js",
   "static/chunks/node_modules_gsap_8ed0561d._.js",
   "static/chunks/node_modules_chart_js_dist_fe1f3c5e._.js",
-  "static/chunks/node_modules_29ca6ca8._.js"
+  "static/chunks/node_modules_836daf8b._.js"
 ],
     source: "dynamic"
 });

@@ -1419,195 +1419,6 @@ const __TURBOPACK__default__export__ = EditBugModal;
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-// "use client";
-// import { useState, useEffect, useMemo } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogClose,
-// } from "@/components/ui/dialog";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Button } from "@/components/ui/button";
-// import { Loader2, Users, User, Calendar, X } from "lucide-react";
-// import { toast } from "sonner";
-// import { fetchTeamByProjectId } from "@/modules/project-management/team/slices/teamSlice";
-// import { assignBug } from "@/modules/project-management/issues/slices/bugSlice";
-// const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign }) => {
-//   const dispatch = useDispatch();
-//   const { teamsByProject: teams, status: teamStatus } = useSelector(
-//     (state) => state.team
-//   );
-//   const [selectedTeam, setSelectedTeam] = useState(null);
-//   const [selectedMember, setSelectedMember] = useState("");
-//   const [deadline, setDeadline] = useState("");
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   useEffect(() => {
-//     if (projectId && isOpen) dispatch(fetchTeamByProjectId(projectId));
-//   }, [dispatch, projectId, isOpen]);
-//   useEffect(() => {
-//     if (!isOpen) {
-//       setSelectedTeam(null);
-//       setSelectedMember("");
-//       setDeadline("");
-//       setIsSubmitting(false);
-//     }
-//   }, [isOpen]);
-//   const handleTeamSelect = (value) => {
-//     const team = teams.find((t) => t.teamId === value);
-//     setSelectedTeam(team);
-//     setSelectedMember("");
-//   };
-//   const handleAssign = async () => {
-//     if (!selectedTeam) return toast.error("Please select a team");
-//     if (!selectedMember) return toast.error("Please select a team member");
-//     if (!deadline) return toast.error("Please select a deadline");
-//     const payload = {
-//       assignedTo: selectedMember,
-//       deadline,
-//     };
-//     setIsSubmitting(true);
-//     try {
-//       await dispatch(assignBug({ bug_id: bugId, payload })).unwrap();
-//       toast.success("Bug assigned successfully!");
-//       if (onAssign) onAssign({ ...payload, bug_id: bugId });
-//       onOpenChange(false);
-//     } catch (error) {
-//       toast.error(error || "Failed to assign bug");
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-//   return (
-//     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-//       <DialogContent className="max-w-[95vw] sm:max-w-md bg-white shadow-lg border border-gray-200 rounded-lg p-6">
-//         <DialogHeader>
-//           <DialogTitle className="text-lg font-semibold text-gray-900 flex items-center justify-between">
-//             <span>
-//               Assign Bug:{" "}
-//               {bug?.title
-//                 ? bug.title.slice(0, 30) + (bug.title.length > 30 ? "..." : "")
-//                 : "N/A"}
-//             </span>
-//             <DialogClose asChild>
-//               <Button
-//                 variant="ghost"
-//                 size="icon"
-//                 className="text-gray-500 hover:bg-gray-100 rounded-full h-7 w-7"
-//               >
-//                 <X className="h-4 w-4" />
-//               </Button>
-//             </DialogClose>
-//           </DialogTitle>
-//         </DialogHeader>
-//         {/* FORM FIELDS */}
-//         <div className="space-y-4 mt-4">
-//           {/* Select Team */}
-//           <div>
-//             <label className="text-sm font-medium text-gray-700 flex items-center mb-2">
-//               <Users className="h-4 w-4 text-blue-500 mr-2" />
-//               Select Team
-//             </label>
-//             <Select
-//               value={selectedTeam?.teamId || ""}
-//               onValueChange={handleTeamSelect}
-//               disabled={teamStatus === "loading"}
-//             >
-//               <SelectTrigger className="w-full border border-gray-300 rounded-lg text-sm h-10">
-//                 <SelectValue
-//                   placeholder={
-//                     teamStatus === "loading" ? "Loading teams..." : "Select team"
-//                   }
-//                 />
-//               </SelectTrigger>
-//               <SelectContent className="bg-white shadow-lg border border-gray-200 rounded-lg text-black max-h-48">
-//                 {teams.map((team) => (
-//                   <SelectItem key={team.teamId} value={team.teamId}>
-//                     {team.teamName}
-//                   </SelectItem>
-//                 ))}
-//               </SelectContent>
-//             </Select>
-//             {/* Inline Team Members Display */}
-//             {selectedTeam && (
-//               <div className="mt-3 pl-2 border-l-2 border-blue-200">
-//                 <p className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-//                   <User className="h-4 w-4 text-blue-500 mr-2" />
-//                   Team Members
-//                 </p>
-//                 {selectedTeam.teamMembers?.length > 0 ? (
-//                   <div className="flex flex-wrap gap-2">
-//                     {selectedTeam.teamMembers.map((member) => (
-//                       <button
-//                         key={member.memberId}
-//                         onClick={() => setSelectedMember(member.memberId)}
-//                         className={`px-3 py-1.5 rounded-lg text-sm border transition ${
-//                           selectedMember === member.memberId
-//                             ? "bg-blue-600 text-white border-blue-600"
-//                             : "border-gray-300 hover:bg-gray-100"
-//                         }`}
-//                       >
-//                         {member.memberName}
-//                       </button>
-//                     ))}
-//                   </div>
-//                 ) : (
-//                   <p className="text-sm text-gray-500">No members in this team.</p>
-//                 )}
-//               </div>
-//             )}
-//           </div>
-//           {/* Deadline (Date & Time) */}
-//           <div>
-//             <label className="text-sm font-medium text-gray-700 flex items-center mb-2">
-//               <Calendar className="h-4 w-4 text-blue-500 mr-2" />
-//               Deadline (Date & Time)
-//             </label>
-//             <input
-//               type="datetime-local"
-//               value={deadline}
-//               onChange={(e) => setDeadline(e.target.value)}
-//               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-//             />
-//           </div>
-//         </div>
-//         {/* Action Buttons */}
-//         <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
-//           <DialogClose asChild>
-//             <Button
-//               variant="outline"
-//               className="text-gray-700 border border-gray-300 hover:bg-gray-50"
-//             >
-//               Cancel
-//             </Button>
-//           </DialogClose>
-//           <Button
-//             onClick={handleAssign}
-//             disabled={isSubmitting || teamStatus === "loading"}
-//             className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
-//           >
-//             {isSubmitting ? (
-//               <>
-//                 <Loader2 className="h-4 w-4 animate-spin" /> Assigning...
-//               </>
-//             ) : (
-//               "Assign Bug"
-//             )}
-//           </Button>
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// };
-// export default BugAssignModal;
 __turbopack_context__.s({
     "default": (()=>__TURBOPACK__default__export__)
 });
@@ -1621,7 +1432,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/users.js [app-ssr] (ecmascript) <export default as Users>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/calendar.js [app-ssr] (ecmascript) <export default as Calendar>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-ssr] (ecmascript) <export default as X>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$team$2f$slices$2f$teamSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/project-management/team/slices/teamSlice.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$issues$2f$slices$2f$bugSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/project-management/issues/slices/bugSlice.js [app-ssr] (ecmascript)");
@@ -1704,50 +1514,25 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
                         className: "text-lg font-semibold text-gray-900 flex items-center justify-between",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: [
-                                    "Assign Bug:",
-                                    " ",
-                                    bug?.title ? bug.title.slice(0, 30) + (bug.title.length > 30 ? "..." : "") : "N/A"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                lineNumber: 313,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogClose"], {
-                                asChild: true,
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                    variant: "ghost",
-                                    size: "icon",
-                                    className: "text-gray-500 hover:bg-gray-100 rounded-full h-7 w-7",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                        className: "h-4 w-4"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                        lineNumber: 325,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 320,
-                                    columnNumber: 15
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                lineNumber: 319,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            children: [
+                                "Assign Bug:",
+                                " ",
+                                bug?.bug_id
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
+                            lineNumber: 93,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                        lineNumber: 312,
+                        lineNumber: 92,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                    lineNumber: 311,
+                    lineNumber: 91,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1762,14 +1547,14 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                             className: "h-4 w-4 text-blue-500 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 336,
+                                            lineNumber: 107,
                                             columnNumber: 15
                                         }, this),
                                         "Select Team"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 335,
+                                    lineNumber: 106,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -1783,12 +1568,12 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                                 placeholder: teamStatus === "loading" ? "Loading teams..." : "Select team"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                                lineNumber: 345,
+                                                lineNumber: 116,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 344,
+                                            lineNumber: 115,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1798,24 +1583,24 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                                     children: team.teamName
                                                 }, team.teamId, false, {
                                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                                    lineNumber: 353,
+                                                    lineNumber: 124,
                                                     columnNumber: 19
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 351,
+                                            lineNumber: 122,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 339,
+                                    lineNumber: 110,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                            lineNumber: 334,
+                            lineNumber: 105,
                             columnNumber: 11
                         }, this),
                         selectedTeam && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1827,14 +1612,14 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                             className: "h-4 w-4 text-blue-500 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 365,
+                                            lineNumber: 136,
                                             columnNumber: 17
                                         }, this),
                                         "Select Team Member"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 364,
+                                    lineNumber: 135,
                                     columnNumber: 15
                                 }, this),
                                 selectedTeam.teamMembers?.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -1847,12 +1632,12 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                                 placeholder: "Select member"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                                lineNumber: 374,
+                                                lineNumber: 145,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 373,
+                                            lineNumber: 144,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1862,31 +1647,31 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                                     children: member.memberName
                                                 }, member.memberId, false, {
                                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                                    lineNumber: 378,
+                                                    lineNumber: 149,
                                                     columnNumber: 23
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 376,
+                                            lineNumber: 147,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 369,
+                                    lineNumber: 140,
                                     columnNumber: 17
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-sm text-gray-500",
                                     children: "No members in this team."
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 385,
+                                    lineNumber: 156,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                            lineNumber: 363,
+                            lineNumber: 134,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1898,14 +1683,14 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                             className: "h-4 w-4 text-blue-500 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                            lineNumber: 393,
+                                            lineNumber: 164,
                                             columnNumber: 15
                                         }, this),
                                         "Deadline (Date & Time)"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 392,
+                                    lineNumber: 163,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1915,19 +1700,19 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                     className: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                    lineNumber: 396,
+                                    lineNumber: 167,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                            lineNumber: 391,
+                            lineNumber: 162,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                    lineNumber: 332,
+                    lineNumber: 103,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1941,12 +1726,12 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                 children: "Cancel"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                lineNumber: 408,
+                                lineNumber: 179,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                            lineNumber: 407,
+                            lineNumber: 178,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1959,7 +1744,7 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                                         className: "h-4 w-4 animate-spin"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                                        lineNumber: 422,
+                                        lineNumber: 193,
                                         columnNumber: 17
                                     }, this),
                                     " Assigning..."
@@ -1967,24 +1752,24 @@ const BugAssignModal = ({ isOpen, onOpenChange, bug, bugId, projectId, onAssign 
                             }, void 0, true) : "Assign Bug"
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                            lineNumber: 415,
+                            lineNumber: 186,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-                    lineNumber: 406,
+                    lineNumber: 177,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-            lineNumber: 310,
+            lineNumber: 90,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/modules/project-management/issues/components/bug/BugAssignModal.jsx",
-        lineNumber: 309,
+        lineNumber: 89,
         columnNumber: 5
     }, this);
 };
@@ -2766,7 +2551,7 @@ const ProjectbugList = ({ projectId, teamLeadId })=>{
                 className: "space-y-2",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex flex-wrap gap-4 p-4",
+                        className: "flex flex-wrap gap-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex-1 min-w-[180px]",
@@ -3670,6 +3455,7 @@ const ProjectbugList = ({ projectId, teamLeadId })=>{
                         isOpen: showAssignModal,
                         onOpenChange: setShowAssignModal,
                         bug: selectedBugForAssign,
+                        projectId: projectId,
                         bugId: selectedBugForAssign?.bug_id,
                         teamMembers: teamMembersByProjectId || []
                     }, void 0, false, {

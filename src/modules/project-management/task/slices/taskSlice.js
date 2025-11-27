@@ -171,11 +171,11 @@ export const updateTask = createAsyncThunk(
 // Update task status
 export const updateTaskStatus = createAsyncThunk(
   'task/updateTaskStatus',
-  async ({ taskId, status, delayReason }, { rejectWithValue }) => {
+  async ({ taskId, status,actionedBy, delayReason }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.put(
         `/task/update/${taskId}`,
-        { status,delayReason },
+        { status,delayReason,actionedBy },
         {
           headers: { 'Content-Type': 'application/json' },
           timeout: 5000,

@@ -263,7 +263,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     (form.mode === "offline" || form.meetingLink);
 
   return (
-    <div className="w-full p-6 bg-white rounded-lg shadow-sm">
+    <div className="w-full h-full p-6 bg-white rounded-lg shadow-sm">
       {/* Buttons (Top Right) */}
       <div className="flex justify-end gap-3 mb-4">
         <Button
@@ -387,7 +387,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
               className="mt-1"
             >
               <div className="flex flex-wrap gap-3">
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-1 cursor-pointer">
                   <RadioGroupItem value="offline" id="offline" className="h-3 w-3 text-green-600" />
                   <Label
                     htmlFor="offline"
@@ -435,7 +435,7 @@ export default function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
               placeholder="1. Review targets, 2. Demo new features..."
               rows={4}
               maxLength="500"
-              className="w-full rounded-md border border-gray-300 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white transition-colors min-h-[100px]"
+              className="w-full rounded-md border border-gray-300 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white transition-colors min-h-[20dvh]"
               value={form.agenda}
               onChange={(e) => setForm({ ...form, agenda: e.target.value })}
             />

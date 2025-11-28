@@ -22,7 +22,6 @@ export const fetchMoMByMeetingId = createAsyncThunk(
   async (meetingId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/mom/byMeeting/${meetingId}`);
-      console.log(response);
       
       return response.data.data;
     } catch (error) {
@@ -73,7 +72,6 @@ export const createMoM = createAsyncThunk(
   "mom/createMoM",
   async (momData, { rejectWithValue }) => {
     try {
-      console.log("Payload being sent:", momData); // Debug: Log the FormData
       for (let [key, value] of momData.entries()) {
         // console.log(`${key}:`, value); // Debug: Log FormData entries
       }

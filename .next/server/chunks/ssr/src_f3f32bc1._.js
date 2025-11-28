@@ -1686,11 +1686,11 @@ function RecentContactsList() {
         // Time filter (24h)
         if (timeFilter !== "all") {
             const now = new Date();
-            const twentyFourHoursAgo = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$subHours$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["subHours"])(now, 24);
+            const twentyFourHoursAgo = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$subHours$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["subHours"])(now, 16);
             result = result.filter((c)=>{
                 if (!c.createdAt) return false;
                 const date = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$parseISO$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["parseISO"])(c.createdAt);
-                return timeFilter === "within24" ? date >= twentyFourHoursAgo : date < twentyFourHoursAgo;
+                return timeFilter === "within16" ? date >= twentyFourHoursAgo : date < twentyFourHoursAgo;
             });
         }
         // Sorting
@@ -2017,8 +2017,8 @@ function RecentContactsList() {
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
-                                                                        value: "within24",
-                                                                        children: "Within 24 Hours"
+                                                                        value: "within16",
+                                                                        children: "Within 16 Hours"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
                                                                         lineNumber: 393,
@@ -2026,7 +2026,7 @@ function RecentContactsList() {
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
                                                                         value: "older",
-                                                                        children: "Older than 24 Hours"
+                                                                        children: "Older than 16 Hours"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
                                                                         lineNumber: 394,
@@ -2159,7 +2159,7 @@ function RecentContactsList() {
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "rounded-lg border border-gray-200 overflow-hidden shadow-sm bg-white",
+                                        className: "min-h-screen rounded-lg border border-gray-200 overflow-hidden shadow-sm bg-white",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "min-h-[50dvh] overflow-y-auto",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Table"], {
@@ -2623,46 +2623,20 @@ function RecentContactsList() {
                     open: isAddModalOpen,
                     onOpenChange: setIsAddModalOpen,
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
-                        className: "max-w-2xl",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
-                                className: "bg-gradient-to-r from-teal-600 to-blue-600 text-white p-6",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
-                                    className: "text-2xl font-bold flex items-center gap-3",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__PlusCircle$3e$__["PlusCircle"], {
-                                            className: "h-6 w-6"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
-                                            lineNumber: 546,
-                                            columnNumber: 17
-                                        }, this),
-                                        "Add New Contact"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
-                                    lineNumber: 545,
-                                    columnNumber: 15
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
-                                lineNumber: 544,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$marketing$2f$components$2f$ManualAddContactForm$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                onSubmit: (data)=>dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$marketing$2f$slices$2f$contactSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["addContact"])(data)).then(()=>{
-                                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Added!");
-                                        dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$marketing$2f$slices$2f$contactSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getRecentContacts"])());
-                                        setIsAddModalOpen(false);
-                                    }),
-                                onCancel: ()=>setIsAddModalOpen(false)
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
-                                lineNumber: 550,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                        className: "",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$marketing$2f$components$2f$ManualAddContactForm$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                            onSubmit: (data)=>dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$marketing$2f$slices$2f$contactSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["addContact"])(data)).then(()=>{
+                                    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Added!");
+                                    dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$marketing$2f$slices$2f$contactSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getRecentContacts"])());
+                                    setIsAddModalOpen(false);
+                                }),
+                            onCancel: ()=>setIsAddModalOpen(false)
+                        }, void 0, false, {
+                            fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
+                            lineNumber: 545,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/src/modules/marketing/components/RecentContactsList.jsx",
                         lineNumber: 543,
                         columnNumber: 11

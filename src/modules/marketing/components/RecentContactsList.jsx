@@ -209,11 +209,11 @@ export default function RecentContactsList() {
     // Time filter (24h)
     if (timeFilter !== "all") {
       const now = new Date();
-      const twentyFourHoursAgo = subHours(now, 24);
+      const twentyFourHoursAgo = subHours(now, 16);
       result = result.filter(c => {
         if (!c.createdAt) return false;
         const date = parseISO(c.createdAt);
-        return timeFilter === "within24"
+        return timeFilter === "within16"
           ? date >= twentyFourHoursAgo
           : date < twentyFourHoursAgo;
       });
@@ -390,8 +390,8 @@ export default function RecentContactsList() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">All Contacts</SelectItem>
-                            <SelectItem value="within24">Within 24 Hours</SelectItem>
-                            <SelectItem value="older">Older than 24 Hours</SelectItem>
+                            <SelectItem value="within16">Within 16 Hours</SelectItem>
+                            <SelectItem value="older">Older than 16 Hours</SelectItem>
                           </SelectContent>
                         </Select>
                       ),
@@ -437,7 +437,7 @@ export default function RecentContactsList() {
                 </div>
 
                 {/* Table */}
-                <div className="rounded-lg border border-gray-200 overflow-hidden shadow-sm bg-white">
+                <div className="min-h-screen rounded-lg border border-gray-200 overflow-hidden shadow-sm bg-white">
                   <div className="min-h-[50dvh] overflow-y-auto">
                     <Table>
                       <TableHeader className="sticky top-0 bg-gradient-to-r from-teal-50 to-blue-50 z-10">
@@ -540,13 +540,8 @@ export default function RecentContactsList() {
 
         {/* Add Modal */}
         <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader className="bg-gradient-to-r from-teal-600 to-blue-600 text-white p-6">
-              <DialogTitle className="text-2xl font-bold flex items-center gap-3">
-                <PlusCircle className="h-6 w-6" />
-                Add New Contact
-              </DialogTitle>
-            </DialogHeader>
+          <DialogContent className="">
+           
             <ManualAddContactForm onSubmit={(data) => dispatch(addContact(data)).then(() => { toast.success("Added!"); dispatch(getRecentContacts()); setIsAddModalOpen(false); })} onCancel={() => setIsAddModalOpen(false)} />
           </DialogContent>
         </Dialog>

@@ -41,12 +41,15 @@ export default function MeetingDetailsContent({
         </h2>
 
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-          <Button
-            className="bg-teal-600 hover:bg-teal-700 text-white flex-1 sm:flex-none"
-            onClick={() => setIsEditing(true)}
-          >
-            <Edit3 className="w-4 h-4 mr-1" /> Edit
-          </Button>
+     {selectedMeeting?.meetingStatus?.toLowerCase() !== "completed" && (
+  <Button
+    className="bg-teal-600 hover:bg-teal-700 text-white flex-1 sm:flex-none"
+    onClick={() => setIsEditing(true)}
+  >
+    <Edit3 className="w-4 h-4 mr-1" /> Edit
+  </Button>
+)}
+
 
           {canUpdateStatus && (
             <>
@@ -83,6 +86,8 @@ export default function MeetingDetailsContent({
           {/* Basic Info */}
           <section className="text-sm leading-relaxed">
             <div className="grid md:grid-cols-2 gap-3">
+                            <p><strong>Meeting Id:</strong> {selectedMeeting.meetingId}</p>
+
               <p><strong>Date:</strong> {formatDate(selectedMeeting.date)}</p>
               <p>
                 <strong>Time:</strong>{" "}
@@ -115,6 +120,17 @@ export default function MeetingDetailsContent({
             </div>
           </section>
 
+          {/* Title */}
+          {selectedMeeting.agenda && (
+            <section>
+              <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-1">
+                <FileText className="w-5 h-5 text-gray-600" /> Title
+              </h3>
+              <p className="text-sm text-gray-700 whitespace-pre-line border-l-2 border-gray-300 pl-3">
+                {selectedMeeting.title}
+              </p>
+            </section>
+          )}
           {/* Agenda */}
           {selectedMeeting.agenda && (
             <section>

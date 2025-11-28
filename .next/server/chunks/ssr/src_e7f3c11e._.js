@@ -1452,556 +1452,6 @@ function Checkbox({ className, ...props }) {
 
 var { g: global, __dirname } = __turbopack_context__;
 {
-// "use client";
-// import { useEffect, useState, useRef, useCallback } from "react";
-// import { format, isAfter, addHours } from "date-fns";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   fetchMoMByMeetingId,
-//   resetMoMByMeetingId,
-//   createMoM,
-//   updateMoM,
-//   fetchMoMView,
-// } from "@/modules/meet/slices/momSlice";
-// import { submitCause } from "@/modules/escalation/slices/causeSlice";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import { Textarea } from "@/components/ui/textarea";
-// import { Checkbox } from "@/components/ui/checkbox";
-// import {
-//   Loader2,
-//   Edit2,
-//   AlertCircle,
-//   FileText,
-//   Users,
-//   Clock,
-//   Signature,
-//   User,
-// } from "lucide-react";
-// import { toast } from "sonner";
-// import { useCurrentUser } from "@/hooks/useCurrentUser";
-// import Image from "next/image";
-// export default function MomContent({ meeting, meetingId }) {
-//   const dispatch = useDispatch();
-//   const { momByMeetingId, momByMeetingIdLoading, momView, momViewLoading } = useSelector(
-//     (state) => state.mom
-//   );
-//   const [mode, setMode] = useState("view"); // "view", "form", "form-readonly"
-//   const [isEditMode, setIsEditMode] = useState(false);
-//   const [isTimeExceeded, setIsTimeExceeded] = useState(false);
-//   const [isWithinOneHour, setIsWithinOneHour] = useState(false);
-//   const [reasonForDelay, setReasonForDelay] = useState("");
-//   const [isAgreedToTerms, setIsAgreedToTerms] = useState(false);
-//   const [signatureFile, setSignatureFile] = useState(null);
-//   const [signaturePreview, setSignaturePreview] = useState(null);
-//   const containerRef = useRef(null);
-//   const { currentUser } = useCurrentUser();
-//   // Form state for creating/editing MOM
-//   const [momForm, setMomForm] = useState({
-//     agenda: meeting?.agenda || "",
-//     meetingMode: meeting?.mode || "Offline",
-//     duration: "",
-//     participants: "",
-//     summary: "",
-//     notes: "",
-//     createdBy: currentUser?.name || "",
-//     meetingId: meetingId || "",
-//     status: "draft",
-//   });
-//   // Helper: Format time (e.g., "10:00 AM")
-//   const formatTimes = (dateTime) => {
-//     if (!dateTime) return "";
-//     try {
-//       return format(new Date(dateTime), "p");
-//     } catch {
-//       return "";
-//     }
-//   };
-//   // Helper: Compute duration as "startTime - endTime"
-//   const getDurationString = useCallback(() => {
-//     const start = meeting?.startTime ? new Date(meeting.startTime) : null;
-//     const end = meeting?.endTime ? new Date(meeting.endTime) : null;
-//     if (!start || !end || isNaN(start) || isNaN(end)) return "N/A";
-//     if (start >= end) return "Invalid duration (end time before start)";
-//     return `${formatTimes(start)} - ${formatTimes(end)}`;
-//   }, [meeting]);
-//   // Helper: Parse attendees from ourParty and contactParty
-//   const getAttendeesArray = useCallback(() => {
-//     const ourPartyAttendees = (meeting?.ourParty || []).map(
-//       (p) => p.name || p.email || "Unknown"
-//     );
-//     const contactPartyAttendees = (meeting?.contactParty || []).map(
-//       (p) => p.fullName !== "undefined undefined" ? p.fullName : p.email || "Unknown"
-//     );
-//     return [...ourPartyAttendees, ...contactPartyAttendees].filter(Boolean);
-//   }, [meeting]);
-//   // Helper: Check meeting time status
-//   const checkMeetingTimeStatus = useCallback(() => {
-//     if (!meeting?.endTime) return { isTimeExceeded: false, isWithinOneHour: false };
-//     const endTime = new Date(meeting.endTime);
-//     const now = new Date();
-//     const oneHourAfterEnd = addHours(endTime, 1);
-//     return {
-//       isTimeExceeded: isAfter(now, endTime),
-//       isWithinOneHour: isAfter(now, endTime) && !isAfter(now, oneHourAfterEnd),
-//     };
-//   }, [meeting]);
-//   // Effect: Initialize form and check time status
-//   useEffect(() => {
-//     const { isTimeExceeded, isWithinOneHour } = checkMeetingTimeStatus();
-//     setIsTimeExceeded(isTimeExceeded);
-//     setIsWithinOneHour(isWithinOneHour);
-//     const participants = momByMeetingId?.participants
-//       ? momByMeetingId.participants.join(", ")
-//       : getAttendeesArray().join(", ");
-//     if (momByMeetingId && momByMeetingId.meetingId === meetingId) {
-//       setMomForm({
-//         agenda: momByMeetingId.agenda || meeting?.agenda || "",
-//         meetingMode: momByMeetingId.meetingMode || meeting?.mode || "Offline",
-//         duration: momByMeetingId.duration || getDurationString() || "",
-//         participants: participants,
-//         summary: momByMeetingId.summary || "",
-//         notes: momByMeetingId.notes || "",
-//         createdBy: momByMeetingId.createdBy || currentUser?.name || "",
-//         meetingId: meetingId || "",
-//         status: momByMeetingId.status || "draft",
-//       });
-//       setMode(momByMeetingId.status === "final" ? "view" : "form-readonly");
-//       setIsEditMode(false);
-//     } else {
-//       setMomForm({
-//         agenda: meeting?.agenda || "",
-//         meetingMode: meeting?.mode || "Offline",
-//         duration: getDurationString() || "",
-//         participants: getAttendeesArray().join(", "),
-//         summary: "",
-//         notes: "",
-//         createdBy: currentUser?.name || "",
-//         meetingId: meetingId || "",
-//         status: "draft",
-//       });
-//       setMode("form");
-//       setIsEditMode(false);
-//     }
-//     setReasonForDelay(momByMeetingId?.reasonForDelay || "");
-//     setIsAgreedToTerms(false);
-//     setSignatureFile(null);
-//     setSignaturePreview(null);
-//   }, [momByMeetingId, meetingId, checkMeetingTimeStatus, currentUser?.name, meeting, getAttendeesArray, getDurationString]);
-//   // Effect: Fetch MOM data
-//   useEffect(() => {
-//     if (meetingId) {
-//       dispatch(fetchMoMByMeetingId(meetingId));
-//     }
-//   }, [meetingId, dispatch]);
-//   // Effect: Fetch MOM view when available
-//   useEffect(() => {
-//     if (momByMeetingId?.momId && mode === "view") {
-//       dispatch(fetchMoMView(momByMeetingId.momId));
-//       console.log(momByMeetingId);
-//     }
-//   }, [momByMeetingId?.momId, mode, dispatch]);
-//   // Effect: Clean up blob URL and reset state
-//   useEffect(() => {
-//     return () => {
-//       if (momView?.pdfUrl) {
-//         URL.revokeObjectURL(momView.pdfUrl);
-//       }
-//       if (signaturePreview) {
-//         URL.revokeObjectURL(signaturePreview);
-//       }
-//       dispatch(resetMoMByMeetingId());
-//     };
-//   }, [momView?.pdfUrl, signaturePreview, dispatch]);
-//   // Handler: Form input changes
-//   const handleMomFormChange = (e, field) => {
-//     setMomForm({ ...momForm, [field]: e.target.value });
-//   };
-//   // Handler: Reason for delay change
-//   const handleReasonForDelayChange = (e) => {
-//     setReasonForDelay(e.target.value);
-//   };
-//   // Handler: Signature file change
-//   const handleSignatureFileChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file && ["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
-//       setSignatureFile(file);
-//       setSignaturePreview(URL.createObjectURL(file));
-//     } else {
-//       toast.error("Please upload a valid image file (.png, .jpg, .jpeg).");
-//       setSignatureFile(null);
-//       setSignaturePreview(null);
-//     }
-//   };
-//   // Handler: Terms agreement checkbox
-//   const handleTermsChange = (checked) => {
-//     setIsAgreedToTerms(checked);
-//   };
-//   // Helper: Check if all required fields are filled
-//   const areRequiredFieldsFilled = (status = "draft") => {
-//     const baseFields = momForm.createdBy.trim() && momForm.summary.trim();
-//     if (status === "final") {
-//       return baseFields && signatureFile && (!isTimeExceeded || (reasonForDelay.trim() && isAgreedToTerms));
-//     }
-//     return baseFields;
-//   };
-//   // Handler: Form submission
-//   const handleSubmit = async (status) => {
-//     if (!momForm.createdBy.trim()) {
-//       toast.info("Please enter the name of the person who created the MOM.");
-//       return;
-//     }
-//     if (!momForm.summary.trim()) {
-//       toast.info("Please enter a summary.");
-//       return;
-//     }
-//     if (status === "final" && !signatureFile) {
-//       toast.info("Please upload a signature image.");
-//       return;
-//     }
-//     if (status === "final" && isTimeExceeded && !isEditMode && (!reasonForDelay.trim() || !isAgreedToTerms)) {
-//       toast.info("Please provide a reason for the delay and agree to the terms.");
-//       return;
-//     }
-//     try {
-//       const formData = new FormData();
-//       formData.append("agenda", momForm.agenda || "");
-//       formData.append("meetingMode", momForm.meetingMode || "Offline");
-//       formData.append("duration", momForm.duration || "");
-//       formData.append("participants", JSON.stringify(momForm.participants.split(",").map(p => p.trim()).filter(Boolean)));
-//       formData.append("summary", momForm.summary);
-//       formData.append("notes", momForm.notes);
-//       formData.append("createdBy", momForm.createdBy);
-//       formData.append("meetingId", momForm.meetingId);
-//       formData.append("status", status);
-//       if (signatureFile) {
-//         formData.append("signature", signatureFile);
-//       }
-//       if (status === "final" && isTimeExceeded && !isEditMode) {
-//         formData.append("reasonForDelay", reasonForDelay);
-//       }
-//       if (status === "final" && isTimeExceeded && !isEditMode) {
-//         await dispatch(
-//           submitCause({
-//             meetingId: meetingId,
-//             reason: reasonForDelay,
-//             submittedBy: currentUser?.name || momForm.createdBy,
-//           })
-//         ).unwrap();
-//         toast.success("Cause for delay submitted successfully!");
-//       }
-//       if (isEditMode && momByMeetingId) {
-//         await dispatch(updateMoM(formData)).unwrap();
-//         toast.success(`MOM ${status === "draft" ? "updated as draft" : "finalized"} successfully!`);
-//       } else {
-//         await dispatch(createMoM(formData)).unwrap();
-//         toast.success(`MOM ${status === "draft" ? "saved as draft" : "created"} successfully!`);
-//       }
-//       setMode("view");
-//       setIsEditMode(false);
-//       setReasonForDelay("");
-//       setIsAgreedToTerms(false);
-//       setSignatureFile(null);
-//       setSignaturePreview(null);
-//     } catch (error) {
-//       toast.error(`Failed to ${isEditMode ? "update" : "create"} MOM: ${error?.message || "Unknown error"}`);
-//     }
-//   };
-//   // Handler: Toggle to edit mode
-//   const handleToggleMode = () => {
-//     if (mode === "view") {
-//       setMode("form");
-//       setIsEditMode(momByMeetingId ? true : false);
-//     } else {
-//       setMode("view");
-//       setIsEditMode(false);
-//       setReasonForDelay("");
-//       setIsAgreedToTerms(false);
-//       setSignatureFile(null);
-//       setSignaturePreview(null);
-//     }
-//   };
-//   // Loading state
-//   if (momByMeetingIdLoading || momViewLoading) {
-//     return (
-//       <div className="min-h-[400px] bg-background rounded-xl flex items-center justify-center shadow-md">
-//         <div className="flex flex-col items-center gap-4">
-//           <Loader2 className="h-12 w-12 text-teal-600 animate-spin" />
-//           <span className="text-teal-600 text-lg font-semibold">Loading...</span>
-//         </div>
-//       </div>
-//     );
-//   }
-//   return (
-//     <div className="w-full p-4 sm:p-6 bg-background rounded-xl shadow-md">
-//       {/* Header */}
-//       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-//         <h2 className="text-xl sm:text-2xl font-bold text-teal-600 flex items-center">
-//           <FileText className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
-//           {mode === "form" || mode === "form-readonly"
-//             ? isEditMode
-//               ? "Edit Minutes of Meeting"
-//               : "Create Minutes of Meeting"
-//             : "Meeting Details"}
-//         </h2>
-//         {mode === "view" && momByMeetingId && (
-//           <Button
-//             variant="ghost"
-//             onClick={handleToggleMode}
-//             className="text-teal-600 hover:bg-teal-50"
-//             title="Edit MOM"
-//           >
-//             <Edit2 className="h-5 w-5" />
-//           </Button>
-//         )}
-//       </div>
-//       {/* Warning Messages */}
-//       {isTimeExceeded && (!momByMeetingId || !isWithinOneHour) && (
-//         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg flex items-center text-sm">
-//           <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
-//           <span>
-//             {!momByMeetingId
-//               ? isWithinOneHour
-//                 ? "Please complete MOM within one hour of meeting end time."
-//                 : "Meeting has ended, and no MOM has been created."
-//               : "Meeting has ended, and MOM creation is delayed beyond one hour."}
-//           </span>
-//         </div>
-//       )}
-//       {/* Form or MOM Preview */}
-//       <div className="space-y-4">
-//         {mode === "form" || mode === "form-readonly" ? (
-//           // Form View
-//           <div className="space-y-4">
-//             <h3 className="text-lg font-semibold text-gray-800">
-//               {isEditMode ? "Edit MOM" : mode === "form-readonly" ? "View MOM (Draft)" : "Create MOM"}
-//             </h3>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <FileText className="h-5 w-5 mr-2" />
-//                 Agenda
-//               </Label>
-//               <Textarea
-//                 value={momForm.agenda}
-//                 onChange={(e) => handleMomFormChange(e, "agenda")}
-//                 placeholder="Enter meeting agenda..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 rows={4}
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <Users className="h-5 w-5 mr-2" />
-//                 Meeting Mode
-//               </Label>
-//               <Input
-//                 value={momForm.meetingMode}
-//                 onChange={(e) => handleMomFormChange(e, "meetingMode")}
-//                 placeholder="Enter meeting mode (e.g., Offline, Online)..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <Clock className="h-5 w-5 mr-2" />
-//                 Duration
-//               </Label>
-//               <Input
-//                 value={momForm.duration}
-//                 onChange={(e) => handleMomFormChange(e, "duration")}
-//                 placeholder="Enter duration (e.g., 10:00 AM - 11:00 AM)..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <Users className="h-5 w-5 mr-2" />
-//                 Participants
-//               </Label>
-//               <Textarea
-//                 value={momForm.participants}
-//                 onChange={(e) => handleMomFormChange(e, "participants")}
-//                 placeholder="Enter participants (comma-separated)..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 rows={4}
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <FileText className="h-5 w-5 mr-2" />
-//                 Summary
-//               </Label>
-//               <Textarea
-//                 value={momForm.summary}
-//                 onChange={(e) => handleMomFormChange(e, "summary")}
-//                 placeholder="Enter meeting summary..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 rows={4}
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <FileText className="h-5 w-5 mr-2" />
-//                 Notes
-//               </Label>
-//               <Textarea
-//                 value={momForm.notes}
-//                 onChange={(e) => handleMomFormChange(e, "notes")}
-//                 placeholder="Enter additional notes..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 rows={4}
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             {isTimeExceeded && !isEditMode && mode !== "form-readonly" && (
-//               <>
-//                 <div>
-//                   <Label className="text-teal-600 font-semibold flex items-center">
-//                     <AlertCircle className="h-5 w-5 mr-2 text-red-700" />
-//                     Reason for Delay
-//                   </Label>
-//                   <Textarea
-//                     value={reasonForDelay}
-//                     onChange={handleReasonForDelayChange}
-//                     placeholder="Enter reason for delay..."
-//                     className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                     rows={3}
-//                   />
-//                 </div>
-//                 <div className="flex items-center space-x-2">
-//                   <Checkbox
-//                     id="terms"
-//                     checked={isAgreedToTerms}
-//                     onCheckedChange={handleTermsChange}
-//                     className="border-gray-300 data-[state=checked]:bg-teal-600"
-//                     disabled={mode === "form-readonly" && !isEditMode}
-//                   />
-//                   <Label htmlFor="terms" className="text-teal-600 font-semibold text-sm sm:text-base">
-//                     I agree to the cause terms and conditions
-//                   </Label>
-//                 </div>
-//               </>
-//             )}
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <Signature className="h-5 w-5 mr-2" />
-//                 Signature (Image)
-//               </Label>
-//               <Input
-//                 type="file"
-//                 accept="image/png,image/jpeg,image/jpg"
-//                 onChange={handleSignatureFileChange}
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base"
-//                 disabled={mode === "form-readonly" && !isEditMode}
-//               />
-//               {signaturePreview && (
-//                 <div className="mt-2">
-//                   <Image
-//                     src={signaturePreview}
-//                     alt="Signature Preview"
-//                     width={120}
-//                     height={80}
-//                     className="rounded-md border border-gray-300"
-//                   />
-//                 </div>
-//               )}
-//             </div>
-//             <div>
-//               <Label className="text-teal-600 font-semibold flex items-center">
-//                 <User className="h-5 w-5 mr-2" />
-//                 Created By
-//               </Label>
-//               <Input
-//                 value={momForm.createdBy}
-//                 onChange={(e) => handleMomFormChange(e, "createdBy")}
-//                 placeholder="Recorder's name..."
-//                 className="mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full"
-//                 readOnly={mode === "form-readonly" && !isEditMode}
-//               />
-//             </div>
-//             <div className="flex justify-end gap-3">
-//               {(isEditMode || mode === "form-readonly") && (
-//                 <Button
-//                   variant="outline"
-//                   className="border-teal-600 text-teal-600 hover:bg-teal-50 rounded-lg text.voice-mode sm:text-base"
-//                   onClick={() => setMode("view")}
-//                 >
-//                   Cancel
-//                 </Button>
-//               )}
-//               {mode !== "form-readonly" || isEditMode ? (
-//                 <>
-//                   <Button
-//                     variant="outline"
-//                     className="border-teal-600 text-teal-600 hover:bg-teal-50 rounded-lg text-sm sm:text-base"
-//                     onClick={() => handleSubmit("draft")}
-//                     disabled={momByMeetingIdLoading || !areRequiredFieldsFilled("draft")}
-//                   >
-//                     {momByMeetingIdLoading ? (
-//                       <>
-//                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-//                         Saving...
-//                       </>
-//                     ) : (
-//                       "Save as Draft"
-//                     )}
-//                   </Button>
-//                   <Button
-//                     className="bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm sm:text-base"
-//                     onClick={() => handleSubmit("final")}
-//                     disabled={momByMeetingIdLoading || !areRequiredFieldsFilled("final")}
-//                   >
-//                     {momByMeetingIdLoading ? (
-//                       <>
-//                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-//                         Submitting...
-//                       </>
-//                     ) : isEditMode ? (
-//                       "Finalize MOM"
-//                     ) : (
-//                       "Create MOM"
-//                     )}
-//                   </Button>
-//                 </>
-//               ) : (
-//                 <Button
-//                   className="bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm sm:text-base"
-//                   onClick={handleToggleMode}
-//                 >
-//                   <Edit2 className="h-4 w-4 mr-1" />
-//                   Edit MOM
-//                 </Button>
-//               )}
-//             </div>
-//           </div>
-//         ) : (
-//           // View Mode: MOM Preview
-//           <div className="space-y-4">
-//             {momByMeetingId && momView?.pdfUrl && (
-//               <div>
-//                 <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-lg border border-gray-300 overflow-hidden">
-//                   <iframe
-//                     src={momView.pdfUrl}
-//                     width="100%"
-//                     height="100%"
-//                     className="rounded-lg"
-//                     title="MOM PDF Preview"
-//                   />
-//                 </div>
-//               </div>
-//             )}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
 __turbopack_context__.s({
     "default": (()=>MomContent)
 });
@@ -2009,6 +1459,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/date-fns/format.js [app-ssr] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$isAfter$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/date-fns/isAfter.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$addHours$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/date-fns/addHours.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-redux/dist/react-redux.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$momSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/meet/slices/momSlice.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$escalation$2f$slices$2f$causeSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/escalation/slices/causeSlice.js [app-ssr] (ecmascript)");
@@ -2025,7 +1476,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$signature$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Signature$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/signature.js [app-ssr] (ecmascript) <export default as Signature>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/eye.js [app-ssr] (ecmascript) <export default as Eye>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/useCurrentUser.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
@@ -2047,19 +1497,21 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$imag
 ;
 function MomContent({ meeting, meetingId }) {
     const dispatch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDispatch"])();
-    const { currentUser } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCurrentUser"])();
     const { momByMeetingId, momByMeetingIdLoading, momView, momViewLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSelector"])((state)=>state.mom);
-    // === State ===
-    const [mode, setMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("loading"); // "loading" | "view" | "form"
+    const [mode, setMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("view"); // "view", "form", "form-readonly"
     const [isEditMode, setIsEditMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [isTimeExceeded, setIsTimeExceeded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isWithinOneHour, setIsWithinOneHour] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [reasonForDelay, setReasonForDelay] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [isAgreedToTerms, setIsAgreedToTerms] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [signatureFile, setSignatureFile] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [signaturePreview, setSignaturePreview] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const containerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const { currentUser } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCurrentUser$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCurrentUser"])();
+    // Form state for creating/editing MOM
     const [momForm, setMomForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
-        agenda: "",
-        meetingMode: "Offline",
+        agenda: meeting?.agenda || "",
+        meetingMode: meeting?.mode || "Offline",
         duration: "",
         participants: "",
         summary: "",
@@ -2068,8 +1520,8 @@ function MomContent({ meeting, meetingId }) {
         meetingId: meetingId || "",
         status: "draft"
     });
-    // === Helpers ===
-    const formatTime = (dateTime)=>{
+    // Helper: Format time (e.g., "10:00 AM")
+    const formatTimes = (dateTime)=>{
         if (!dateTime) return "";
         try {
             return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(dateTime), "p");
@@ -2077,33 +1529,92 @@ function MomContent({ meeting, meetingId }) {
             return "";
         }
     };
+    // Helper: Compute duration as "startTime - endTime"
     const getDurationString = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
         const start = meeting?.startTime ? new Date(meeting.startTime) : null;
         const end = meeting?.endTime ? new Date(meeting.endTime) : null;
         if (!start || !end || isNaN(start) || isNaN(end)) return "N/A";
-        return `${formatTime(start)} - ${formatTime(end)}`;
+        if (start >= end) return "Invalid duration (end time before start)";
+        return `${formatTimes(start)} - ${formatTimes(end)}`;
     }, [
         meeting
     ]);
+    // Helper: Parse attendees from ourParty and contactParty
     const getAttendeesArray = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
-        const our = (meeting?.ourParty || []).map((p)=>p.name || p.email || "Unknown");
-        const contact = (meeting?.contactParty || []).map((p)=>(p.fullName !== "undefined undefined" ? p.fullName : p.email) || "Unknown");
+        const ourPartyAttendees = (meeting?.ourParty || []).map((p)=>p.name || p.email || "Unknown");
+        const contactPartyAttendees = (meeting?.contactParty || []).map((p)=>p.fullName !== "undefined undefined" ? p.fullName : p.email || "Unknown");
         return [
-            ...our,
-            ...contact
+            ...ourPartyAttendees,
+            ...contactPartyAttendees
         ].filter(Boolean);
     }, [
         meeting
     ]);
-    const checkTimeExceeded = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
-        if (!meeting?.endTime) return false;
-        const end = new Date(meeting.endTime);
+    // Helper: Check meeting time status
+    const checkMeetingTimeStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        if (!meeting?.endTime) return {
+            isTimeExceeded: false,
+            isWithinOneHour: false
+        };
+        const endTime = new Date(meeting.endTime);
         const now = new Date();
-        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$isAfter$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isAfter"])(now, end);
+        const oneHourAfterEnd = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$addHours$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["addHours"])(endTime, 1);
+        return {
+            isTimeExceeded: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$isAfter$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isAfter"])(now, endTime),
+            isWithinOneHour: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$isAfter$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isAfter"])(now, endTime) && !(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$isAfter$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isAfter"])(now, oneHourAfterEnd)
+        };
     }, [
         meeting
     ]);
-    // === Effects ===
+    // Effect: Initialize form and check time status
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const { isTimeExceeded, isWithinOneHour } = checkMeetingTimeStatus();
+        setIsTimeExceeded(isTimeExceeded);
+        setIsWithinOneHour(isWithinOneHour);
+        const participants = momByMeetingId?.participants ? momByMeetingId.participants.join(", ") : getAttendeesArray().join(", ");
+        if (momByMeetingId && momByMeetingId.meetingId === meetingId) {
+            setMomForm({
+                agenda: momByMeetingId.agenda || meeting?.agenda || "",
+                meetingMode: momByMeetingId.meetingMode || meeting?.mode || "Offline",
+                duration: momByMeetingId.duration || getDurationString() || "",
+                participants: participants,
+                summary: momByMeetingId.summary || "",
+                notes: momByMeetingId.notes || "",
+                createdBy: momByMeetingId.createdBy || currentUser?.name || "",
+                meetingId: meetingId || "",
+                status: momByMeetingId.status || "draft"
+            });
+            setMode(momByMeetingId.status === "final" ? "view" : "form-readonly");
+            setIsEditMode(false);
+        } else {
+            setMomForm({
+                agenda: meeting?.agenda || "",
+                meetingMode: meeting?.mode || "Offline",
+                duration: getDurationString() || "",
+                participants: getAttendeesArray().join(", "),
+                summary: "",
+                notes: "",
+                createdBy: currentUser?.name || "",
+                meetingId: meetingId || "",
+                status: "draft"
+            });
+            setMode("form");
+            setIsEditMode(false);
+        }
+        setReasonForDelay(momByMeetingId?.reasonForDelay || "");
+        setIsAgreedToTerms(false);
+        setSignatureFile(null);
+        setSignaturePreview(null);
+    }, [
+        momByMeetingId,
+        meetingId,
+        checkMeetingTimeStatus,
+        currentUser?.name,
+        meeting,
+        getAttendeesArray,
+        getDurationString
+    ]);
+    // Effect: Fetch MOM data
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (meetingId) {
             dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$momSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchMoMByMeetingId"])(meetingId));
@@ -2112,77 +1623,26 @@ function MomContent({ meeting, meetingId }) {
         meetingId,
         dispatch
     ]);
+    // Effect: Fetch MOM view when available
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        setIsTimeExceeded(checkTimeExceeded());
-    }, [
-        checkTimeExceeded
-    ]);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        const attendees = getAttendeesArray().join(", ");
-        const duration = getDurationString();
-        if (momByMeetingId && momByMeetingId.meetingId === meetingId) {
-            // MoM exists
-            const participants = momByMeetingId.participants ? momByMeetingId.participants.join(", ") : attendees;
-            setMomForm({
-                agenda: momByMeetingId.agenda || meeting?.agenda || "",
-                meetingMode: momByMeetingId.meetingMode || meeting?.mode || "Offline",
-                duration: momByMeetingId.duration || duration,
-                participants,
-                summary: momByMeetingId.summary || "",
-                notes: momByMeetingId.notes || "",
-                createdBy: momByMeetingId.createdBy || currentUser?.name || "",
-                meetingId,
-                status: momByMeetingId.status || "draft"
-            });
-            setReasonForDelay(momByMeetingId.reasonForDelay || "");
-            if (momByMeetingId.status === "final") {
-                setMode("view");
-            } else {
-                setMode("form");
-                setIsEditMode(true);
-            }
-        } else {
-            // No MoM → create new
-            setMomForm({
-                agenda: meeting?.agenda || "",
-                meetingMode: meeting?.mode || "Offline",
-                duration,
-                participants: attendees,
-                summary: "",
-                notes: "",
-                createdBy: currentUser?.name || "",
-                meetingId,
-                status: "draft"
-            });
-            setMode("form");
-            setIsEditMode(false);
-        }
-        setSignatureFile(null);
-        setSignaturePreview(null);
-        setIsAgreedToTerms(false);
-    }, [
-        momByMeetingId,
-        meeting,
-        meetingId,
-        currentUser?.name,
-        getAttendeesArray,
-        getDurationString
-    ]);
-    // Fetch PDF only in final view mode
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (momByMeetingId?.momId && mode === "view" && momByMeetingId.status === "final") {
+        if (momByMeetingId?.momId && mode === "view") {
             dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$momSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchMoMView"])(momByMeetingId.momId));
+            console.log(momByMeetingId);
         }
     }, [
         momByMeetingId?.momId,
         mode,
         dispatch
     ]);
-    // Cleanup
+    // Effect: Clean up blob URL and reset state
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         return ()=>{
-            if (momView?.pdfUrl) URL.revokeObjectURL(momView.pdfUrl);
-            if (signaturePreview) URL.revokeObjectURL(signaturePreview);
+            if (momView?.pdfUrl) {
+                URL.revokeObjectURL(momView.pdfUrl);
+            }
+            if (signaturePreview) {
+                URL.revokeObjectURL(signaturePreview);
+            }
             dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$momSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["resetMoMByMeetingId"])());
         };
     }, [
@@ -2190,14 +1650,19 @@ function MomContent({ meeting, meetingId }) {
         signaturePreview,
         dispatch
     ]);
-    // === Handlers ===
-    const handleChange = (e, field)=>{
-        setMomForm((prev)=>({
-                ...prev,
-                [field]: e.target.value
-            }));
+    // Handler: Form input changes
+    const handleMomFormChange = (e, field)=>{
+        setMomForm({
+            ...momForm,
+            [field]: e.target.value
+        });
     };
-    const handleSignatureChange = (e)=>{
+    // Handler: Reason for delay change
+    const handleReasonForDelayChange = (e)=>{
+        setReasonForDelay(e.target.value);
+    };
+    // Handler: Signature file change
+    const handleSignatureFileChange = (e)=>{
         const file = e.target.files[0];
         if (file && [
             "image/png",
@@ -2207,51 +1672,73 @@ function MomContent({ meeting, meetingId }) {
             setSignatureFile(file);
             setSignaturePreview(URL.createObjectURL(file));
         } else {
-            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Only .png, .jpg, .jpeg allowed.");
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Please upload a valid image file (.png, .jpg, .jpeg).");
             setSignatureFile(null);
             setSignaturePreview(null);
         }
     };
-    const validateForm = (status)=>{
-        const base = momForm.createdBy.trim() && momForm.summary.trim();
-        if (status === "final") {
-            return base && signatureFile && (!isTimeExceeded || reasonForDelay.trim() && isAgreedToTerms);
-        }
-        return base;
+    // Handler: Terms agreement checkbox
+    const handleTermsChange = (checked)=>{
+        setIsAgreedToTerms(checked);
     };
-    const handleSubmit = async (status)=>{
-        if (!validateForm(status)) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Please fill all required fields.");
+    // Helper: Check if all required fields are filled
+    const areRequiredFieldsFilled = (status = "draft")=>{
+        const baseFields = momForm.createdBy.trim() && momForm.summary.trim();
+        if (status === "final") {
+            return baseFields && signatureFile && (!isTimeExceeded || reasonForDelay.trim() && isAgreedToTerms);
         }
-        const formData = new FormData();
-        formData.append("agenda", momForm.agenda);
-        formData.append("meetingMode", momForm.meetingMode);
-        formData.append("duration", momForm.duration);
-        formData.append("participants", JSON.stringify(momForm.participants.split(",").map((p)=>p.trim()).filter(Boolean)));
-        formData.append("summary", momForm.summary);
-        formData.append("notes", momForm.notes);
-        formData.append("createdBy", momForm.createdBy);
-        formData.append("meetingId", momForm.meetingId);
-        formData.append("status", status);
-        if (signatureFile) formData.append("signature", signatureFile);
-        if (status === "final" && isTimeExceeded && !isEditMode) {
-            formData.append("reasonForDelay", reasonForDelay);
+        return baseFields;
+    };
+    console.log(momByMeetingId);
+    // Handler: Form submission
+    const handleSubmit = async (status)=>{
+        if (!momForm.createdBy.trim()) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].info("Please enter the name of the person who created the MOM.");
+            return;
+        }
+        if (!momForm.summary.trim()) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].info("Please enter a summary.");
+            return;
+        }
+        if (status === "final" && !signatureFile) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].info("Please upload a signature image.");
+            return;
+        }
+        if (status === "final" && isTimeExceeded && !isEditMode && (!reasonForDelay.trim() || !isAgreedToTerms)) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].info("Please provide a reason for the delay and agree to the terms.");
+            return;
         }
         try {
+            const formData = new FormData();
+            formData.append("agenda", momForm.agenda || "");
+            formData.append("meetingMode", momForm.meetingMode || "Offline");
+            formData.append("duration", momForm.duration || "");
+            formData.append("participants", JSON.stringify(momForm.participants.split(",").map((p)=>p.trim()).filter(Boolean)));
+            formData.append("summary", momForm.summary);
+            formData.append("notes", momForm.notes);
+            formData.append("createdBy", momForm.createdBy);
+            formData.append("meetingId", momForm.meetingId);
+            formData.append("status", status);
+            if (signatureFile) {
+                formData.append("signature", signatureFile);
+            }
+            if (status === "final" && isTimeExceeded && !isEditMode) {
+                formData.append("reasonForDelay", reasonForDelay);
+            }
             if (status === "final" && isTimeExceeded && !isEditMode) {
                 await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$escalation$2f$slices$2f$causeSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["submitCause"])({
-                    meetingId,
+                    meetingId: meetingId,
                     reason: reasonForDelay,
                     submittedBy: currentUser?.name || momForm.createdBy
                 })).unwrap();
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Delay reason submitted.");
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Cause for delay submitted successfully!");
             }
             if (isEditMode && momByMeetingId) {
                 await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$momSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["updateMoM"])(formData)).unwrap();
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success(status === "draft" ? "MoM updated (draft)" : "MoM finalized");
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success(`MOM ${status === "draft" ? "updated as draft" : "finalized"} successfully!`);
             } else {
                 await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$momSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createMoM"])(formData)).unwrap();
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success(status === "draft" ? "MoM saved (draft)" : "MoM created");
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success(`MOM ${status === "draft" ? "saved as draft" : "created"} successfully!`);
             }
             setMode("view");
             setIsEditMode(false);
@@ -2259,1875 +1746,1389 @@ function MomContent({ meeting, meetingId }) {
             setIsAgreedToTerms(false);
             setSignatureFile(null);
             setSignaturePreview(null);
-        } catch (err) {
-            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(`Error: ${err?.message || "Unknown error"}`);
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(`Failed to ${isEditMode ? "update" : "create"} MOM: ${error?.message || "Unknown error"}`);
         }
     };
-    const startEdit = ()=>{
-        setMode("form");
-        setIsEditMode(true);
+    // Handler: Toggle to edit mode
+    const handleToggleMode = ()=>{
+        if (mode === "view") {
+            setMode("form");
+            setIsEditMode(momByMeetingId ? true : false);
+        } else {
+            setMode("view");
+            setIsEditMode(false);
+            setReasonForDelay("");
+            setIsAgreedToTerms(false);
+            setSignatureFile(null);
+            setSignaturePreview(null);
+        }
     };
-    // === Loading ===
+    // Loading state
     if (momByMeetingIdLoading || momViewLoading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "min-h-[400px] flex flex-col items-center justify-center bg-background rounded-xl shadow-md",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
-                    className: "h-12 w-12 text-teal-600 animate-spin"
-                }, void 0, false, {
-                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                    lineNumber: 878,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                    className: "mt-3 text-lg font-semibold text-teal-600",
-                    children: "Loading MoM..."
-                }, void 0, false, {
-                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                    lineNumber: 879,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
+            className: "min-h-[400px] bg-background rounded-xl flex items-center justify-center shadow-md",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex flex-col items-center gap-4",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                        className: "h-12 w-12 text-teal-600 animate-spin"
+                    }, void 0, false, {
+                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                        lineNumber: 319,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-teal-600 text-lg font-semibold",
+                        children: "Loading..."
+                    }, void 0, false, {
+                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                        lineNumber: 320,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                lineNumber: 318,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
             fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-            lineNumber: 877,
+            lineNumber: 317,
             columnNumber: 7
         }, this);
     }
-    // === Render ===
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "w-full p-4 sm:p-6 bg-background rounded-xl shadow-md",
         children: [
-            mode === "view" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "space-y-6",
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4",
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex justify-between items-center",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            className: "text-2xl font-bold text-teal-600 flex items-center",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
-                                    className: "h-6 w-6 mr-2"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                    lineNumber: 892,
-                                    columnNumber: 15
-                                }, this),
-                                "Minutes of Meeting"
-                            ]
-                        }, void 0, true, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        className: "text-xl sm:text-2xl font-bold text-teal-600 flex items-center",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                className: "h-5 w-5 sm:h-6 sm:w-6 mr-2"
+                            }, void 0, false, {
+                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                lineNumber: 331,
+                                columnNumber: 11
+                            }, this),
+                            mode === "form" || mode === "form-readonly" ? isEditMode ? "Edit Minutes of Meeting" : "Create Minutes of Meeting" : "Meeting Details"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                        lineNumber: 330,
+                        columnNumber: 9
+                    }, this),
+                    mode === "view" && momByMeetingId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                        variant: "ghost",
+                        onClick: handleToggleMode,
+                        className: "text-teal-600 hover:bg-teal-50",
+                        title: "Edit MOM",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit2$3e$__["Edit2"], {
+                            className: "h-5 w-5"
+                        }, void 0, false, {
                             fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                            lineNumber: 891,
+                            lineNumber: 345,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 890,
+                        lineNumber: 339,
                         columnNumber: 11
-                    }, this),
-                    !momByMeetingId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex justify-end",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                            className: "bg-teal-600 hover:bg-teal-700 text-white",
-                            onClick: ()=>setMode("form"),
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit2$3e$__["Edit2"], {
-                                    className: "h-4 w-4 mr-2"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                    lineNumber: 904,
-                                    columnNumber: 17
-                                }, this),
-                                "Create MoM"
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                            lineNumber: 900,
-                            columnNumber: 15
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 899,
-                        columnNumber: 13
-                    }, this),
-                    momByMeetingId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex justify-end gap-3",
-                        children: momByMeetingId.status === "final" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                            variant: "outline",
-                            className: "border-teal-600 text-teal-600 hover:bg-teal-50",
-                            onClick: ()=>momView?.pdfUrl && window.open(momView.pdfUrl, "_blank"),
-                            disabled: !momView?.pdfUrl,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
-                                    className: "h-4 w-4 mr-2"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                    lineNumber: 920,
-                                    columnNumber: 19
-                                }, this),
-                                "View PDF"
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                            lineNumber: 914,
-                            columnNumber: 17
-                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                            className: "bg-teal-600 hover:bg-teal-700 text-white",
-                            onClick: startEdit,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit2$3e$__["Edit2"], {
-                                    className: "h-4 w-4 mr-2"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                    lineNumber: 928,
-                                    columnNumber: 19
-                                }, this),
-                                "Edit MoM"
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                            lineNumber: 924,
-                            columnNumber: 17
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 912,
-                        columnNumber: 13
-                    }, this),
-                    momByMeetingId?.status === "final" && momView?.pdfUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "mt-6 border rounded-lg overflow-hidden h-[600px]",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("iframe", {
-                            src: momView.pdfUrl,
-                            width: "100%",
-                            height: "100%",
-                            title: "MoM PDF",
-                            className: "rounded-lg"
-                        }, void 0, false, {
-                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                            lineNumber: 938,
-                            columnNumber: 15
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 937,
-                        columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                lineNumber: 889,
+                lineNumber: 329,
+                columnNumber: 7
+            }, this),
+            isTimeExceeded && (!momByMeetingId || !isWithinOneHour) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mb-4 p-3 bg-red-100 text-red-700 rounded-lg flex items-center text-sm",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
+                        className: "h-5 w-5 mr-2 flex-shrink-0"
+                    }, void 0, false, {
+                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                        lineNumber: 353,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        children: !momByMeetingId ? isWithinOneHour ? "Please complete MOM within one hour of meeting end time." : "Meeting has ended, and no MOM has been created." : "Meeting has ended, and MOM creation is delayed beyond one hour."
+                    }, void 0, false, {
+                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                        lineNumber: 354,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                lineNumber: 352,
                 columnNumber: 9
             }, this),
-            mode === "form" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "mt-6 space-y-5",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                        className: "text-lg font-semibold text-gray-800",
-                        children: isEditMode ? "Edit MoM" : "Create MoM"
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 953,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 960,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Agenda"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 959,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                value: momForm.agenda,
-                                onChange: (e)=>handleChange(e, "agenda"),
-                                placeholder: "Meeting agenda...",
-                                rows: 4,
-                                className: "mt-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 962,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 958,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 974,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Meeting Mode"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 973,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                value: momForm.meetingMode,
-                                onChange: (e)=>handleChange(e, "meetingMode"),
-                                className: "mt-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 976,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 972,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 986,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Duration"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 985,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                value: momForm.duration,
-                                readOnly: true,
-                                className: "mt-1 bg-gray-50"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 988,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 984,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 994,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Participants"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 993,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                value: momForm.participants,
-                                onChange: (e)=>handleChange(e, "participants"),
-                                rows: 3,
-                                className: "mt-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 996,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 992,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1007,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Summary ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-red-500",
-                                        children: "*"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1007,
-                                        columnNumber: 61
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1006,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                value: momForm.summary,
-                                onChange: (e)=>handleChange(e, "summary"),
-                                rows: 5,
-                                placeholder: "Key points, decisions, action items...",
-                                className: "mt-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1009,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 1005,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1021,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Notes"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1020,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                value: momForm.notes,
-                                onChange: (e)=>handleChange(e, "notes"),
-                                rows: 4,
-                                className: "mt-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1023,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 1019,
-                        columnNumber: 11
-                    }, this),
-                    isTimeExceeded && !isEditMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                        className: "flex items-center text-red-600 font-semibold",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
-                                                className: "h-5 w-5 mr-2"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                                lineNumber: 1036,
-                                                columnNumber: 19
-                                            }, this),
-                                            " Reason for Delay ",
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-red-500",
-                                                children: "*"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                                lineNumber: 1036,
-                                                columnNumber: 77
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1035,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                        value: reasonForDelay,
-                                        onChange: (e)=>setReasonForDelay(e.target.value),
-                                        rows: 3,
-                                        placeholder: "Why is MoM being submitted after meeting end?",
-                                        className: "mt-1"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1038,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1034,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-2",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$checkbox$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Checkbox"], {
-                                        id: "terms",
-                                        checked: isAgreedToTerms,
-                                        onCheckedChange: setIsAgreedToTerms
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1047,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                        htmlFor: "terms",
-                                        className: "text-sm font-medium",
-                                        children: "I agree to the terms and conditions"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1052,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1046,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$signature$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Signature$3e$__["Signature"], {
-                                        className: "h-5 w-5 mr-2"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1062,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Signature ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-red-500",
-                                        children: "*"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1062,
-                                        columnNumber: 64
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1061,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                type: "file",
-                                accept: "image/png,image/jpeg,image/jpg",
-                                onChange: handleSignatureChange,
-                                className: "mt-1"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1064,
-                                columnNumber: 13
-                            }, this),
-                            signaturePreview && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "mt-2",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                    src: signaturePreview,
-                                    alt: "Signature",
-                                    width: 140,
-                                    height: 80,
-                                    className: "border rounded-md"
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "space-y-4",
+                children: mode === "form" || mode === "form-readonly" ? // Form View
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "space-y-4",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                            className: "text-lg font-semibold text-gray-800",
+                            children: isEditMode ? "Edit MOM" : mode === "form-readonly" ? "View MOM (Draft)" : "Create MOM"
+                        }, void 0, false, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 369,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 374,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Agenda"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 373,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
+                                    value: momForm.agenda,
+                                    onChange: (e)=>handleMomFormChange(e, "agenda"),
+                                    placeholder: "Enter meeting agenda...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    rows: 4,
+                                    readOnly: mode === "form-readonly" && !isEditMode
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                    lineNumber: 1072,
+                                    lineNumber: 377,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 372,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 388,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Meeting Mode"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 387,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
+                                    value: momForm.meetingMode,
+                                    onChange: (e)=>handleMomFormChange(e, "meetingMode"),
+                                    placeholder: "Enter meeting mode (e.g., Offline, Online)...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    readOnly: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 391,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 386,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 401,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Duration"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 400,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
+                                    value: momForm.duration,
+                                    onChange: (e)=>handleMomFormChange(e, "duration"),
+                                    placeholder: "Enter duration (e.g., 10:00 AM - 11:00 AM)...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    readOnly: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 404,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 399,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 414,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Participants"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 413,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
+                                    value: momForm.participants,
+                                    onChange: (e)=>handleMomFormChange(e, "participants"),
+                                    placeholder: "Enter participants (comma-separated)...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    rows: 4,
+                                    readOnly: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 417,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 412,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 428,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Summary"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 427,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
+                                    value: momForm.summary,
+                                    onChange: (e)=>handleMomFormChange(e, "summary"),
+                                    placeholder: "Enter meeting summary...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    rows: 4,
+                                    readOnly: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 431,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 426,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 442,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Notes"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 441,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
+                                    value: momForm.notes,
+                                    onChange: (e)=>handleMomFormChange(e, "notes"),
+                                    placeholder: "Enter additional notes...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    rows: 4,
+                                    readOnly: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 445,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 440,
+                            columnNumber: 13
+                        }, this),
+                        isTimeExceeded && !isEditMode && mode !== "form-readonly" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                            className: "text-teal-600 font-semibold flex items-center",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
+                                                    className: "h-5 w-5 mr-2 text-red-700"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                                    lineNumber: 458,
+                                                    columnNumber: 21
+                                                }, this),
+                                                "Reason for Delay"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 457,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
+                                            value: reasonForDelay,
+                                            onChange: handleReasonForDelayChange,
+                                            placeholder: "Enter reason for delay...",
+                                            className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                            rows: 3
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 461,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 456,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center space-x-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$checkbox$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Checkbox"], {
+                                            id: "terms",
+                                            checked: isAgreedToTerms,
+                                            onCheckedChange: handleTermsChange,
+                                            className: "border-gray-300 data-[state=checked]:bg-teal-600",
+                                            disabled: mode === "form-readonly" && !isEditMode
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 470,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: "terms",
+                                            className: "text-teal-600 font-semibold text-sm sm:text-base",
+                                            children: "I agree to the cause terms and conditions"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 477,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 469,
                                     columnNumber: 17
                                 }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1071,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 1060,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                className: "flex items-center text-teal-600 font-semibold",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
-                                        className: "h-5 w-5 mr-2"
+                            ]
+                        }, void 0, true),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$signature$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Signature$3e$__["Signature"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 485,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Signature (Image)"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 484,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
+                                    type: "file",
+                                    accept: "image/png,image/jpeg,image/jpg",
+                                    onChange: handleSignatureFileChange,
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base",
+                                    disabled: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 488,
+                                    columnNumber: 15
+                                }, this),
+                                signaturePreview && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mt-2",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                        src: signaturePreview,
+                                        alt: "Signature Preview",
+                                        width: 120,
+                                        height: 80,
+                                        className: "rounded-md border border-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1086,
-                                        columnNumber: 15
-                                    }, this),
-                                    " Created By ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-red-500",
-                                        children: "*"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                        lineNumber: 1086,
-                                        columnNumber: 60
+                                        lineNumber: 497,
+                                        columnNumber: 19
                                     }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1085,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                value: momForm.createdBy,
-                                onChange: (e)=>handleChange(e, "createdBy"),
-                                className: "mt-1"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 496,
+                                    columnNumber: 17
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 483,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                    className: "text-teal-600 font-semibold flex items-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                                            className: "h-5 w-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 509,
+                                            columnNumber: 17
+                                        }, this),
+                                        "Created By"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 508,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
+                                    value: momForm.createdBy,
+                                    onChange: (e)=>handleMomFormChange(e, "createdBy"),
+                                    placeholder: "Recorder's name...",
+                                    className: "mt-1 border-gray-300 focus:ring-1 focus:ring-teal-500 bg-white rounded-lg text-sm sm:text-base w-full",
+                                    readOnly: mode === "form-readonly" && !isEditMode
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 512,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 507,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex justify-end gap-3",
+                            children: [
+                                (isEditMode || mode === "form-readonly") && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                    variant: "outline",
+                                    className: "border-teal-600 text-teal-600 hover:bg-teal-50 rounded-lg text.voice-mode sm:text-base",
+                                    onClick: ()=>setMode("view"),
+                                    children: "Cancel"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 522,
+                                    columnNumber: 17
+                                }, this),
+                                mode !== "form-readonly" || isEditMode ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                            variant: "outline",
+                                            className: "border-teal-600 text-teal-600 hover:bg-teal-50 rounded-lg text-sm sm:text-base",
+                                            onClick: ()=>handleSubmit("draft"),
+                                            disabled: momByMeetingIdLoading || !areRequiredFieldsFilled("draft"),
+                                            children: momByMeetingIdLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                                        className: "h-4 w-4 mr-2 animate-spin"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                                        lineNumber: 540,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    "Saving..."
+                                                ]
+                                            }, void 0, true) : "Save as Draft"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 532,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                            className: "bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm sm:text-base",
+                                            onClick: ()=>handleSubmit("final"),
+                                            disabled: momByMeetingIdLoading || !areRequiredFieldsFilled("final"),
+                                            children: momByMeetingIdLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                                        className: "h-4 w-4 mr-2 animate-spin"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                                        lineNumber: 554,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    "Submitting..."
+                                                ]
+                                            }, void 0, true) : isEditMode ? "Finalize MOM" : "Create MOM"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 547,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                    className: "bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm sm:text-base",
+                                    onClick: handleToggleMode,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit2$3e$__["Edit2"], {
+                                            className: "h-4 w-4 mr-1"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                            lineNumber: 569,
+                                            columnNumber: 19
+                                        }, this),
+                                        "Edit MOM"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                                    lineNumber: 565,
+                                    columnNumber: 17
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 520,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                    lineNumber: 368,
+                    columnNumber: 11
+                }, this) : // View Mode: MOM Preview
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "space-y-4",
+                    children: momByMeetingId && momView?.pdfUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "w-full h-[300px] sm:h-[400px] lg:h-[500px] rounded-lg border border-gray-300 overflow-hidden",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("iframe", {
+                                src: momView.pdfUrl,
+                                width: "100%",
+                                height: "100%",
+                                className: "rounded-lg",
+                                title: "MOM PDF Preview"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1088,
-                                columnNumber: 13
+                                lineNumber: 581,
+                                columnNumber: 19
                             }, this)
-                        ]
-                    }, void 0, true, {
+                        }, void 0, false, {
+                            fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                            lineNumber: 580,
+                            columnNumber: 17
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 1084,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex justify-end gap-3 pt-4",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                variant: "outline",
-                                onClick: ()=>setMode("view"),
-                                children: "Cancel"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1097,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                variant: "outline",
-                                onClick: ()=>handleSubmit("draft"),
-                                disabled: !validateForm("draft"),
-                                children: "Save as Draft"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1100,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                className: "bg-teal-600 hover:bg-teal-700 text-white",
-                                onClick: ()=>handleSubmit("final"),
-                                disabled: !validateForm("final"),
-                                children: isEditMode ? "Finalize MoM" : "Submit MoM"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                                lineNumber: 1107,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                        lineNumber: 1096,
-                        columnNumber: 11
+                        lineNumber: 579,
+                        columnNumber: 15
                     }, this)
-                ]
-            }, void 0, true, {
+                }, void 0, false, {
+                    fileName: "[project]/src/modules/meet/components/MomContent.jsx",
+                    lineNumber: 577,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-                lineNumber: 952,
-                columnNumber: 9
+                lineNumber: 365,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/modules/meet/components/MomContent.jsx",
-        lineNumber: 886,
+        lineNumber: 327,
         columnNumber: 5
     }, this);
-}
+} // "use client";
+ // import { useEffect, useState, useCallback } from "react";
+ // import { format, isAfter, addHours } from "date-fns";
+ // import { useDispatch, useSelector } from "react-redux";
+ // import {
+ //   fetchMoMByMeetingId,
+ //   resetMoMByMeetingId,
+ //   createMoM,
+ //   updateMoM,
+ //   fetchMoMView,
+ // } from "@/modules/meet/slices/momSlice";
+ // import { submitCause } from "@/modules/escalation/slices/causeSlice";
+ // import { Button } from "@/components/ui/button";
+ // import { Input } from "@/components/ui/input";
+ // import { Label } from "@/components/ui/label";
+ // import { Textarea } from "@/components/ui/textarea";
+ // import { Checkbox } from "@/components/ui/checkbox";
+ // import {
+ //   Loader2,
+ //   Edit2,
+ //   AlertCircle,
+ //   FileText,
+ //   Users,
+ //   Clock,
+ //   Signature,
+ //   User,
+ //   Eye,
+ // } from "lucide-react";
+ // import { toast } from "sonner";
+ // import { useCurrentUser } from "@/hooks/useCurrentUser";
+ // import Image from "next/image";
+ // export default function MomContent({ meeting, meetingId }) {
+ //   const dispatch = useDispatch();
+ //   const { currentUser } = useCurrentUser();
+ //   const { momByMeetingId, momByMeetingIdLoading, momView, momViewLoading } = useSelector(
+ //     (state) => state.mom
+ //   );
+ //   // === State ===
+ //   const [mode, setMode] = useState("loading"); // "loading" | "view" | "form"
+ //   const [isEditMode, setIsEditMode] = useState(false);
+ //   const [isTimeExceeded, setIsTimeExceeded] = useState(false);
+ //   const [reasonForDelay, setReasonForDelay] = useState("");
+ //   const [isAgreedToTerms, setIsAgreedToTerms] = useState(false);
+ //   const [signatureFile, setSignatureFile] = useState(null);
+ //   const [signaturePreview, setSignaturePreview] = useState(null);
+ //   const [momForm, setMomForm] = useState({
+ //     agenda: "",
+ //     meetingMode: "Offline",
+ //     duration: "",
+ //     participants: "",
+ //     summary: "",
+ //     notes: "",
+ //     createdBy: currentUser?.name || "",
+ //     meetingId: meetingId || "",
+ //     status: "draft",
+ //   });
+ //   // === Helpers ===
+ //   const formatTime = (dateTime) => {
+ //     if (!dateTime) return "";
+ //     try {
+ //       return format(new Date(dateTime), "p");
+ //     } catch {
+ //       return "";
+ //     }
+ //   };
+ //   const getDurationString = useCallback(() => {
+ //     const start = meeting?.startTime ? new Date(meeting.startTime) : null;
+ //     const end = meeting?.endTime ? new Date(meeting.endTime) : null;
+ //     if (!start || !end || isNaN(start) || isNaN(end)) return "N/A";
+ //     return `${formatTime(start)} - ${formatTime(end)}`;
+ //   }, [meeting]);
+ //   const getAttendeesArray = useCallback(() => {
+ //     const our = (meeting?.ourParty || []).map((p) => p.name || p.email || "Unknown");
+ //     const contact = (meeting?.contactParty || []).map(
+ //       (p) => (p.fullName !== "undefined undefined" ? p.fullName : p.email) || "Unknown"
+ //     );
+ //     return [...our, ...contact].filter(Boolean);
+ //   }, [meeting]);
+ //   const checkTimeExceeded = useCallback(() => {
+ //     if (!meeting?.endTime) return false;
+ //     const end = new Date(meeting.endTime);
+ //     const now = new Date();
+ //     return isAfter(now, end);
+ //   }, [meeting]);
+ //   // === Effects ===
+ //   useEffect(() => {
+ //     if (meetingId) {
+ //       dispatch(fetchMoMByMeetingId(meetingId));
+ //     }
+ //   }, [meetingId, dispatch]);
+ //   useEffect(() => {
+ //     setIsTimeExceeded(checkTimeExceeded());
+ //   }, [checkTimeExceeded]);
+ //   useEffect(() => {
+ //     const attendees = getAttendeesArray().join(", ");
+ //     const duration = getDurationString();
+ //     if (momByMeetingId && momByMeetingId.meetingId === meetingId) {
+ //       // MoM exists
+ //       const participants = momByMeetingId.participants
+ //         ? momByMeetingId.participants.join(", ")
+ //         : attendees;
+ //       setMomForm({
+ //         agenda: momByMeetingId.agenda || meeting?.agenda || "",
+ //         meetingMode: momByMeetingId.meetingMode || meeting?.mode || "Offline",
+ //         duration: momByMeetingId.duration || duration,
+ //         participants,
+ //         summary: momByMeetingId.summary || "",
+ //         notes: momByMeetingId.notes || "",
+ //         createdBy: momByMeetingId.createdBy || currentUser?.name || "",
+ //         meetingId,
+ //         status: momByMeetingId.status || "draft",
+ //       });
+ //       setReasonForDelay(momByMeetingId.reasonForDelay || "");
+ //       if (momByMeetingId.status === "final") {
+ //         setMode("view");
+ //       } else {
+ //         setMode("form");
+ //         setIsEditMode(true);
+ //       }
+ //     } else {
+ //       // No MoM → create new
+ //       setMomForm({
+ //         agenda: meeting?.agenda || "",
+ //         meetingMode: meeting?.mode || "Offline",
+ //         duration,
+ //         participants: attendees,
+ //         summary: "",
+ //         notes: "",
+ //         createdBy: currentUser?.name || "",
+ //         meetingId,
+ //         status: "draft",
+ //       });
+ //       setMode("form");
+ //       setIsEditMode(false);
+ //     }
+ //     setSignatureFile(null);
+ //     setSignaturePreview(null);
+ //     setIsAgreedToTerms(false);
+ //   }, [
+ //     momByMeetingId,
+ //     meeting,
+ //     meetingId,
+ //     currentUser?.name,
+ //     getAttendeesArray,
+ //     getDurationString,
+ //   ]);
+ //   // Fetch PDF only in final view mode
+ //   useEffect(() => {
+ //     if (momByMeetingId?.momId && mode === "view" && momByMeetingId.status === "final") {
+ //       dispatch(fetchMoMView(momByMeetingId.momId));
+ //     }
+ //   }, [momByMeetingId?.momId, mode, dispatch]);
+ //   // Cleanup
+ //   useEffect(() => {
+ //     return () => {
+ //       if (momView?.pdfUrl) URL.revokeObjectURL(momView.pdfUrl);
+ //       if (signaturePreview) URL.revokeObjectURL(signaturePreview);
+ //       dispatch(resetMoMByMeetingId());
+ //     };
+ //   }, [momView?.pdfUrl, signaturePreview, dispatch]);
+ //   // === Handlers ===
+ //   const handleChange = (e, field) => {
+ //     setMomForm((prev) => ({ ...prev, [field]: e.target.value }));
+ //   };
+ //   const handleSignatureChange = (e) => {
+ //     const file = e.target.files[0];
+ //     if (file && ["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+ //       setSignatureFile(file);
+ //       setSignaturePreview(URL.createObjectURL(file));
+ //     } else {
+ //       toast.error("Only .png, .jpg, .jpeg allowed.");
+ //       setSignatureFile(null);
+ //       setSignaturePreview(null);
+ //     }
+ //   };
+ //   const validateForm = (status) => {
+ //     const base = momForm.createdBy.trim() && momForm.summary.trim();
+ //     if (status === "final") {
+ //       return (
+ //         base &&
+ //         signatureFile &&
+ //         (!isTimeExceeded || (reasonForDelay.trim() && isAgreedToTerms))
+ //       );
+ //     }
+ //     return base;
+ //   };
+ //   const handleSubmit = async (status) => {
+ //     if (!validateForm(status)) {
+ //       return toast.error("Please fill all required fields.");
+ //     }
+ //     const formData = new FormData();
+ //     formData.append("agenda", momForm.agenda);
+ //     formData.append("meetingMode", momForm.meetingMode);
+ //     formData.append("duration", momForm.duration);
+ //     formData.append(
+ //       "participants",
+ //       JSON.stringify(momForm.participants.split(",").map((p) => p.trim()).filter(Boolean))
+ //     );
+ //     formData.append("summary", momForm.summary);
+ //     formData.append("notes", momForm.notes);
+ //     formData.append("createdBy", momForm.createdBy);
+ //     formData.append("meetingId", momForm.meetingId);
+ //     formData.append("status", status);
+ //     if (signatureFile) formData.append("signature", signatureFile);
+ //     if (status === "final" && isTimeExceeded && !isEditMode) {
+ //       formData.append("reasonForDelay", reasonForDelay);
+ //     }
+ //     try {
+ //       if (status === "final" && isTimeExceeded && !isEditMode) {
+ //         await dispatch(
+ //           submitCause({
+ //             meetingId,
+ //             reason: reasonForDelay,
+ //             submittedBy: currentUser?.name || momForm.createdBy,
+ //           })
+ //         ).unwrap();
+ //         toast.success("Delay reason submitted.");
+ //       }
+ //       if (isEditMode && momByMeetingId) {
+ //         await dispatch(updateMoM(formData)).unwrap();
+ //         toast.success(status === "draft" ? "MoM updated (draft)" : "MoM finalized");
+ //       } else {
+ //         await dispatch(createMoM(formData)).unwrap();
+ //         toast.success(status === "draft" ? "MoM saved (draft)" : "MoM created");
+ //       }
+ //       setMode("view");
+ //       setIsEditMode(false);
+ //       setReasonForDelay("");
+ //       setIsAgreedToTerms(false);
+ //       setSignatureFile(null);
+ //       setSignaturePreview(null);
+ //     } catch (err) {
+ //       toast.error(`Error: ${err?.message || "Unknown error"}`);
+ //     }
+ //   };
+ //   const startEdit = () => {
+ //     setMode("form");
+ //     setIsEditMode(true);
+ //   };
+ //   // === Loading ===
+ //   if (momByMeetingIdLoading || momViewLoading) {
+ //     return (
+ //       <div className="min-h-[400px] flex flex-col items-center justify-center bg-background rounded-xl shadow-md">
+ //         <Loader2 className="h-12 w-12 text-teal-600 animate-spin" />
+ //         <p className="mt-3 text-lg font-semibold text-teal-600">Loading MoM...</p>
+ //       </div>
+ //     );
+ //   }
+ //   // === Render ===
+ //   return (
+ //     <div className="w-full p-4 sm:p-6 bg-background rounded-xl shadow-md">
+ //       {/* === VIEW MODE: MoM Finalized === */}
+ //       {mode === "view" && (
+ //         <div className="space-y-6">
+ //           <div className="flex justify-between items-center">
+ //             <h2 className="text-2xl font-bold text-teal-600 flex items-center">
+ //               <FileText className="h-6 w-6 mr-2" />
+ //               Minutes of Meeting
+ //             </h2>
+ //           </div>
+ //           {/* No MoM → Show Create Button */}
+ //           {!momByMeetingId && (
+ //             <div className="flex justify-end">
+ //               <Button
+ //                 className="bg-teal-600 hover:bg-teal-700 text-white"
+ //                 onClick={() => setMode("form")}
+ //               >
+ //                 <Edit2 className="h-4 w-4 mr-2" />
+ //                 Create MoM
+ //               </Button>
+ //             </div>
+ //           )}
+ //           {/* MoM Exists */}
+ //           {momByMeetingId && (
+ //             <div className="flex justify-end gap-3">
+ //               {momByMeetingId.status === "final" ? (
+ //                 <Button
+ //                   variant="outline"
+ //                   className="border-teal-600 text-teal-600 hover:bg-teal-50"
+ //                   onClick={() => momView?.pdfUrl && window.open(momView.pdfUrl, "_blank")}
+ //                   disabled={!momView?.pdfUrl}
+ //                 >
+ //                   <Eye className="h-4 w-4 mr-2" />
+ //                   View PDF
+ //                 </Button>
+ //               ) : (
+ //                 <Button
+ //                   className="bg-teal-600 hover:bg-teal-700 text-white"
+ //                   onClick={startEdit}
+ //                 >
+ //                   <Edit2 className="h-4 w-4 mr-2" />
+ //                   Edit MoM
+ //                 </Button>
+ //               )}
+ //             </div>
+ //           )}
+ //           {/* PDF Preview (Optional) */}
+ //           {momByMeetingId?.status === "final" && momView?.pdfUrl && (
+ //             <div className="mt-6 border rounded-lg overflow-hidden h-[600px]">
+ //               <iframe
+ //                 src={momView.pdfUrl}
+ //                 width="100%"
+ //                 height="100%"
+ //                 title="MoM PDF"
+ //                 className="rounded-lg"
+ //               />
+ //             </div>
+ //           )}
+ //         </div>
+ //       )}
+ //       {/* === FORM MODE: Create or Edit === */}
+ //       {mode === "form" && (
+ //         <div className="mt-6 space-y-5">
+ //           <h3 className="text-lg font-semibold text-gray-800">
+ //             {isEditMode ? "Edit MoM" : "Create MoM"}
+ //           </h3>
+ //           {/* Agenda */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <FileText className="h-5 w-5 mr-2" /> Agenda
+ //             </Label>
+ //             <Textarea
+ //               value={momForm.agenda}
+ //               onChange={(e) => handleChange(e, "agenda")}
+ //               placeholder="Meeting agenda..."
+ //               rows={4}
+ //               className="mt-1"
+ //             />
+ //           </div>
+ //           {/* Meeting Mode */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <Users className="h-5 w-5 mr-2" /> Meeting Mode
+ //             </Label>
+ //             <Input
+ //               value={momForm.meetingMode}
+ //               onChange={(e) => handleChange(e, "meetingMode")}
+ //               className="mt-1"
+ //             />
+ //           </div>
+ //           {/* Duration (Read-only) */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <Clock className="h-5 w-5 mr-2" /> Duration
+ //             </Label>
+ //             <Input value={momForm.duration} readOnly className="mt-1 bg-gray-50" />
+ //           </div>
+ //           {/* Participants */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <Users className="h-5 w-5 mr-2" /> Participants
+ //             </Label>
+ //             <Textarea
+ //               value={momForm.participants}
+ //               onChange={(e) => handleChange(e, "participants")}
+ //               rows={3}
+ //               className="mt-1"
+ //             />
+ //           </div>
+ //           {/* Summary */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <FileText className="h-5 w-5 mr-2" /> Summary <span className="text-red-500">*</span>
+ //             </Label>
+ //             <Textarea
+ //               value={momForm.summary}
+ //               onChange={(e) => handleChange(e, "summary")}
+ //               rows={5}
+ //               placeholder="Key points, decisions, action items..."
+ //               className="mt-1"
+ //             />
+ //           </div>
+ //           {/* Notes */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <FileText className="h-5 w-5 mr-2" /> Notes
+ //             </Label>
+ //             <Textarea
+ //               value={momForm.notes}
+ //               onChange={(e) => handleChange(e, "notes")}
+ //               rows={4}
+ //               className="mt-1"
+ //             />
+ //           </div>
+ //           {/* Delay Reason */}
+ //           {isTimeExceeded && !isEditMode && (
+ //             <>
+ //               <div>
+ //                 <Label className="flex items-center text-red-600 font-semibold">
+ //                   <AlertCircle className="h-5 w-5 mr-2" /> Reason for Delay <span className="text-red-500">*</span>
+ //                 </Label>
+ //                 <Textarea
+ //                   value={reasonForDelay}
+ //                   onChange={(e) => setReasonForDelay(e.target.value)}
+ //                   rows={3}
+ //                   placeholder="Why is MoM being submitted after meeting end?"
+ //                   className="mt-1"
+ //                 />
+ //               </div>
+ //               <div className="flex items-center gap-2">
+ //                 <Checkbox
+ //                   id="terms"
+ //                   checked={isAgreedToTerms}
+ //                   onCheckedChange={setIsAgreedToTerms}
+ //                 />
+ //                 <Label htmlFor="terms" className="text-sm font-medium">
+ //                   I agree to the terms and conditions
+ //                 </Label>
+ //               </div>
+ //             </>
+ //           )}
+ //           {/* Signature */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <Signature className="h-5 w-5 mr-2" /> Signature <span className="text-red-500">*</span>
+ //             </Label>
+ //             <Input
+ //               type="file"
+ //               accept="image/png,image/jpeg,image/jpg"
+ //               onChange={handleSignatureChange}
+ //               className="mt-1"
+ //             />
+ //             {signaturePreview && (
+ //               <div className="mt-2">
+ //                 <Image
+ //                   src={signaturePreview}
+ //                   alt="Signature"
+ //                   width={140}
+ //                   height={80}
+ //                   className="border rounded-md"
+ //                 />
+ //               </div>
+ //             )}
+ //           </div>
+ //           {/* Created By */}
+ //           <div>
+ //             <Label className="flex items-center text-teal-600 font-semibold">
+ //               <User className="h-5 w-5 mr-2" /> Created By <span className="text-red-500">*</span>
+ //             </Label>
+ //             <Input
+ //               value={momForm.createdBy}
+ //               onChange={(e) => handleChange(e, "createdBy")}
+ //               className="mt-1"
+ //             />
+ //           </div>
+ //           {/* Action Buttons */}
+ //           <div className="flex justify-end gap-3 pt-4">
+ //             <Button variant="outline" onClick={() => setMode("view")}>
+ //               Cancel
+ //             </Button>
+ //             <Button
+ //               variant="outline"
+ //               onClick={() => handleSubmit("draft")}
+ //               disabled={!validateForm("draft")}
+ //             >
+ //               Save as Draft
+ //             </Button>
+ //             <Button
+ //               className="bg-teal-600 hover:bg-teal-700 text-white"
+ //               onClick={() => handleSubmit("final")}
+ //               disabled={!validateForm("final")}
+ //             >
+ //               {isEditMode ? "Finalize MoM" : "Submit MoM"}
+ //             </Button>
+ //           </div>
+ //         </div>
+ //       )}
+ //     </div>
+ //   );
+ // }
+ // "use client";
+ // import { useEffect, useState } from "react";
+ // import { format } from "date-fns";
+ // import { useDispatch, useSelector } from "react-redux";
+ // import {
+ //   fetchMoMByMeetingId,
+ //   resetMoMByMeetingId,
+ //   createMoM,
+ //   updateMoM,
+ //   fetchMoMView,
+ // } from "@/modules/meet/slices/momSlice";
+ // import { Button } from "@/components/ui/button";
+ // import { Textarea } from "@/components/ui/textarea";
+ // import { Label } from "@/components/ui/label";
+ // import { Loader2, FileText, Users, Clock, User, ExternalLink } from "lucide-react";
+ // import { toast } from "sonner";
+ // import { useCurrentUser } from "@/hooks/useCurrentUser";
+ // import Image from "next/image";
+ // export default function MomContent({ meeting, meetingId }) {
+ //   const dispatch = useDispatch();
+ //   const { momByMeetingId, momByMeetingIdLoading, momView, momViewLoading } = useSelector((state) => state.mom);
+ //   const { currentUser } = useCurrentUser();
+ //   const [summary, setSummary] = useState("");
+ //   const [notes, setNotes] = useState("");
+ //   const [signatureFile, setSignatureFile] = useState(null);
+ //   const [signaturePreview, setSignaturePreview] = useState(null);
+ //   // Read-only fields
+ //   const agenda = momByMeetingId?.agenda || meeting?.agenda || "N/A";
+ //   const meetingMode = momByMeetingId?.meetingMode || meeting?.mode || "Offline";
+ //   const createdBy = momByMeetingId?.createdBy || currentUser?.name || "Unknown";
+ //   const formatTime = (date) => (date ? format(new Date(date), "p") : "N/A");
+ //   const duration = meeting?.startTime && meeting?.endTime
+ //     ? `${formatTime(meeting.startTime)} - ${formatTime(meeting.endTime)}`
+ //     : "N/A";
+ //   const participants = (() => {
+ //     const our = (meeting?.ourParty || []).map(p => p.name || p.email || "").filter(Boolean);
+ //     const contact = (meeting?.contactParty || []).map(p => 
+ //       p.fullName && p.fullName !== "undefined undefined" ? p.fullName : p.email || ""
+ //     ).filter(Boolean);
+ //     return [...our, ...contact].join(", ") || "None listed";
+ //   })();
+ //   // Load MOM data
+ //   useEffect(() => {
+ //     if (meetingId) dispatch(fetchMoMByMeetingId(meetingId));
+ //   }, [meetingId, dispatch]);
+ //   useEffect(() => {
+ //     if (momByMeetingId) {
+ //       setSummary(momByMeetingId.summary || "");
+ //       setNotes(momByMeetingId.notes || "");
+ //     } else {
+ //       setSummary("");
+ //       setNotes("");
+ //     }
+ //     setSignatureFile(null);
+ //     setSignaturePreview(null);
+ //   }, [momByMeetingId]);
+ //   // Fetch PDF for final MOM
+ //   useEffect(() => {
+ //     if (momByMeetingId?.status === "final" && momByMeetingId.momId) {
+ //       dispatch(fetchMoMView(momByMeetingId.momId));
+ //     }
+ //   }, [momByMeetingId?.momId, momByMeetingId?.status, dispatch]);
+ //   // Cleanup
+ //   useEffect(() => {
+ //     return () => {
+ //       if (momView?.pdfUrl) URL.revokeObjectURL(momView.pdfUrl);
+ //       if (signaturePreview) URL.revokeObjectURL(signaturePreview);
+ //       dispatch(resetMoMByMeetingId());
+ //     };
+ //   }, []);
+ // console.log(momByMeetingId);
+ //   const handleSignatureChange = (e) => {
+ //     const file = e.target.files[0];
+ //     if (file && /^image\/(png|jpeg|jpg)$/.test(file.type)) {
+ //       setSignatureFile(file);
+ //       setSignaturePreview(URL.createObjectURL(file));
+ //     } else {
+ //       toast.error("Upload PNG/JPG only");
+ //       e.target.value = "";
+ //     }
+ //   };
+ //   const openPdfInNewTab = () => {
+ //     if (momView?.pdfUrl) window.open(momView.pdfUrl, "_blank", "noopener,noreferrer");
+ //   };
+ //   const handleSubmit = async (status) => {
+ //     if (!summary.trim()) {
+ //       toast.error("Summary is required");
+ //       return;
+ //     }
+ //     if (status === "final" && !signatureFile && !momByMeetingId?.signatureUrl) {
+ //       toast.error("Signature is required");
+ //       return;
+ //     }
+ //     const formData = new FormData();
+ //     formData.append("agenda", agenda);
+ //     formData.append("meetingMode", meetingMode);
+ //     formData.append("duration", duration);
+ //     formData.append("participants", JSON.stringify(participants.split(",").map(p => p.trim())));
+ //     formData.append("summary", summary);
+ //     formData.append("notes", notes);
+ //     formData.append("createdBy", createdBy);
+ //     formData.append("meetingId", meetingId);
+ //     formData.append("status", status);
+ //     if (signatureFile) formData.append("signature", signatureFile);
+ //     try {
+ //       if (momByMeetingId) {
+ //         await dispatch(updateMoM(formData)).unwrap();
+ //         toast.success("MOM updated");
+ //       } else {
+ //         await dispatch(createMoM(formData)).unwrap();
+ //         toast.success("MOM created");
+ //       }
+ //       dispatch(fetchMoMByMeetingId(meetingId));
+ //     } catch (err) {
+ //       toast.error("Failed to save MOM");
+ //     }
+ //   };
+ //   // Loading
+ //   if (momByMeetingIdLoading || momViewLoading) {
+ //     return (
+ //       <div className="min-h-[400px] flex items-center justify-center bg-gray-100 rounded-2xl">
+ //         <div className="text-center">
+ //           <Loader2 className="h-8 w-8 animate-spin text-teal-500 mx-auto mb-2" />
+ //           <p className="text-sm font-medium text-teal-600">Loading...</p>
+ //         </div>
+ //       </div>
+ //     );
+ //   }
+ //   const isFinal = momByMeetingId?.status === "final";
+ //   const hasMom = !!momByMeetingId;
+ //   return (
+ //     <div className="max-w-4xl mx-auto p-4 bg-white rounded-2xl shadow-md border border-gray-100">
+ //       {/* Header */}
+ //       <div className="flex justify-between items-center mb-4">
+ //         <h2 className="text-lg md:text-xl font-bold text-teal-600 flex items-center gap-2">
+ //           <FileText className="h-5 w-5" />
+ //           Minutes of Meeting
+ //         </h2>
+ //         {isFinal && momView?.pdfUrl && (
+ //           <Button onClick={openPdfInNewTab} variant="ghost" size="sm" className="text-teal-500 hover:bg-teal-50">
+ //             <ExternalLink className="h-4 w-4 mr-1" />
+ //             View PDF
+ //           </Button>
+ //         )}
+ //       </div>
+ //       {/* Final MOM: PDF Only */}
+ //       {isFinal && momView?.pdfUrl ? (
+ //         <div className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+ //           <iframe src={momView.pdfUrl} className="w-full h-[600px]" title="Final MOM" />
+ //         </div>
+ //       ) : (
+ //         <>
+ //           {/* Read-only Fields */}
+ //           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-gray-700 text-sm">
+ //             <div>
+ //               <Label className="text-teal-500 font-medium text-xs">Agenda</Label>
+ //               <p className="mt-1 p-3 bg-gray-50 rounded-lg">{agenda}</p>
+ //             </div>
+ //             <div>
+ //               <Label className="text-teal-500 font-medium text-xs">Mode</Label>
+ //               <p className="mt-1 p-3 bg-gray-50 rounded-lg">{meetingMode}</p>
+ //             </div>
+ //             <div>
+ //               <Label className="text-teal-500 font-medium text-xs flex items-center gap-1">
+ //                 <Clock className="h-4 w-4" /> Duration
+ //               </Label>
+ //               <p className="mt-1 p-3 bg-gray-50 rounded-lg">{duration}</p>
+ //             </div>
+ //             <div>
+ //               <Label className="text-teal-500 font-medium text-xs flex items-center gap-1">
+ //                 <User className="h-4 w-4" /> Created By
+ //               </Label>
+ //               <p className="mt-1 p-3 bg-gray-50 rounded-lg">{createdBy}</p>
+ //             </div>
+ //             <div className="sm:col-span-2">
+ //               <Label className="text-teal-500 font-medium text-xs flex items-center gap-1">
+ //                 <Users className="h-4 w-4" /> Participants
+ //               </Label>
+ //               <p className="mt-1 p-3 bg-gray-50 rounded-lg">{participants}</p>
+ //             </div>
+ //           </div>
+ //           {/* Editable Fields */}
+ //           <div className="space-y-4">
+ //             <div>
+ //               <Label className="text-teal-500 font-medium text-sm">
+ //                 Summary <span className="text-red-400">*</span>
+ //               </Label>
+ //               <Textarea
+ //                 value={summary}
+ //                 onChange={(e) => setSummary(e.target.value)}
+ //                 placeholder="Meeting summary..."
+ //                 rows={4}
+ //                 className="mt-1 text-sm resize-none bg-gray-50 focus:ring-teal-400"
+ //                 disabled={isFinal}
+ //               />
+ //             </div>
+ //             <div>
+ //               <Label className="text-teal-500 font-medium text-sm">Notes</Label>
+ //               <Textarea
+ //                 value={notes}
+ //                 onChange={(e) => setNotes(e.target.value)}
+ //                 placeholder="Action items or remarks..."
+ //                 rows={3}
+ //                 className="mt-1 text-sm bg-gray-50 focus:ring-teal-400"
+ //                 disabled={isFinal}
+ //               />
+ //             </div>
+ //             {!isFinal && (
+ //               <div>
+ //                 <Label className="text-teal-500 font-medium text-sm">
+ //                   Signature <span className="text-red-400">*</span>
+ //                 </Label>
+ //                 <input
+ //                   type="file"
+ //                   accept="image/png,image/jpeg,image/jpg"
+ //                   onChange={handleSignatureChange}
+ //                   className="mt-1 block w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-medium file:bg-teal-50 file:text-teal-600 hover:file:bg-teal-100"
+ //                 />
+ //                 {signaturePreview && (
+ //                   <div className="mt-3 inline-block">
+ //                     <Image src={signaturePreview} alt="Signature" width={150} height={60} className="border rounded" />
+ //                   </div>
+ //                 )}
+ //                 {momByMeetingId?.signatureUrl && !signatureFile && (
+ //                   <div className="mt-3 inline-block">
+ //                     <Image src={momByMeetingId.signatureUrl} alt="Current signature" width={150} height={60} className="border rounded" />
+ //                   </div>
+ //                 )}
+ //               </div>
+ //             )}
+ //           </div>
+ //           {/* Buttons */}
+ //           {!isFinal && (
+ //             <div className="flex justify-end gap-3 mt-6">
+ //               <Button
+ //                 variant="outline"
+ //                 size="sm"
+ //                 onClick={() => handleSubmit("draft")}
+ //                 disabled={!summary.trim()}
+ //                 className="text-teal-600 border-teal-200 hover:bg-teal-50"
+ //               >
+ //                 Save Draft
+ //               </Button>
+ //               <Button
+ //                 size="sm"
+ //                 onClick={() => handleSubmit("final")}
+ //                 disabled={!summary.trim() || (!signatureFile && !momByMeetingId?.signatureUrl)}
+ //                 className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white"
+ //               >
+ //                 {hasMom ? "Finalize" : "Create"}
+ //               </Button>
+ //             </div>
+ //           )}
+ //         </>
+ //       )}
+ //     </div>
+ //   );
+ // }
 }}),
-"[project]/src/modules/meet/components/MeetingController.js [app-ssr] (ecmascript)": ((__turbopack_context__) => {
-"use strict";
+"[project]/src/modules/meet/components/MeetingController.js [app-ssr] (ecmascript)": (function(__turbopack_context__) {
 
-var { g: global, __dirname } = __turbopack_context__;
+var { g: global, __dirname, m: module, e: exports } = __turbopack_context__;
 {
-__turbopack_context__.s({
-    "default": (()=>MeetingController)
-});
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-redux/dist/react-redux.mjs [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/card.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/button.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/input.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/textarea.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/label.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/dialog.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/alert.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/skeleton.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/tabs.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.js [app-ssr] (ecmascript) <export default as ChevronLeft>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$badge$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Badge$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/badge.js [app-ssr] (ecmascript) <export default as Badge>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/save.js [app-ssr] (ecmascript) <export default as Save>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-ssr] (ecmascript) <export default as X>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/date-fns/format.js [app-ssr] (ecmascript) <locals>"); // PROPERLY IMPORTED
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/meet/slices/meetSlice.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$components$2f$MeetingDetailsContent$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/meet/components/MeetingDetailsContent.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$components$2f$ProposalContent$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/meet/components/ProposalContent.jsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$components$2f$MomContent$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/meet/components/MomContent.jsx [app-ssr] (ecmascript)");
-"use client";
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-function MeetingController({ meetingId }) {
-    const dispatch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDispatch"])();
-    const { selectedMeeting, status, error } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$redux$2f$dist$2f$react$2d$redux$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSelector"])((state)=>state.meet);
-    const [isEditing, setIsEditing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [editForm, setEditForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [showReschedule, setShowReschedule] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [showStatusUpdate, setShowStatusUpdate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [statusUpdateType, setStatusUpdateType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [endNote, setEndNote] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
-    const [localError, setLocalError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [updateStatus, setUpdateStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("idle");
-    // MEETING IS FINAL → NO EDITS ALLOWED
-    const isFinalStatus = [
-        "completed",
-        "canceled"
-    ].includes(selectedMeeting?.meetingStatus);
-    const canUpdateStatus = [
-        "scheduled",
-        "rescheduled"
-    ].includes(selectedMeeting?.meetingStatus);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (meetingId) {
-            dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchMeetingById"])(meetingId));
-        }
-        return ()=>{
-            dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clearSelectedMeeting"])());
-            dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clearError"])());
-        };
-    }, [
-        dispatch,
-        meetingId
-    ]);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (selectedMeeting) {
-            try {
-                setEditForm({
-                    title: selectedMeeting.title || "",
-                    date: selectedMeeting.date ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(selectedMeeting.date), "yyyy-MM-dd") : "",
-                    startTime: selectedMeeting.startTime ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(selectedMeeting.startTime), "HH:mm") : "",
-                    endTime: selectedMeeting.endTime ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(selectedMeeting.endTime), "HH:mm") : "",
-                    agenda: selectedMeeting.agenda || "",
-                    mode: selectedMeeting.mode || "online",
-                    meetingLink: selectedMeeting.meetingLink || "",
-                    meetingStatus: selectedMeeting.meetingStatus || "scheduled"
-                });
-                setLocalError(null);
-            } catch (err) {
-                console.error("Sync error:", err);
-                setLocalError("Invalid meeting data.");
-            }
-        }
-    }, [
-        selectedMeeting
-    ]);
-    // PROPER TIME FORMATTERS
-    const formatDate = (dateStr)=>{
-        if (!dateStr) return "N/A";
-        try {
-            return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(dateStr), "MMM d, yyyy");
-        } catch  {
-            return "Invalid Date";
-        }
-    };
-    const formatTime = (dateStr)=>{
-        if (!dateStr) return "N/A";
-        try {
-            return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(dateStr), "h:mm a"); // 2:30 PM
-        } catch  {
-            return "Invalid Time";
-        }
-    };
-    const formatDateTime = (dateStr)=>{
-        if (!dateStr) return "N/A";
-        try {
-            return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(dateStr), "MMM d, yyyy h:mm a");
-        } catch  {
-            return "Invalid DateTime";
-        }
-    };
-    const handleSave = async ()=>{
-        if (isFinalStatus) {
-            setLocalError("Cannot edit a completed or canceled meeting.");
-            return;
-        }
-        if (!editForm?.title || !editForm.date || !editForm.startTime || !editForm.endTime) {
-            setLocalError("Please fill all required fields.");
-            return;
-        }
-        if (editForm.mode === "online" && !editForm.meetingLink) {
-            setLocalError("Please provide a meeting link for online mode.");
-            return;
-        }
-        try {
-            setLocalError(null);
-            setUpdateStatus("loading");
-            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["updateMeeting"])({
-                meetingId,
-                updates: {
-                    title: editForm.title,
-                    agenda: editForm.agenda,
-                    mode: editForm.mode,
-                    meetingLink: editForm.mode === "online" ? editForm.meetingLink : null,
-                    meetingStatus: editForm.meetingStatus,
-                    startTime: `${editForm.date}T${editForm.startTime}:00.000Z`,
-                    endTime: `${editForm.date}T${editForm.endTime}:00.000Z`
-                }
-            })).unwrap();
-            setIsEditing(false);
-        } catch (err) {
-            setLocalError(err?.message || "Failed to update.");
-        } finally{
-            setUpdateStatus("idle");
-        }
-    };
-    const handleReschedule = async ()=>{
-        if (isFinalStatus) {
-            setLocalError("Cannot reschedule a completed or canceled meeting.");
-            return;
-        }
-        if (!editForm?.date || !editForm.startTime || !editForm.endTime) {
-            setLocalError("Please fill all required fields.");
-            return;
-        }
-        try {
-            setLocalError(null);
-            setUpdateStatus("loading");
-            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["updateMeeting"])({
-                meetingId,
-                updates: {
-                    startTime: `${editForm.date}T${editForm.startTime}:00.000Z`,
-                    endTime: `${editForm.date}T${editForm.endTime}:00.000Z`,
-                    meetingStatus: "rescheduled"
-                }
-            })).unwrap();
-            setShowReschedule(false);
-        } catch (err) {
-            setLocalError(err?.message || "Failed to reschedule.");
-        } finally{
-            setUpdateStatus("idle");
-        }
-    };
-    const handleStatusUpdate = async ()=>{
-        if (!endNote.trim()) {
-            setLocalError("Please provide a feedback note.");
-            return;
-        }
-        try {
-            setLocalError(null);
-            setUpdateStatus("loading");
-            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$slices$2f$meetSlice$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["updateMeeting"])({
-                meetingId,
-                updates: {
-                    meetingStatus: statusUpdateType,
-                    endNote: endNote.trim()
-                }
-            })).unwrap();
-            setShowStatusUpdate(false);
-            setEndNote("");
-            setStatusUpdateType(null);
-        } catch (err) {
-            setLocalError(err?.message || "Failed to update status.");
-        } finally{
-            setUpdateStatus("idle");
-        }
-    };
-    const openStatusUpdateModal = (type)=>{
-        setStatusUpdateType(type);
-        setShowStatusUpdate(true);
-    };
-    // LOADING
-    if (status === "loading") {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "min-h-screen bg-gray-50 py-8 px-4",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "max-w-6xl mx-auto space-y-4",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                        className: "h-8 w-32"
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 227,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
-                        className: "shadow-lg border-0 p-6 space-y-4",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                                className: "h-10 w-3/4"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 229,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "grid lg:grid-cols-5 gap-6",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "lg:col-span-4 space-y-3",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                                            className: "h-6 w-40"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 232,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                                            className: "h-4 w-full"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 233,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$skeleton$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Skeleton"], {
-                                            className: "h-4 w-full"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 234,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 231,
-                                    columnNumber: 15
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 230,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 228,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 226,
-                columnNumber: 9
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-            lineNumber: 225,
-            columnNumber: 7
-        }, this);
-    }
-    // ERROR
-    if (status === "failed" || localError) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
-            variant: "destructive",
-            className: "max-w-2xl mx-auto mt-8",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
-                children: localError || error || "No meeting found."
-            }, void 0, false, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 247,
-                columnNumber: 9
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-            lineNumber: 246,
-            columnNumber: 7
-        }, this);
-    }
-    if (!selectedMeeting) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
-            variant: "destructive",
-            className: "max-w-2xl mx-auto mt-8",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
-                children: "Meeting data unavailable."
-            }, void 0, false, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 255,
-                columnNumber: 9
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-            lineNumber: 254,
-            columnNumber: 7
-        }, this);
-    }
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "min-h-screen bg-gray-50",
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: " mx-auto",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "bg-gradient-to-r from-teal-600 to-cyan-600 p-4 rounded-t-lg shadow-md",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex flex-wrap items-center justify-between gap-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                            size: "sm",
-                                            className: "bg-teal-600 hover:bg-teal-700 text-white",
-                                            onClick: ()=>window.history.back(),
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__["ChevronLeft"], {
-                                                    className: "w-5 h-5 mr-1"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 272,
-                                                    columnNumber: 17
-                                                }, this),
-                                                " Back"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 267,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                                    className: "text-xl font-bold text-white",
-                                                    children: selectedMeeting.title
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 275,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-teal-100 text-sm",
-                                                    children: [
-                                                        "Meeting ID: ",
-                                                        meetingId
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 276,
-                                                    columnNumber: 17
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 274,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 266,
-                                    columnNumber: 13
-                                }, this),
-                                isFinalStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$badge$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Badge$3e$__["Badge"], {
-                                    variant: "secondary",
-                                    className: "bg-white text-teal-700",
-                                    children: selectedMeeting.meetingStatus.toUpperCase()
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 280,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 265,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 264,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
-                        className: "shadow-lg border-0 rounded-t-none",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
-                            className: "p-4 sm:p-6",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Tabs"], {
-                                defaultValue: "details",
-                                className: "w-full",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsList"], {
-                                        className: "flex w-fit bg-teal-50 rounded-lg p-1 mb-4",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsTrigger"], {
-                                                value: "details",
-                                                className: "data-[state=active]:bg-teal-600 data-[state=active]:text-white",
-                                                children: "Details"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                lineNumber: 291,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsTrigger"], {
-                                                value: "proposal",
-                                                className: "data-[state=active]:bg-teal-600 data-[state=active]:text-white",
-                                                children: "Proposal"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                lineNumber: 294,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsTrigger"], {
-                                                value: "mom",
-                                                className: "data-[state=active]:bg-teal-600 data-[state=active]:text-white",
-                                                children: "MOM"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                lineNumber: 297,
-                                                columnNumber: 17
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 290,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsContent"], {
-                                        value: "details",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$components$2f$MeetingDetailsContent$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                            selectedMeeting: selectedMeeting,
-                                            formatDate: formatDate,
-                                            formatTime: formatTime,
-                                            formatDateTime: formatDateTime,
-                                            hasEndNote: !!selectedMeeting.endNote,
-                                            canUpdateStatus: canUpdateStatus,
-                                            isFinalStatus: isFinalStatus,
-                                            openStatusUpdateModal: openStatusUpdateModal,
-                                            setShowReschedule: setShowReschedule,
-                                            setIsEditing: setIsEditing
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 303,
-                                            columnNumber: 17
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 302,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsContent"], {
-                                        value: "proposal",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$components$2f$ProposalContent$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                            contactId: selectedMeeting?.contactId,
-                                            meetingId: meetingId
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 318,
-                                            columnNumber: 17
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 317,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsContent"], {
-                                        value: "mom",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$meet$2f$components$2f$MomContent$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                            meeting: selectedMeeting,
-                                            meetingId: meetingId
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 322,
-                                            columnNumber: 17
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 321,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 289,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 288,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                        lineNumber: 287,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 262,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
-                open: isEditing && !isFinalStatus,
-                onOpenChange: setIsEditing,
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
-                    className: "max-w-lg",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
-                                className: "text-teal-700",
-                                children: "Edit Meeting"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 333,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 332,
-                            columnNumber: 11
-                        }, this),
-                        editForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "space-y-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: [
-                                                "Title ",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-red-500",
-                                                    children: "*"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 338,
-                                                    columnNumber: 30
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 338,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                            value: editForm.title,
-                                            onChange: (e)=>setEditForm({
-                                                    ...editForm,
-                                                    title: e.target.value
-                                                }),
-                                            className: "border-teal-300 focus:border-teal-600"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 339,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 337,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: [
-                                                "Date ",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-red-500",
-                                                    children: "*"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 347,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 347,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                            type: "date",
-                                            value: editForm.date,
-                                            onChange: (e)=>setEditForm({
-                                                    ...editForm,
-                                                    date: e.target.value
-                                                }),
-                                            className: "border-teal-300 focus:border-teal-600"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 348,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 346,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "grid grid-cols-2 gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                                    children: [
-                                                        "Start Time ",
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "text-red-500",
-                                                            children: "*"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 358,
-                                                            columnNumber: 37
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 358,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                                    type: "time",
-                                                    value: editForm.startTime,
-                                                    onChange: (e)=>setEditForm({
-                                                            ...editForm,
-                                                            startTime: e.target.value
-                                                        }),
-                                                    className: "border-teal-300 focus:border-teal-600"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 359,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 357,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                                    children: [
-                                                        "End Time ",
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "text-red-500",
-                                                            children: "*"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 367,
-                                                            columnNumber: 35
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 367,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                                    type: "time",
-                                                    value: editForm.endTime,
-                                                    onChange: (e)=>setEditForm({
-                                                            ...editForm,
-                                                            endTime: e.target.value
-                                                        }),
-                                                    className: "border-teal-300 focus:border-teal-600"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 368,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 366,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 356,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: "Agenda"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 378,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                            value: editForm.agenda,
-                                            onChange: (e)=>setEditForm({
-                                                    ...editForm,
-                                                    agenda: e.target.value
-                                                }),
-                                            className: "border-teal-300 focus:border-teal-600"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 379,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 377,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: [
-                                                "Mode ",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-red-500",
-                                                    children: "*"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 387,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 387,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                            value: editForm.mode,
-                                            onChange: (e)=>setEditForm({
-                                                    ...editForm,
-                                                    mode: e.target.value
-                                                }),
-                                            className: "w-full p-2 border border-teal-300 rounded focus:border-teal-600",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "online",
-                                                    children: "Online"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 393,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "offline",
-                                                    children: "Offline"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 394,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 388,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 386,
-                                    columnNumber: 15
-                                }, this),
-                                editForm.mode === "online" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: [
-                                                "Join Link ",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-red-500",
-                                                    children: "*"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 400,
-                                                    columnNumber: 36
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 400,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                            value: editForm.meetingLink,
-                                            onChange: (e)=>setEditForm({
-                                                    ...editForm,
-                                                    meetingLink: e.target.value
-                                                }),
-                                            className: "border-teal-300 focus:border-teal-600"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 401,
-                                            columnNumber: 19
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 399,
-                                    columnNumber: 17
-                                }, this),
-                                localError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
-                                    variant: "destructive",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
-                                        children: localError
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 411,
-                                        columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 410,
-                                    columnNumber: 17
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-end gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                            variant: "outline",
-                                            onClick: ()=>setIsEditing(false),
-                                            className: "border-teal-600 text-teal-600 hover:bg-teal-50",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                    className: "w-4 h-4 mr-1"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 421,
-                                                    columnNumber: 19
-                                                }, this),
-                                                " Cancel"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 416,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                            onClick: handleSave,
-                                            disabled: updateStatus === "loading",
-                                            className: "bg-teal-600 hover:bg-teal-700 text-white",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
-                                                    className: "w-4 h-4 mr-1"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 428,
-                                                    columnNumber: 19
-                                                }, this),
-                                                " Save"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 423,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 415,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 336,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                    lineNumber: 331,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 330,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
-                open: showReschedule && !isFinalStatus,
-                onOpenChange: setShowReschedule,
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
-                    className: "max-w-lg",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
-                                className: "text-teal-700",
-                                children: "Reschedule Meeting"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 440,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 439,
-                            columnNumber: 11
-                        }, this),
-                        editForm && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "space-y-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: [
-                                                "Date ",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-red-500",
-                                                    children: "*"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 445,
-                                                    columnNumber: 29
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 445,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                            type: "date",
-                                            value: editForm.date,
-                                            onChange: (e)=>setEditForm({
-                                                    ...editForm,
-                                                    date: e.target.value
-                                                }),
-                                            className: "border-teal-300 focus:border-teal-600"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 446,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 444,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "grid grid-cols-2 gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                                    children: [
-                                                        "Start Time ",
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "text-red-500",
-                                                            children: "*"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 456,
-                                                            columnNumber: 37
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 456,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                                    type: "time",
-                                                    value: editForm.startTime,
-                                                    onChange: (e)=>setEditForm({
-                                                            ...editForm,
-                                                            startTime: e.target.value
-                                                        }),
-                                                    className: "border-teal-300 focus:border-teal-600"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 457,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 455,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                                    children: [
-                                                        "End Time ",
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "text-red-500",
-                                                            children: "*"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                            lineNumber: 465,
-                                                            columnNumber: 35
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 465,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
-                                                    type: "time",
-                                                    value: editForm.endTime,
-                                                    onChange: (e)=>setEditForm({
-                                                            ...editForm,
-                                                            endTime: e.target.value
-                                                        }),
-                                                    className: "border-teal-300 focus:border-teal-600"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 466,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 464,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 454,
-                                    columnNumber: 15
-                                }, this),
-                                localError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
-                                    variant: "destructive",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
-                                        children: localError
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 477,
-                                        columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 476,
-                                    columnNumber: 17
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                    className: "w-full bg-teal-600 hover:bg-teal-700 text-white",
-                                    onClick: handleReschedule,
-                                    disabled: updateStatus === "loading",
-                                    children: "Reschedule"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 481,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 443,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                    lineNumber: 438,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 437,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
-                open: showStatusUpdate,
-                onOpenChange: setShowStatusUpdate,
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
-                    className: "max-w-lg",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
-                                className: "text-teal-700",
-                                children: statusUpdateType === "completed" ? "Mark as Completed" : "Cancel Meeting"
-                            }, void 0, false, {
-                                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                lineNumber: 497,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 496,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "space-y-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
-                                            children: [
-                                                "Feedback Note ",
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-red-500",
-                                                    children: "*"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 503,
-                                                    columnNumber: 36
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 503,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
-                                            placeholder: "Enter note...",
-                                            value: endNote,
-                                            onChange: (e)=>setEndNote(e.target.value),
-                                            className: "border-teal-300 focus:border-teal-600"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 504,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 502,
-                                    columnNumber: 13
-                                }, this),
-                                localError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
-                                    variant: "destructive",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
-                                        children: localError
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                        lineNumber: 514,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 513,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-end gap-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                            variant: "outline",
-                                            onClick: ()=>{
-                                                setShowStatusUpdate(false);
-                                                setEndNote("");
-                                                setStatusUpdateType(null);
-                                            },
-                                            className: "border-teal-600 text-teal-600 hover:bg-teal-50",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                                    className: "w-4 h-4 mr-1"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 528,
-                                                    columnNumber: 17
-                                                }, this),
-                                                " Cancel"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 519,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                            onClick: handleStatusUpdate,
-                                            disabled: updateStatus === "loading" || !endNote.trim(),
-                                            className: "bg-teal-600 hover:bg-teal-700 text-white",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
-                                                    className: "w-4 h-4 mr-1"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                                    lineNumber: 535,
-                                                    columnNumber: 17
-                                                }, this),
-                                                " Save"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                            lineNumber: 530,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                                    lineNumber: 518,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                            lineNumber: 501,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                    lineNumber: 495,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/src/modules/meet/components/MeetingController.js",
-                lineNumber: 494,
-                columnNumber: 7
-            }, this)
-        ]
-    }, void 0, true, {
-        fileName: "[project]/src/modules/meet/components/MeetingController.js",
-        lineNumber: 261,
-        columnNumber: 5
-    }, this);
-}
-}}),
+const e = new Error(`Could not parse module '[project]/src/modules/meet/components/MeetingController.js'
+
+Expected ';', '}' or <eof>`);
+e.code = 'MODULE_UNPARSEABLE';
+throw e;}}),
 "[project]/src/app/(protected)/meet/[meeting_id]/page.jsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
 "use strict";
 

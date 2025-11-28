@@ -2754,7 +2754,7 @@ const fetchAllMeetings = (0, __TURBOPACK__imported__module__$5b$project$5d2f$nod
 const fetchMeetingById = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])("meet/fetchMeetingById", async (meetingId, { rejectWithValue })=>{
     try {
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["axiosInstance"].get(`${BASE_URL}/getMeetByMeetId/${meetingId}`);
-        return response.data.meeting || response.data;
+        return response.data;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Failed to fetch meeting");
     }
@@ -6072,7 +6072,6 @@ const fetchMoMs = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modul
 const fetchMoMByMeetingId = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])('mom/fetchMoMByMeetingId', async (meetingId, { rejectWithValue })=>{
     try {
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["axiosInstance"].get(`/mom/byMeeting/${meetingId}`);
-        console.log(response);
         return response.data.data;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to fetch MoM by meeting ID');
@@ -6111,7 +6110,6 @@ const fetchMoMView = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_mo
 });
 const createMoM = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$reduxjs$2f$toolkit$2f$dist$2f$redux$2d$toolkit$2e$modern$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createAsyncThunk"])("mom/createMoM", async (momData, { rejectWithValue })=>{
     try {
-        console.log("Payload being sent:", momData); // Debug: Log the FormData
         for (let [key, value] of momData.entries()){
         // console.log(`${key}:`, value); // Debug: Log FormData entries
         }

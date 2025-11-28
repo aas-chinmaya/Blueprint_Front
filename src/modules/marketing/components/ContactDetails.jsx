@@ -829,7 +829,7 @@ export default function ContactDetails({ contact_id }) {
                                     {meeting.title} – {meeting.mode}
                                   </span>
                                   <span className="text-sm text-red-600">
-                                    Click to view meeting details!
+                                    Click to view!
                                   </span>
                                 </div>
                               ))}
@@ -842,7 +842,7 @@ export default function ContactDetails({ contact_id }) {
                         {!(isContactClosed && !isPositiveResult) && (
                           <>
                             <Button
-                              className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700"
+                              className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700"
                               onClick={() => setOpenMeetDialog(true)}
                               disabled={isFreeTierFull}
                             >

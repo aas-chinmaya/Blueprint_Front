@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FileText, Edit2, Eye, Plus, Loader2 } from "lucide-react";
 
-export default function ProposalContent({ meetingId,contactId }) {
+export default function QuotationContent({ meetingId,contactId }) {
   const router = useRouter();
   const dispatch = useDispatch();
 

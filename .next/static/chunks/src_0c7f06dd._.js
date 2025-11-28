@@ -925,7 +925,7 @@ function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
     };
     const isValid = form.title && form.date && form.startTime && form.endTime && form.ourParty.some((p)=>p.role === "Organizer") && (form.mode === "offline" || form.meetingLink);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "w-full p-6 bg-white rounded-lg shadow-sm",
+        className: "w-full h-full p-6 bg-white rounded-lg shadow-sm",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex justify-end gap-3 mb-4",
@@ -1245,7 +1245,7 @@ function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
                                             className: "flex flex-wrap gap-3",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex items-center space-x-1",
+                                                    className: "flex items-center space-x-1 cursor-pointer",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$radio$2d$group$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RadioGroupItem"], {
                                                             value: "offline",
@@ -1410,7 +1410,7 @@ function ScheduleMeeting({ meetingRefs, contactId, onClose }) {
                                         placeholder: "1. Review targets, 2. Demo new features...",
                                         rows: 4,
                                         maxLength: "500",
-                                        className: "w-full rounded-md border border-gray-300 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white transition-colors min-h-[100px]",
+                                        className: "w-full rounded-md border border-gray-300 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white transition-colors min-h-[20dvh]",
                                         value: form.agenda,
                                         onChange: (e)=>setForm({
                                                 ...form,
@@ -3275,7 +3275,7 @@ function ContactDetails({ contact_id }) {
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "text-sm text-red-600",
-                                                                                children: "Click to view meeting details!"
+                                                                                children: "Click to view!"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/modules/marketing/components/ContactDetails.jsx",
                                                                                 lineNumber: 831,
@@ -3302,7 +3302,7 @@ function ContactDetails({ contact_id }) {
                                                             !(isContactClosed && !isPositiveResult) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                                                 children: [
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                                        className: "w-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700",
+                                                                        className: "bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700",
                                                                         onClick: ()=>setOpenMeetDialog(true),
                                                                         disabled: isFreeTierFull,
                                                                         children: isFreeTierFull ? "Meeting Limit Reached" : "Schedule Meeting"

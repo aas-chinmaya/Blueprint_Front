@@ -63,7 +63,8 @@ export const fetchMeetingById = createAsyncThunk(
       const response = await axiosInstance.get(
         `${BASE_URL}/getMeetByMeetId/${meetingId}`
       );
-      return response.data.meeting || response.data;
+      
+      return  response.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch meeting"

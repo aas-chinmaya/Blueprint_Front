@@ -3,13 +3,7 @@
     "[project]/src/app/(protected)/(common)/dashboard/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/(common)/inbox/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
     "[project]/src/app/(protected)/marketing/contacts/[contact_id]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/marketing/contacts/all/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
     "[project]/src/app/(protected)/marketing/contacts/overview/page": [
@@ -27,16 +21,13 @@
     "[project]/src/app/(protected)/project/all/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/quotation/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
     "[project]/src/app/(protected)/sales/quotation/create/[contactId]/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/sales/quotation/edit/[contactId]/page": [
+    "[project]/src/app/(protected)/workspace/my-projects/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/workspace/my-projects/page": [
+    "[project]/src/app/(protected)/workspace/task/[id]/[subtaskid]/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
     "[project]/src/app/(protected)/workspace/task/[id]/page": [

@@ -279,7 +279,7 @@ export default function MeetingController({ meetingId }) {
 
         <Card className="shadow-lg border-0 rounded-t-none">
           <CardContent className="p-4 sm:p-6">
-            <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="details">
+            <Tabs className="min-h-screen" value={activeTab} onValueChange={setActiveTab} defaultValue="details">
               <TabsList className="cursor-pointer flex w-fit bg-teal-50 rounded-lg p-1 mb-4">
                 <TabsTrigger value="details" className="cursor-pointer data-[state=active]:bg-teal-600 data-[state=active]:text-white">
                   Details
@@ -320,11 +320,28 @@ export default function MeetingController({ meetingId }) {
               </TabsContent>
 
               <TabsContent value="mom">
-                {activeTab === "mom" ? (
+              {
+                console.log(selectedMeeting)
+                
+              }
+                {/* {activeTab === "mom" ? (
                   <MomContent meeting={selectedMeeting} meetingId={meetingId} />
                 ) : (
                   <TabSkeleton />
-                )}
+                )} */}
+                {activeTab === "mom" ? (
+  // Check if meeting has ended
+  new Date(selectedMeeting?.endTime) <= new Date() ? (
+    <MomContent meeting={selectedMeeting} meetingId={meetingId} />
+  ) : (
+    <div className="h-full text-center py-10 text-gray-600 font-medium">
+      Meeting not completed yet. MOM accessible only after meeting end time.
+    </div>
+  )
+) : (
+  <TabSkeleton />
+)}
+
               </TabsContent>
             </Tabs>
           </CardContent>

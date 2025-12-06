@@ -3,43 +3,10 @@
     "[project]/src/app/(protected)/(common)/dashboard/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
-    "[project]/src/app/(protected)/marketing/contacts/[contact_id]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/marketing/contacts/overview/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/marketing/contacts/recent/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/meet/[meeting_id]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/project/[id]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/project/all/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/sales/quotation/create/[contactId]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/workspace/my-projects/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/workspace/task/[id]/[subtaskid]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/(protected)/workspace/task/[id]/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
     "[project]/src/app/(public)/login/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ],
     "[project]/src/app/(public)/page": [
-      "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
-    ],
-    "[project]/src/app/_not-found/page": [
       "static/media/XRXV3I6Li01BKofINeaBTMnFcQ-s.p.5b5a25ed.woff2"
     ]
   },

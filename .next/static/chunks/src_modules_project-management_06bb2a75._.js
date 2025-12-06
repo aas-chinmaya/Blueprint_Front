@@ -3229,7 +3229,7 @@ const AllTaskListByProjectId = ({ projectId, project })=>{
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "w-full bg-white",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "space-y-6",
+                className: "space-y-2",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex flex-wrap gap-4",
@@ -10414,9 +10414,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$document$2
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$analytics$2f$components$2f$ProjectMetrics$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/project-management/analytics/components/ProjectMetrics.jsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$team$2f$components$2f$TeamManagement$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/project-management/team/components/TeamManagement.jsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/popover.jsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$finance$2f$budget$2f$components$2f$budgetWraper$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/modules/finance/budget/components/budgetWraper.jsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -10460,7 +10462,7 @@ function ViewProjectById({ projectId }) {
                 className: "h-5 w-5"
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 82,
+                lineNumber: 83,
                 columnNumber: 46
             }, this)
         },
@@ -10471,8 +10473,19 @@ function ViewProjectById({ projectId }) {
                 className: "h-5 w-5"
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 83,
+                lineNumber: 84,
                 columnNumber: 40
+            }, this)
+        },
+        {
+            id: "budget",
+            label: "Budget",
+            icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiUsers"], {
+                className: "h-5 w-5"
+            }, void 0, false, {
+                fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
+                lineNumber: 85,
+                columnNumber: 44
             }, this)
         },
         {
@@ -10482,7 +10495,7 @@ function ViewProjectById({ projectId }) {
                 className: "h-5 w-5"
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 84,
+                lineNumber: 86,
                 columnNumber: 40
             }, this)
         },
@@ -10493,7 +10506,7 @@ function ViewProjectById({ projectId }) {
                 className: "h-5 w-5"
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 85,
+                lineNumber: 87,
                 columnNumber: 44
             }, this)
         },
@@ -10504,7 +10517,7 @@ function ViewProjectById({ projectId }) {
                 className: "h-5 w-5"
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 86,
+                lineNumber: 88,
                 columnNumber: 38
             }, this)
         },
@@ -10515,7 +10528,7 @@ function ViewProjectById({ projectId }) {
                 className: "h-5 w-5"
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 87,
+                lineNumber: 89,
                 columnNumber: 48
             }, this)
         }
@@ -10713,7 +10726,7 @@ function ViewProjectById({ projectId }) {
                         className: "h-5 w-5 text-red-600"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 240,
+                        lineNumber: 242,
                         columnNumber: 24
                     }, this),
                     bg: "bg-red-50"
@@ -10725,7 +10738,7 @@ function ViewProjectById({ projectId }) {
                         className: "h-5 w-5 text-blue-600"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 243,
+                        lineNumber: 245,
                         columnNumber: 24
                     }, this),
                     bg: "bg-blue-50"
@@ -10737,7 +10750,7 @@ function ViewProjectById({ projectId }) {
                         className: "h-5 w-5 text-green-600"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 246,
+                        lineNumber: 248,
                         columnNumber: 24
                     }, this),
                     bg: "bg-green-50"
@@ -10749,7 +10762,7 @@ function ViewProjectById({ projectId }) {
                         className: "h-5 w-5 text-orange-600"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 249,
+                        lineNumber: 251,
                         columnNumber: 24
                     }, this),
                     bg: "bg-orange-50"
@@ -10760,7 +10773,7 @@ function ViewProjectById({ projectId }) {
                         className: "h-5 w-5 text-yellow-600"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 251,
+                        lineNumber: 253,
                         columnNumber: 24
                     }, this),
                     bg: "bg-yellow-50"
@@ -10771,7 +10784,7 @@ function ViewProjectById({ projectId }) {
                         className: "h-5 w-5 text-gray-600"
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 253,
+                        lineNumber: 255,
                         columnNumber: 24
                     }, this),
                     bg: "bg-gray-50"
@@ -10783,12 +10796,12 @@ function ViewProjectById({ projectId }) {
             className: "flex flex-col items-center justify-center w-full h-[calc(100vh-64px)]",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$loader$2f$Spinner$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 260,
+                lineNumber: 262,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-            lineNumber: 259,
+            lineNumber: 261,
             columnNumber: 7
         }, this);
     }
@@ -10814,7 +10827,7 @@ function ViewProjectById({ projectId }) {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 309,
+                                                    lineNumber: 279,
                                                     columnNumber: 7
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10822,13 +10835,13 @@ function ViewProjectById({ projectId }) {
                                                     children: "Back"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 310,
+                                                    lineNumber: 280,
                                                     columnNumber: 7
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 305,
+                                            lineNumber: 275,
                                             columnNumber: 5
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardTitle"], {
@@ -10837,13 +10850,13 @@ function ViewProjectById({ projectId }) {
                                             children: project?.data?.projectName || "Unnamed Project"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 313,
+                                            lineNumber: 283,
                                             columnNumber: 5
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 304,
+                                    lineNumber: 274,
                                     columnNumber: 3
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10854,7 +10867,7 @@ function ViewProjectById({ projectId }) {
                                             children: statusUpdateMessage
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 324,
+                                            lineNumber: 294,
                                             columnNumber: 7
                                         }, this),
                                         canEditStatus && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -10863,47 +10876,29 @@ function ViewProjectById({ projectId }) {
                                             children: isProjectActive ? "Update Status" : "Start Project"
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 333,
+                                            lineNumber: 303,
                                             columnNumber: 7
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 322,
+                                    lineNumber: 292,
                                     columnNumber: 3
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 302,
+                            lineNumber: 272,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 268,
+                        lineNumber: 270,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
                         className: "p-0",
-                        children: !isProjectActive && project?.data?.status === "Planned" && canEditStatus ? // <div className="p-16 text-center bg-gray-100 min-h-screen flex flex-col justify-center item-center">
-                        //   <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                        //     Project is in Planned Stage
-                        //   </h2>
-                        //   <p className="text-lg text-gray-600 mb-10 max-w-3xl mx-auto">
-                        //     This project is currently in the planning phase. To access tasks, team, issues, documents, and other features, 
-                        //     please start the project by changing its status to In Progress.
-                        //   </p>
-                        //   <Button
-                        //     onClick={() => {
-                        //       setNewStatus("In Progress");
-                        //       setIsStatusModalOpen(true);
-                        //     }}
-                        //     className="bg-blue-600 text-white hover:bg-blue-700 text-lg px-8 py-4 rounded-xl shadow-lg w-[1"
-                        //   >
-                        //     Start Project Now
-                        //   </Button>
-                        // </div>
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: !isProjectActive && project?.data?.status === "Planned" && canEditStatus ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "min-h-screen flex items-center justify-center  p-6",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: " p-10 max-w-md w-full text-center",
@@ -10913,7 +10908,7 @@ function ViewProjectById({ projectId }) {
                                         children: "Project is in Planned Stage"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                        lineNumber: 367,
+                                        lineNumber: 320,
                                         columnNumber: 5
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10925,14 +10920,14 @@ function ViewProjectById({ projectId }) {
                                                 children: "In Progress"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 373,
+                                                lineNumber: 326,
                                                 columnNumber: 10
                                             }, this),
                                             "."
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                        lineNumber: 370,
+                                        lineNumber: 323,
                                         columnNumber: 5
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -10944,18 +10939,18 @@ function ViewProjectById({ projectId }) {
                                         children: "Start Project Now"
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                        lineNumber: 375,
+                                        lineNumber: 328,
                                         columnNumber: 5
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                lineNumber: 366,
+                                lineNumber: 319,
                                 columnNumber: 3
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 365,
+                            lineNumber: 318,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                             children: [
@@ -10976,13 +10971,13 @@ function ViewProjectById({ projectId }) {
                                                             children: tab.label
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 407,
+                                                            lineNumber: 360,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, tab.id, true, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 397,
+                                                    lineNumber: 350,
                                                     columnNumber: 21
                                                 }, this)),
                                             !isLargeScreen && hiddenTabs.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
@@ -10999,7 +10994,7 @@ function ViewProjectById({ projectId }) {
                                                                     children: "⋯"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 422,
+                                                                    lineNumber: 375,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -11007,18 +11002,18 @@ function ViewProjectById({ projectId }) {
                                                                     children: "More"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 423,
+                                                                    lineNumber: 376,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 415,
+                                                            lineNumber: 368,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                        lineNumber: 414,
+                                                        lineNumber: 367,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -11037,40 +11032,40 @@ function ViewProjectById({ projectId }) {
                                                                             children: tab.label
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 438,
+                                                                            lineNumber: 391,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, tab.id, true, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 429,
+                                                                    lineNumber: 382,
                                                                     columnNumber: 29
                                                                 }, this))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 427,
+                                                            lineNumber: 380,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                        lineNumber: 426,
+                                                        lineNumber: 379,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 413,
+                                                lineNumber: 366,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                        lineNumber: 391,
+                                        lineNumber: 344,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 390,
+                                    lineNumber: 343,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11083,7 +11078,7 @@ function ViewProjectById({ projectId }) {
                                                     projectId: projectId
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 453,
+                                                    lineNumber: 406,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11096,14 +11091,14 @@ function ViewProjectById({ projectId }) {
                                                                     className: "h-7 w-7 text-blue-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 458,
+                                                                    lineNumber: 411,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "Project Information"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 457,
+                                                            lineNumber: 410,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11121,12 +11116,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-green-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 465,
+                                                                                        lineNumber: 418,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 464,
+                                                                                    lineNumber: 417,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11136,7 +11131,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Project ID"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 468,
+                                                                                            lineNumber: 421,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11144,19 +11139,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: project?.data?.projectId || "N/A"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 469,
+                                                                                            lineNumber: 422,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 467,
+                                                                                    lineNumber: 420,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 463,
+                                                                            lineNumber: 416,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11168,12 +11163,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-green-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 474,
+                                                                                        lineNumber: 427,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 473,
+                                                                                    lineNumber: 426,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11183,7 +11178,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Category"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 477,
+                                                                                            lineNumber: 430,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11191,19 +11186,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: project?.data?.category ? project.data.category.toLowerCase().split(" ").map((w)=>w[0].toUpperCase() + w.slice(1)).join(" ") : "N/A"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 478,
+                                                                                            lineNumber: 431,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 476,
+                                                                                    lineNumber: 429,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 472,
+                                                                            lineNumber: 425,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         project?.data?.clientId?.trim() && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11215,12 +11210,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-green-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 492,
+                                                                                        lineNumber: 445,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 491,
+                                                                                    lineNumber: 444,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11230,7 +11225,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Client ID"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 495,
+                                                                                            lineNumber: 448,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11238,19 +11233,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: project.data.clientId
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 496,
+                                                                                            lineNumber: 449,
                                                                                             columnNumber: 33
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 494,
+                                                                                    lineNumber: 447,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 490,
+                                                                            lineNumber: 443,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11262,12 +11257,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-green-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 502,
+                                                                                        lineNumber: 455,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 501,
+                                                                                    lineNumber: 454,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11277,7 +11272,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Team Lead"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 505,
+                                                                                            lineNumber: 458,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11285,25 +11280,25 @@ function ViewProjectById({ projectId }) {
                                                                                             children: project?.data?.teamLeadName || "Unassigned"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 506,
+                                                                                            lineNumber: 459,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 504,
+                                                                                    lineNumber: 457,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 500,
+                                                                            lineNumber: 453,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 462,
+                                                                    lineNumber: 415,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11318,12 +11313,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-blue-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 514,
+                                                                                        lineNumber: 467,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 513,
+                                                                                    lineNumber: 466,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11333,7 +11328,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Status"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 517,
+                                                                                            lineNumber: 470,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -11341,19 +11336,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: project?.data?.status || "N/A"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 518,
+                                                                                            lineNumber: 471,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 516,
+                                                                                    lineNumber: 469,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 512,
+                                                                            lineNumber: 465,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11365,12 +11360,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-purple-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 533,
+                                                                                        lineNumber: 486,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 532,
+                                                                                    lineNumber: 485,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11380,7 +11375,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Onboarding Date"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 536,
+                                                                                            lineNumber: 489,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11388,19 +11383,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: project?.data?.createdAt ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$formatDate$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateUTC"])(project.data.createdAt) : "N/A"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 537,
+                                                                                            lineNumber: 490,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 535,
+                                                                                    lineNumber: 488,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 531,
+                                                                            lineNumber: 484,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         project?.data?.startDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11412,12 +11407,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-indigo-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 545,
+                                                                                        lineNumber: 498,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 544,
+                                                                                    lineNumber: 497,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11427,7 +11422,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Start Date"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 548,
+                                                                                            lineNumber: 501,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11435,19 +11430,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$formatDate$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateUTC"])(project.data.startDate)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 549,
+                                                                                            lineNumber: 502,
                                                                                             columnNumber: 33
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 547,
+                                                                                    lineNumber: 500,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 543,
+                                                                            lineNumber: 496,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         project?.data?.endDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11459,12 +11454,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-red-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 556,
+                                                                                        lineNumber: 509,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 555,
+                                                                                    lineNumber: 508,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11474,7 +11469,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "End Date"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 559,
+                                                                                            lineNumber: 512,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11482,19 +11477,19 @@ function ViewProjectById({ projectId }) {
                                                                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$formatDate$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateUTC"])(project.data.endDate)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 560,
+                                                                                            lineNumber: 513,
                                                                                             columnNumber: 33
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 558,
+                                                                                    lineNumber: 511,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 554,
+                                                                            lineNumber: 507,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         project?.data?.expectedEndDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11506,12 +11501,12 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-6 w-6 text-orange-600"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 567,
+                                                                                        lineNumber: 520,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 566,
+                                                                                    lineNumber: 519,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11521,7 +11516,7 @@ function ViewProjectById({ projectId }) {
                                                                                             children: "Expected End Date"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 570,
+                                                                                            lineNumber: 523,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11529,37 +11524,37 @@ function ViewProjectById({ projectId }) {
                                                                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$formatDate$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateUTC"])(project.data.expectedEndDate)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                            lineNumber: 571,
+                                                                                            lineNumber: 524,
                                                                                             columnNumber: 33
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                    lineNumber: 569,
+                                                                                    lineNumber: 522,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                            lineNumber: 565,
+                                                                            lineNumber: 518,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 511,
+                                                                    lineNumber: 464,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 461,
+                                                            lineNumber: 414,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 456,
+                                                    lineNumber: 409,
                                                     columnNumber: 21
                                                 }, this),
                                                 project?.data?.attachments?.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11572,14 +11567,14 @@ function ViewProjectById({ projectId }) {
                                                                     className: "h-7 w-7 text-blue-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 582,
+                                                                    lineNumber: 535,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 "Attachments"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 581,
+                                                            lineNumber: 534,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11598,7 +11593,7 @@ function ViewProjectById({ projectId }) {
                                                                                 children: fileInfo.icon
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                lineNumber: 598,
+                                                                                lineNumber: 551,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11608,7 +11603,7 @@ function ViewProjectById({ projectId }) {
                                                                                         children: attachment.filename
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 602,
+                                                                                        lineNumber: 555,
                                                                                         columnNumber: 37
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11616,13 +11611,13 @@ function ViewProjectById({ projectId }) {
                                                                                         children: "Click to download"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 603,
+                                                                                        lineNumber: 556,
                                                                                         columnNumber: 37
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                lineNumber: 601,
+                                                                                lineNumber: 554,
                                                                                 columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11632,7 +11627,7 @@ function ViewProjectById({ projectId }) {
                                                                                         className: "h-5 w-5"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 606,
+                                                                                        lineNumber: 559,
                                                                                         columnNumber: 37
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -11640,36 +11635,36 @@ function ViewProjectById({ projectId }) {
                                                                                         children: "Download"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                        lineNumber: 607,
+                                                                                        lineNumber: 560,
                                                                                         columnNumber: 37
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                                lineNumber: 605,
+                                                                                lineNumber: 558,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                        lineNumber: 593,
+                                                                        lineNumber: 546,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, index, false, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 589,
+                                                                    lineNumber: 542,
                                                                     columnNumber: 31
                                                                 }, this);
                                                             })
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 585,
+                                                            lineNumber: 538,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 580,
+                                                    lineNumber: 533,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11682,14 +11677,14 @@ function ViewProjectById({ projectId }) {
                                                                     className: "h-7 w-7 text-blue-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                    lineNumber: 619,
+                                                                    lineNumber: 572,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "Description"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 618,
+                                                            lineNumber: 571,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11699,31 +11694,31 @@ function ViewProjectById({ projectId }) {
                                                                 children: project.data.description
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                lineNumber: 624,
+                                                                lineNumber: 577,
                                                                 columnNumber: 27
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-gray-500 italic text-lg",
                                                                 children: "No description provided for this project."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                                lineNumber: 628,
+                                                                lineNumber: 581,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                            lineNumber: 622,
+                                                            lineNumber: 575,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 617,
+                                                    lineNumber: 570,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 451,
+                                            lineNumber: 404,
                                             columnNumber: 19
                                         }, this),
                                         activeTab === "task" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11733,12 +11728,26 @@ function ViewProjectById({ projectId }) {
                                                 projectId: project?.data?.projectId
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 637,
+                                                lineNumber: 590,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 636,
+                                            lineNumber: 589,
+                                            columnNumber: 19
+                                        }, this),
+                                        activeTab === "budget" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$finance$2f$budget$2f$components$2f$budgetWraper$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                projectId: projectId
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
+                                                lineNumber: 595,
+                                                columnNumber: 17
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
+                                            lineNumber: 594,
                                             columnNumber: 19
                                         }, this),
                                         activeTab === "team" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$modules$2f$project$2d$management$2f$team$2f$components$2f$TeamManagement$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -11746,7 +11755,7 @@ function ViewProjectById({ projectId }) {
                                             projectId: projectId
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 641,
+                                            lineNumber: 599,
                                             columnNumber: 42
                                         }, this),
                                         activeTab === "issues" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11757,12 +11766,12 @@ function ViewProjectById({ projectId }) {
                                                 teamLeadId: project?.data?.teamLeadId
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 645,
+                                                lineNumber: 603,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 644,
+                                            lineNumber: 602,
                                             columnNumber: 19
                                         }, this),
                                         activeTab === "mom" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11774,12 +11783,12 @@ function ViewProjectById({ projectId }) {
                                                 teamLeadId: project?.data?.teamLeadId
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 651,
+                                                lineNumber: 609,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 650,
+                                            lineNumber: 608,
                                             columnNumber: 19
                                         }, this),
                                         activeTab === "document" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11790,31 +11799,31 @@ function ViewProjectById({ projectId }) {
                                                 teamLeadId: project?.data?.teamLeadId
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 662,
+                                                lineNumber: 620,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 661,
+                                            lineNumber: 619,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 449,
+                                    lineNumber: 402,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true)
                     }, void 0, false, {
                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                        lineNumber: 345,
+                        lineNumber: 315,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 267,
+                lineNumber: 269,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -11829,12 +11838,12 @@ function ViewProjectById({ projectId }) {
                                 children: project?.data?.status === "Planned" ? "Start Project" : "Update Project Status"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                lineNumber: 679,
+                                lineNumber: 637,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 678,
+                            lineNumber: 636,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11845,7 +11854,7 @@ function ViewProjectById({ projectId }) {
                                     children: "Select New Status"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 684,
+                                    lineNumber: 642,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -11858,12 +11867,12 @@ function ViewProjectById({ projectId }) {
                                                 placeholder: "Choose status"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                lineNumber: 687,
+                                                lineNumber: 645,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 686,
+                                            lineNumber: 644,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -11873,24 +11882,24 @@ function ViewProjectById({ projectId }) {
                                                     children: s
                                                 }, s, false, {
                                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                                    lineNumber: 693,
+                                                    lineNumber: 651,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                            lineNumber: 689,
+                                            lineNumber: 647,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 685,
+                                    lineNumber: 643,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 683,
+                            lineNumber: 641,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -11902,7 +11911,7 @@ function ViewProjectById({ projectId }) {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 701,
+                                    lineNumber: 659,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -11912,24 +11921,24 @@ function ViewProjectById({ projectId }) {
                                     children: "Proceed"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 704,
+                                    lineNumber: 662,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 700,
+                            lineNumber: 658,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                    lineNumber: 677,
+                    lineNumber: 635,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 676,
+                lineNumber: 634,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -11944,12 +11953,12 @@ function ViewProjectById({ projectId }) {
                                 children: "Confirm Status Change"
                             }, void 0, false, {
                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                lineNumber: 714,
+                                lineNumber: 672,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 713,
+                            lineNumber: 671,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11964,19 +11973,19 @@ function ViewProjectById({ projectId }) {
                                         children: newStatus
                                     }, void 0, false, {
                                         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                        lineNumber: 719,
+                                        lineNumber: 677,
                                         columnNumber: 15
                                     }, this),
                                     "?"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                lineNumber: 717,
+                                lineNumber: 675,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 716,
+                            lineNumber: 674,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -11988,7 +11997,7 @@ function ViewProjectById({ projectId }) {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 723,
+                                    lineNumber: 681,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -11997,30 +12006,30 @@ function ViewProjectById({ projectId }) {
                                     children: "Confirm"
                                 }, void 0, false, {
                                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                                    lineNumber: 726,
+                                    lineNumber: 684,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                            lineNumber: 722,
+                            lineNumber: 680,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                    lineNumber: 712,
+                    lineNumber: 670,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-                lineNumber: 711,
+                lineNumber: 669,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/modules/project-management/project/components/ViewProjectById.js",
-        lineNumber: 266,
+        lineNumber: 268,
         columnNumber: 5
     }, this);
 }

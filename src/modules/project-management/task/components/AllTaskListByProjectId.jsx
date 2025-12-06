@@ -269,7 +269,7 @@ const AllTaskListByProjectId = ({ projectId, project }) => {
   return (
     <TooltipProvider>
       <div className="w-full bg-white">
-        <div className="space-y-6">
+        <div className="space-y-2">
 
           <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-[180px]">

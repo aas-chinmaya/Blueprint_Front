@@ -57,6 +57,17 @@ import slotReducer from "@/modules/master/slices/slotMasterSlice";
 import serviceReducer from "@/modules/master/slices/serviceMasterSlice";
 import industriesReducer from "@/modules/master/slices/industriesMasterSlice";
 
+
+
+
+//budget
+
+import budgetReducer from '@/modules/finance/budget/slices/budgetSlice'; // Import the budget request reducer
+import budgetRequestReducer from '@/modules/finance/budget/slices/budgetRequestSlice'; // Import the budget request reducer
+import budgetCategoryReducer from '@/modules/finance/budget/slices/budgetCategorySlice'; // Import the budget request reducer
+import budgetEntityReducer from '@/modules/finance/budget/slices/budgetEntitySlice'; // Import the budget request reducer
+
+
 const initialState = {
   initialized: false,
   loading: false,
@@ -135,7 +146,11 @@ export const store = configureStore({
     industries: industriesReducer,
 
 
-    
+    //budget
+     budgetRequest: budgetRequestReducer,
+  budget: budgetReducer,
+  budgetCategory: budgetCategoryReducer,
+budgetEntity: budgetEntityReducer,
   
   },
   middleware: (getDefaultMiddleware) =>

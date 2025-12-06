@@ -63,6 +63,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import ProjectBudgetWrapper from "@/modules/finance/budget/components/budgetWraper";
 
 export default function ViewProjectById({ projectId }) {
   const router = useRouter();
@@ -81,6 +82,7 @@ export default function ViewProjectById({ projectId }) {
   const tabs = [
     { id: "details", label: "Details", icon: <FiInfo className="h-5 w-5" /> },
     { id: "team", label: "Team", icon: <FiUsers className="h-5 w-5" /> },
+    { id: "budget", label: "Budget", icon: <FiUsers className="h-5 w-5" /> },
     { id: "task", label: "Task", icon: <FiList className="h-5 w-5" /> },
     { id: "issues", label: "Issues", icon: <BugIcon className="h-5 w-5" /> },
     { id: "mom", label: "Mom", icon: <LuFolderClock className="h-5 w-5" /> },
@@ -266,39 +268,7 @@ export default function ViewProjectById({ projectId }) {
     <div className="min-h-screen bg-gray-50">
       <Card className="shadow-2xl border border-gray-200 mx-auto max-w-full">
         <CardHeader className="border-b border-gray-200 bg-white">
-          {/* <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 ">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.back()}
-                className="inline-flex items-center gap-2 bg-blue-600 text-white font-medium text-sm px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 transition-colors duration-200"
-              >
-                <FiArrowLeft className="h-4 w-4" />
-                Back
-              </button>
-              <CardTitle className="text-2xl font-bold text-gray-900">
-                {project?.data?.projectName || "Unnamed Project"}
-              </CardTitle>
-            </div>
-            <div className="flex items-center gap-4">
-              {statusUpdateMessage && (
-                <p
-                  className={`text-sm font-medium ${
-                    successMessage ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {statusUpdateMessage}
-                </p>
-              )}
-              {canEditStatus && (
-                <Button
-                  onClick={() => setIsStatusModalOpen(true)}
-                  className="bg-blue-600 text-white hover:bg-blue-700"
-                >
-                  {isProjectActive ? "Update Status" : "Start Project"}
-                </Button>
-              )}
-            </div>
-          </div> */}
+         
           <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
   {/* Left side: Back + Project name */}
   <div className="flex items-center min-w-0 gap-2 sm:gap-4">
@@ -344,24 +314,7 @@ export default function ViewProjectById({ projectId }) {
 
         <CardContent className="p-0">
           {!isProjectActive && project?.data?.status === "Planned" && canEditStatus ? (
-            // <div className="p-16 text-center bg-gray-100 min-h-screen flex flex-col justify-center item-center">
-            //   <h2 className="text-3xl font-bold text-gray-800 mb-6">
-            //     Project is in Planned Stage
-            //   </h2>
-            //   <p className="text-lg text-gray-600 mb-10 max-w-3xl mx-auto">
-            //     This project is currently in the planning phase. To access tasks, team, issues, documents, and other features, 
-            //     please start the project by changing its status to In Progress.
-            //   </p>
-            //   <Button
-            //     onClick={() => {
-            //       setNewStatus("In Progress");
-            //       setIsStatusModalOpen(true);
-            //     }}
-            //     className="bg-blue-600 text-white hover:bg-blue-700 text-lg px-8 py-4 rounded-xl shadow-lg w-[1"
-            //   >
-            //     Start Project Now
-            //   </Button>
-            // </div>
+    
             <div className="min-h-screen flex items-center justify-center  p-6">
   <div className=" p-10 max-w-md w-full text-center">
     <h2 className="text-2xl font-semibold text-gray-800 mb-4">
@@ -637,6 +590,11 @@ export default function ViewProjectById({ projectId }) {
                     <AllTaskListByProjectId project={project?.data} projectId={project?.data?.projectId} />
                   </div>
                 )}
+                {activeTab === "budget" && (
+                  <div className="">
+                <ProjectBudgetWrapper projectId={projectId} />
+                  </div>
+                )}
 
                 {activeTab === "team" && <TeamManagement project={project} projectId={projectId} />}
 
@@ -732,5 +690,17 @@ export default function ViewProjectById({ projectId }) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 

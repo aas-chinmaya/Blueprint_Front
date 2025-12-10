@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///C:/Dev%20Directory/live/frontend/Blueprint_Front/src/app/%28protected%29/projects/page.jsx"],"sourcesContent":["\"use client\";\r\n\r\nexport default function Page() {\r\n\r\n  return <div>Project Page</div>;\r\n}\r\n"],"names":[],"mappings":";;;;AAAA;;AAEe,SAAS;IAEtB,qBAAO,6LAAC;kBAAI;;;;;;AACd;KAHwB","debugId":null}}]
-}

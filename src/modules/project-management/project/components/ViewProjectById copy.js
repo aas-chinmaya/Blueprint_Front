@@ -700,6 +700,13 @@
 
 
 
+
+
+
+
+
+
+
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
@@ -1447,11 +1454,11 @@ export default function ViewProjectById({ projectId }) {
                     <AllTaskListByProjectId project={project?.data} projectId={project?.data?.projectId} />
                   </div>
                 )}
-                {/* {activeTab === "budget" && (
+                {activeTab === "budget" && (
                   <div className="">
                 <ProjectBudgetWrapper projectId={projectId} />
                   </div>
-                )} */}
+                )}
 
                 {activeTab === "team" && <TeamManagement project={project} projectId={projectId} />}
 
@@ -1547,8 +1554,6 @@ export default function ViewProjectById({ projectId }) {
     </div>
   );
 }
-
-
 
 
 

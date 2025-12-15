@@ -7,6 +7,7 @@
   "/(protected)/workspace/my-projects/page": "app/(protected)/workspace/my-projects/page.js",
   "/(protected)/workspace/task/[id]/[subtaskid]/page": "app/(protected)/workspace/task/[id]/[subtaskid]/page.js",
   "/(protected)/workspace/task/[id]/page": "app/(protected)/workspace/task/[id]/page.js",
+  "/(protected)/workspace/task/my-tasks/page": "app/(protected)/workspace/task/my-tasks/page.js",
   "/(public)/login/page": "app/(public)/login/page.js",
   "/(public)/page": "app/(public)/page.js",
   "/_not-found/page": "app/_not-found/page.js",

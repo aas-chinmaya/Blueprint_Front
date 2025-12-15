@@ -373,8 +373,7 @@ const SubTaskList = ({ task, taskId, projectId, isTaskClosed }) => {
           (member) => member.memberId === currentUser?.id
         );
       });
-console.log(safeSubtasks,visibleSubtasks);
-console.log(safeSubtasks,visibleSubtasks);
+
 
   // ────────────────────────────────────────────────────────────────
   // Pagination based on visible subtasks

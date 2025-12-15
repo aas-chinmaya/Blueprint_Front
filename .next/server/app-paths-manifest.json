@@ -1,0 +1,14 @@
+{
+  "/(protected)/(common)/dashboard/page": "app/(protected)/(common)/dashboard/page.js",
+  "/(protected)/marketing/contacts/overview/page": "app/(protected)/marketing/contacts/overview/page.js",
+  "/(protected)/project/[id]/page": "app/(protected)/project/[id]/page.js",
+  "/(protected)/project/all/page": "app/(protected)/project/all/page.js",
+  "/(protected)/project/onboarding/page": "app/(protected)/project/onboarding/page.js",
+  "/(protected)/workspace/my-projects/page": "app/(protected)/workspace/my-projects/page.js",
+  "/(protected)/workspace/task/[id]/[subtaskid]/page": "app/(protected)/workspace/task/[id]/[subtaskid]/page.js",
+  "/(protected)/workspace/task/[id]/page": "app/(protected)/workspace/task/[id]/page.js",
+  "/(public)/login/page": "app/(public)/login/page.js",
+  "/(public)/page": "app/(public)/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
+}

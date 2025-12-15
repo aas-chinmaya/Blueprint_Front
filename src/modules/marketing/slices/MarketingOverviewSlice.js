@@ -1,6 +1,3 @@
-
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
 // Comprehensive dummy data for 2024 and 2025, 2–4 records per month
 const dummyData = {
   statistics: [
@@ -147,6 +144,20 @@ const dummyData = {
   ],
 };
 
+
+
+
+
+
+
+
+
+
+
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {axiosInstance} from '@/lib/axios';
+
 // Async thunk to return dummy data
 export const fetchMarketingOverview = createAsyncThunk(
   'marketingOverview/fetchOverview',
@@ -154,6 +165,8 @@ export const fetchMarketingOverview = createAsyncThunk(
     try {
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      // const response = await axiosInstance.get('/contact/marketingOverview');
+
       return dummyData;
     } catch (error) {
       return rejectWithValue({ message: 'Failed to load dummy data' });
@@ -188,3 +201,15 @@ const MarketingOverviewSlice = createSlice({
 
 export const MarketingOverviewReducer = MarketingOverviewSlice.reducer;
 export default MarketingOverviewReducer;
+
+
+
+
+
+
+
+
+
+
+
+
